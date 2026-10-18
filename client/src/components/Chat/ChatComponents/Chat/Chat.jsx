@@ -14,7 +14,7 @@ import CONSTANTS from '../../../../constants';
 import CatalogListContainer from '../../CatalogComponents/CatalogListContainer/CatalogListContainer';
 import CatalogListHeader from '../../CatalogComponents/CatalogListHeader/CatalogListHeader';
 import ChatError from '../../../ChatError/ChatError';
-import CatalogCreation from '../../CatalogComponents/CatalogCreation/CatalogCreation.jsx';
+import CatalogCreation from '../../CatalogComponents/CatalogCreation/CatalogCreation';
 
 const Chat = () => {
   const dispatch = useDispatch();
@@ -51,9 +51,7 @@ const Chat = () => {
     dispatch(setPreviewChatMode(mode));
   };
 
-  const handleRetry = () => {
-    return dispatch(getPreviewChat());
-  };
+  const handleRetry = () => dispatch(getPreviewChat());
 
   if (userId == null) {
     return null;

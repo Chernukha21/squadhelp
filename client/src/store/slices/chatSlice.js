@@ -29,7 +29,7 @@ const initialState = {
   catalogCreationMode: CONSTANTS.ADD_CHAT_TO_OLD_CATALOG,
 };
 
-//---------- getPreviewChat
+// ---------- getPreviewChat
 export const getPreviewChat = decorateAsyncThunk({
   key: `${CHAT_SLICE_NAME}/getPreviewChat`,
   thunk: async () => {
@@ -50,7 +50,7 @@ const getPreviewChatExtraReducers = createExtraReducers({
   },
 });
 
-//---------- getDialogMessages
+// ---------- getDialogMessages
 export const getDialogMessages = decorateAsyncThunk({
   key: `${CHAT_SLICE_NAME}/getDialogMessages`,
   thunk: async payload => {
@@ -72,7 +72,7 @@ const getDialogMessagesExtraReducers = createExtraReducers({
   },
 });
 
-//---------- sendMessage
+// ---------- sendMessage
 export const sendMessage = decorateAsyncThunk({
   key: `${CHAT_SLICE_NAME}/sendMessage`,
   thunk: async payload => {
@@ -112,7 +112,7 @@ const sendMessageExtraReducers = createExtraReducers({
   },
 });
 
-//---------- changeChatFavorite
+// ---------- changeChatFavorite
 export const changeChatFavorite = decorateAsyncThunk({
   key: `${CHAT_SLICE_NAME}/changeChatFavorite`,
   thunk: async payload => {
@@ -137,7 +137,7 @@ const changeChatFavoriteExtraReducers = createExtraReducers({
   },
 });
 
-//---------- changeChatBlock
+// ---------- changeChatBlock
 export const changeChatBlock = decorateAsyncThunk({
   key: `${CHAT_SLICE_NAME}/changeChatBlock`,
   thunk: async payload => {
@@ -162,7 +162,7 @@ const changeChatBlockExtraReducers = createExtraReducers({
   },
 });
 
-//---------- getCatalogList
+// ---------- getCatalogList
 export const getCatalogList = decorateAsyncThunk({
   key: `${CHAT_SLICE_NAME}/getCatalogList`,
   thunk: async payload => {
@@ -180,7 +180,7 @@ const getCatalogListExtraReducers = createExtraReducers({
   rejectedReducer,
 });
 
-//---------- addChatToCatalog
+// ---------- addChatToCatalog
 export const addChatToCatalog = decorateAsyncThunk({
   key: `${CHAT_SLICE_NAME}/addChatToCatalog`,
   thunk: async payload => {
@@ -208,7 +208,7 @@ const addChatToCatalogExtraReducers = createExtraReducers({
   },
 });
 
-//---------- createCatalog
+// ---------- createCatalog
 export const createCatalog = decorateAsyncThunk({
   key: `${CHAT_SLICE_NAME}/createCatalog`,
   thunk: async payload => {
@@ -229,7 +229,7 @@ const createCatalogExtraReducers = createExtraReducers({
   },
 });
 
-//---------- deleteCatalog
+// ---------- deleteCatalog
 export const deleteCatalog = decorateAsyncThunk({
   key: `${CHAT_SLICE_NAME}/deleteCatalog`,
   thunk: async payload => {
@@ -253,7 +253,7 @@ const deleteCatalogExtraReducers = createExtraReducers({
   },
 });
 
-//---------- removeChatFromCatalog
+// ---------- removeChatFromCatalog
 export const removeChatFromCatalog = decorateAsyncThunk({
   key: `${CHAT_SLICE_NAME}/removeChatFromCatalog`,
   thunk: async payload => {
@@ -280,7 +280,7 @@ const removeChatFromCatalogExtraReducers = createExtraReducers({
   },
 });
 
-//---------- changeCatalogName
+// ---------- changeCatalogName
 export const changeCatalogName = decorateAsyncThunk({
   key: `${CHAT_SLICE_NAME}/changeCatalogName`,
   thunk: async payload => {
@@ -322,21 +322,24 @@ const reducers = {
 
   addMessage: (state, { payload }) => {
     const { message, preview } = payload;
-    const { messagesPreview } = state;
     let isNew = true;
-    messagesPreview.forEach(preview => {
-      if (isEqual(preview.participants, message.participants)) {
-        preview.text = message.body;
-        preview.sender = message.sender;
-        preview.createAt = message.createdAt;
+
+    state.messagesPreview.forEach(chatPreview => {
+      if (isEqual(chatPreview.participants, message.participants)) {
+        chatPreview.text = message.body;
+        chatPreview.sender = message.sender;
+        chatPreview.createAt = message.createdAt;
         isNew = false;
       }
     });
+
     if (isNew) {
-      messagesPreview.push(preview);
+      state.messagesPreview.push(preview);
     }
-    state.messagesPreview = messagesPreview;
-    state.messages = [...state.messages, payload.message];
+
+    if (state.interlocutor?.id === message.sender) {
+      state.messages.push(message);
+    }
   },
 
   backToDialogList: state => {
