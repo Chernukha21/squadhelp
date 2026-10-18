@@ -1,0 +1,78 @@
+.inputContainer {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  border-top: 1px solid #f3f3f3;
+  padding: 0 15px;
+  margin-top: 8px;
+}
+.inputContainer:last-child {
+  border: none;
+  margin-top: 0;
+  padding-top: 0;
+}
+.inputContainer .form {
+  display: flex;
+  flex-direction: row;
+  align-items: start;
+}
+.inputContainer .form button {
+  position: relative;
+  padding: 0;
+  border: none;
+  background-color: white;
+  outline: none;
+  cursor: pointer;
+}
+.inputContainer .form button:hover {
+  transition: transform 0.8s ease;
+  transform: rotate(35deg);
+}
+.inputContainer .form img {
+  position: absolute;
+  margin-left: 20px;
+  cursor: pointer;
+  top: -5px;
+  left: -20px;
+  transition: transform 0.2s ease;
+  transform: rotate(325deg);
+}
+.inputContainer .form .container {
+  display: flex;
+  flex-direction: column;
+  padding: 0 15px;
+  justify-content: flex-start;
+}
+.inputContainer .form .container .fieldWarning {
+  font-size: 15px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  border: 1px solid #b72522;
+  margin-bottom: 15px;
+  padding-bottom: 5px;
+  padding-top: 5px;
+  text-align: center;
+}
+.inputContainer .form .container .notValid {
+  border: 1px solid red !important;
+}
+.inputContainer .form .container .input {
+  height: 20px;
+  outline: none;
+  border-radius: 6px;
+  padding: 6px;
+  border: 2px solid #d0d0d0;
+}
+.inputContainer .form .container .input:focus {
+  transition: border 0.5s;
+  border-color: #28d2d0;
+}
+.inputContainer .form .container .input:hover {
+  transition: border 0.5s;
+  border-color: #28d2d0;
+}
+
+/*# sourceMappingURL=ChatInput.module.css.map */

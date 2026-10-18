@@ -1,45 +1,49 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { Formik, Form } from 'formik';
+import { useDispatch, useSelector } from 'react-redux';
+import { Form, Formik } from 'formik';
 import FormInput from '../../../FormInput/FormInput';
 import styles from './CreateCatalog.module.sass';
 import { createCatalog } from '../../../../store/slices/chatSlice';
-import Schems from '../../../../utils/validators/validationSchems';
+import Schemas from '../../../../utils/validators/validationSchemas';
 
-const CreateCatalog = (props) => {
-  const click = (values) => {
-    const { createCatalog } = props;
-    const { addChatId } = props;
-    createCatalog({ catalogName: values.catalogName, chatId: addChatId });
+const CreateCatalog = () => {
+  const dispatch = useDispatch();
+
+  const addChatId = useSelector(state => state.chatStore.addChatId);
+
+  const handleSubmit = values => {
+    return dispatch(
+      createCatalog({
+        catalogName: values.catalogName,
+        chatId: addChatId,
+      })
+    );
   };
   return (
     <Formik
-      onSubmit={click}
+      onSubmit={handleSubmit}
       initialValues={{ catalogName: '' }}
-      validationSchema={Schems.CatalogSchema}
+      validationSchema={Schemas.CatalogSchema}
     >
-      <Form className={styles.form}>
-        <FormInput
-          name="catalogName"
-          type="text"
-          label="name of catalog"
-          classes={{
-            container: styles.inputContainer,
-            input: styles.input,
-            warning: styles.fieldWarning,
-            notValid: styles.notValid,
-          }}
-        />
-        <button type="submit">Create Catalog</button>
-      </Form>
+      {({ isSubmitting }) => (
+        <Form className={styles.form}>
+          <FormInput
+            name='catalogName'
+            type='text'
+            label='name of catalog'
+            classes={{
+              container: styles.inputContainer,
+              input: styles.input,
+              warning: styles.fieldWarning,
+              notValid: styles.notValid,
+            }}
+          />
+          <button type='submit' disabled={isSubmitting}>
+            {isSubmitting ? 'Creating...' : 'Create Catalog'}
+          </button>
+        </Form>
+      )}
     </Formik>
   );
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  createCatalog: (data) => dispatch(createCatalog(data)),
-});
-
-const mapStateToProps = (state) => state.chatStore;
-
-export default connect(mapStateToProps, mapDispatchToProps)(CreateCatalog);
+export default CreateCatalog;

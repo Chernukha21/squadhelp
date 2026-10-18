@@ -166,7 +166,7 @@ router.post(
   chatController.removeChatFromCatalog,
 );
 
-router.post(
+router.delete(
   '/deleteCatalog',
   checkToken.checkToken,
   chatController.deleteCatalog,

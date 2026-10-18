@@ -3,6 +3,9 @@ import react from '@vitejs/plugin-react';
 import browserslistToEsbuild from 'browserslist-to-esbuild';
 
 export default defineConfig({
+  define: {
+    global: 'globalThis',
+  },
   plugins: [
     {
       name: 'transform-js-to-jsx',
@@ -22,6 +25,9 @@ export default defineConfig({
   server: {
     port: 3000,
     host: true,
+    watch: {
+      usePolling: true,
+    },
   },
   build: {
     target: browserslistToEsbuild([

@@ -1,43 +1,92 @@
-import React from 'react';
-import classNames from 'classnames';
+import { useEffect, useId, useRef, useState } from 'react';
 import { useField } from 'formik';
 
-const ImageUpload = props => {
-  const [field, meta, helpers] = useField(props.name);
-  const { uploadContainer, inputContainer, imgStyle } = props.classes;
-  const onChange = e => {
-    const node = window.document.getElementById('imagePreview');
-    const file = e.target.files[0];
-    const imageType = /image.*/;
-    if (!file.type.match(imageType)) {
-      e.target.value = '';
-    } else {
-      field.onChange(file);
-      const reader = new FileReader();
-      reader.onload = () => {
-        node.src = reader.result;
-      };
-      reader.readAsDataURL(file);
+const supportedTypes = ['image/png', 'image/jpeg', 'image/gif'];
+
+const validateImage = file => {
+  if (file && !supportedTypes.includes(file.type)) {
+    return 'Choose a PNG, JPEG or GIF image';
+  }
+
+  return undefined;
+};
+
+const ImageUpload = ({ name, classes }) => {
+  const [field, meta, helpers] = useField({
+    name,
+    validate: validateImage,
+  });
+
+  const [previewUrl, setPreviewUrl] = useState('');
+  const inputRef = useRef(null);
+  const inputId = useId();
+
+  const { uploadContainer, inputContainer, imgStyle } = classes;
+
+  useEffect(() => {
+    const file = field.value;
+
+    if (!file) {
+      setPreviewUrl('');
+
+      if (inputRef.current) {
+        inputRef.current.value = '';
+      }
+
+      return undefined;
     }
+
+    if (!supportedTypes.includes(file.type)) {
+      setPreviewUrl('');
+      return undefined;
+    }
+
+    const url = URL.createObjectURL(file);
+    setPreviewUrl(url);
+
+    return () => {
+      URL.revokeObjectURL(url);
+    };
+  }, [field.value]);
+
+  const handleChange = event => {
+    const file = event.currentTarget.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    helpers.setValue(file);
+    helpers.setTouched(true, false);
   };
+
   return (
     <div className={uploadContainer}>
       <div className={inputContainer}>
         <span>Support only images (*.png, *.gif, *.jpeg)</span>
+
         <input
-          {...field}
-          id="fileInput"
-          type="file"
-          accept=".jpg, .png, .jpeg"
-          onClick={onChange}
+          ref={inputRef}
+          id={inputId}
+          name={field.name}
+          type='file'
+          accept='image/png,image/jpeg,image/gif'
+          onChange={handleChange}
+          onBlur={field.onBlur}
         />
-        <label htmlFor="fileInput">Chose file</label>
+
+        <label htmlFor={inputId}>Choose file</label>
       </div>
-      <img
-        id="imagePreview"
-        className={classNames({ [imgStyle]: !!field.value })}
-        alt="user"
-      />
+
+      {meta.touched && meta.error && <span role='alert'>{meta.error}</span>}
+
+      {previewUrl && (
+        <img
+          src={previewUrl}
+          className={imgStyle}
+          alt='Selected image preview'
+        />
+      )}
     </div>
   );
 };

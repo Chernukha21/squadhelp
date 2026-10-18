@@ -14,7 +14,7 @@ services:
       - /client/node_modules
     ports:
       - "5000:3000"
-      
+
   server-dev:
     build:
       context: ./server

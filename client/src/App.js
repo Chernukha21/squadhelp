@@ -1,4 +1,3 @@
-import React, { Component } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
 import { ToastContainer } from 'react-toastify';
@@ -21,8 +20,7 @@ import Layout from './pages/Layout/Layout';
 import OnlyNotAuthorizedUserRoute from './components/Routes/OnlyNotAuthorizedUserRoute/OnlyNotAuthorizedUserRoute';
 import PrivateRoute from './components/Routes/PrivateRoute/PrivateRoute';
 
-class App extends Component {
-  render() {
+const App = () => {
     return (
       <Router history={browserHistory}>
         <ToastContainer
@@ -85,7 +83,6 @@ class App extends Component {
         <ChatContainer />
       </Router>
     );
-  }
 }
 
 export default App;

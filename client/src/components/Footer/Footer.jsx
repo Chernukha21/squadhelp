@@ -1,32 +1,24 @@
-import React, { Component } from 'react';
 import styles from './Footer.module.sass';
 import CONSTANTS from '../../constants';
 
-class Footer extends Component {
-  topFooterItemsRender = item => (
-    <div key={item.title}>
-      <h4>{item.title}</h4>
-      {item.items.map(i => (
-        <a key={i} href='https://google.com'>
-          {i}
-        </a>
-      ))}
-    </div>
-  );
+const Footer = () => (
+  <div className={styles.footerContainer}>
+    <div className={styles.footerTop}>
+      <div>
+        {CONSTANTS.FooterItems.map(section => (
+          <div key={section.title}>
+            <h4>{section.title}</h4>
 
-  topFooterRender () {
-    return CONSTANTS.FooterItems.map(item => this.topFooterItemsRender(item));
-  }
-
-  render () {
-    return (
-      <div className={styles.footerContainer}>
-        <div className={styles.footerTop}>
-          <div>{this.topFooterRender()}</div>
-        </div>
+            {section.items.map(label => (
+              <a key={label} href='https://google.com'>
+                {label}
+              </a>
+            ))}
+          </div>
+        ))}
       </div>
-    );
-  }
-}
+    </div>
+  </div>
+);
 
 export default Footer;

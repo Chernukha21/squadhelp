@@ -1,5 +1,4 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import Catalog from '../Catalog/Catalog';
 import styles from '../CatalogListContainer/CatalogListContainer.module.sass';
 import {
@@ -7,43 +6,35 @@ import {
   deleteCatalog,
 } from '../../../../store/slices/chatSlice';
 
-const CatalogList = (props) => {
-  const goToCatalog = (event, catalog) => {
-    props.changeShowModeCatalog(catalog);
+const CatalogList = ({ catalogList }) => {
+  const dispatch = useDispatch();
+
+  const handleOpenCatalog = (event, catalog) => {
     event.stopPropagation();
+    dispatch(changeShowModeCatalog(catalog));
   };
 
-  const deleteCatalog = (event, catalogId) => {
-    props.deleteCatalog({ catalogId });
+  const handleDeleteCatalog = (event, catalogId) => {
     event.stopPropagation();
+    dispatch(deleteCatalog({ catalogId }));
   };
 
-  const getListCatalog = () => {
-    const { catalogList } = props;
-    const elementList = [];
-    catalogList.forEach((catalog) => {
-      elementList.push(
-        <Catalog
-          catalog={catalog}
-          key={catalog._id}
-          deleteCatalog={deleteCatalog}
-          goToCatalog={goToCatalog}
-        />
-      );
-    });
-    return elementList.length ? (
-      elementList
-    ) : (
-      <span className={styles.notFound}>Not found</span>
-    );
-  };
-
-  return <div className={styles.listContainer}>{getListCatalog()}</div>;
+  return (
+    <div className={styles.listContainer}>
+      {catalogList.length > 0 ? (
+        catalogList.map(catalog => (
+          <Catalog
+            key={catalog._id}
+            catalog={catalog}
+            deleteCatalog={handleDeleteCatalog}
+            goToCatalog={handleOpenCatalog}
+          />
+        ))
+      ) : (
+        <span className={styles.notFound}>Not found</span>
+      )}
+    </div>
+  );
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  changeShowModeCatalog: (data) => dispatch(changeShowModeCatalog(data)),
-  deleteCatalog: (data) => dispatch(deleteCatalog(data)),
-});
-
-export default connect(null, mapDispatchToProps)(CatalogList);
+export default CatalogList;

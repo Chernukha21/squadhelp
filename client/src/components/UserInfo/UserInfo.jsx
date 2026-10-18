@@ -1,24 +1,38 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import UpdateUserInfoForm from '../UpdateUserInfoForm/UpdateUserInfoForm';
-import { updateUser } from '../../store/slices/userSlice';
-import { changeEditModeOnUserProfile } from '../../store/slices/userProfileSlice';
 import CONSTANTS from '../../constants';
 import styles from './UserInfo.module.sass';
+import { updateUser } from '../../store/slices/userSlice';
 
-const UserInfo = (props) => {
-  const updateUserData = (values) => {
+import { changeEditModeOnUserProfile } from '../../store/slices/userProfileSlice';
+
+const UserInfo = () => {
+  const dispatch = useDispatch();
+
+  const data = useSelector(state => state.userStore.data);
+  const isEdit = useSelector(state => state.userProfile.isEdit);
+
+  const { avatar, firstName, lastName, displayName, email, role, balance } =
+    data;
+
+  const updateUserData = values => {
     const formData = new FormData();
-    formData.append('file', values.file);
+
+    if (values.file) {
+      formData.append('file', values.file);
+    }
+
     formData.append('firstName', values.firstName);
     formData.append('lastName', values.lastName);
     formData.append('displayName', values.displayName);
-    props.updateUser(formData);
+
+    return dispatch(updateUser(formData));
   };
 
-  const { isEdit, changeEditMode, data } = props;
-  const { avatar, firstName, lastName, displayName, email, role, balance } =
-    data;
+  const handleToggleEdit = () => {
+    dispatch(changeEditModeOnUserProfile(!isEdit));
+  };
+
   return (
     <div className={styles.mainContainer}>
       {isEdit ? (
@@ -32,7 +46,7 @@ const UserInfo = (props) => {
                 : `${CONSTANTS.publicURL}${avatar}`
             }
             className={styles.avatar}
-            alt="user"
+            alt='user'
           />
           <div className={styles.infoContainer}>
             <div className={styles.infoBlock}>
@@ -64,25 +78,15 @@ const UserInfo = (props) => {
           </div>
         </div>
       )}
-      <div
-        onClick={() => changeEditMode(!isEdit)}
+      <button
+        type='button'
+        onClick={handleToggleEdit}
         className={styles.buttonEdit}
       >
         {isEdit ? 'Cancel' : 'Edit'}
-      </div>
+      </button>
     </div>
   );
 };
 
-const mapStateToProps = (state) => {
-  const { data } = state.userStore;
-  const { isEdit } = state.userProfile;
-  return { data, isEdit };
-};
-
-const mapDispatchToProps = (dispatch) => ({
-  updateUser: (data) => dispatch(updateUser(data)),
-  changeEditMode: (data) => dispatch(changeEditModeOnUserProfile(data)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(UserInfo);
+export default UserInfo;

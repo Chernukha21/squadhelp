@@ -1,0 +1,98 @@
+.mainContainer {
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 100px;
+}
+@media (max-width: 800px) {
+  .mainContainer {
+    padding: 40px;
+    flex-direction: column;
+  }
+}
+@media (max-width: 590px) {
+  .mainContainer {
+    padding: 15px;
+  }
+}
+@media (max-width: 345px) {
+  .mainContainer {
+    padding: 10px 0;
+  }
+}
+.mainContainer .notMoney {
+  margin-bottom: 20px;
+  color: #455a89;
+  font-size: 18px;
+  font-weight: 500;
+}
+.mainContainer .container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  padding-top: 30px;
+}
+.mainContainer .aside {
+  margin-right: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  box-shadow: 0 5px 10px 3px rgba(0, 0, 0, 0.1);
+}
+@media (max-width: 800px) {
+  .mainContainer .aside {
+    align-self: stretch;
+    margin-right: 0;
+    margin-bottom: 15px;
+  }
+}
+.mainContainer .aside .headerAside {
+  align-self: stretch;
+  font-size: 18px;
+  padding: 20px 26px;
+  background-color: #f3f3f3;
+  font-weight: 500;
+}
+.mainContainer .aside .optionsContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  align-self: stretch;
+  padding: 15px 0;
+  margin-bottom: 10px;
+}
+.mainContainer .aside .optionsContainer .optionContainer {
+  border-radius: 8px;
+  margin-top: 5px;
+  cursor: pointer;
+  color: #455a89;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 14px 58px;
+  align-self: stretch;
+  border: none;
+  background-color: transparent;
+  font-family: inherit;
+  text-align: left;
+}
+@media (max-width: 800px) {
+  .mainContainer .aside .optionsContainer .optionContainer {
+    text-align: center;
+  }
+}
+.mainContainer .aside .optionsContainer .optionContainer:hover {
+  background-color: #455a89;
+  color: white;
+}
+.mainContainer .aside .optionsContainer .currentOption {
+  background-color: #455a89;
+  color: white;
+}
+
+/*# sourceMappingURL=UserProfile.module.css.map */

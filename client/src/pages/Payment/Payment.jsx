@@ -1,51 +1,71 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import isEmpty from 'lodash/isEmpty';
-import { pay, clearPaymentStore } from '../../store/slices/paymentSlice';
+import {
+  clearPaymentStore,
+  pay as submitPayment,
+} from '../../store/slices/paymentSlice';
 import PayForm from '../../components/PayForm/PayForm';
 import styles from './Payment.module.sass';
-import CONSTANTS from '../../constants';
 import Error from '../../components/Error/Error';
 
-const Payment = (props) => {
+const Payment = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const pay = (values) => {
-    const { contests } = props.contestCreationStore;
-    const contestArray = [];
-    Object.keys(contests).forEach((key) =>
-      contestArray.push({ ...contests[key] })
-    );
-    const { number, expiry, cvc } = values;
-    const data = new FormData();
-    for (let i = 0; i < contestArray.length; i++) {
-      data.append('files', contestArray[i].file);
-      contestArray[i].haveFile = !!contestArray[i].file;
+  const contests = useSelector(state => state.contestCreationStore.contests);
+  const error = useSelector(state => state.payment.error);
+
+  const hasContests = Object.keys(contests).length > 0;
+
+  useEffect(() => {
+    if (!hasContests) {
+      navigate('/startContest', { replace: true });
     }
-    data.append('number', number);
-    data.append('expiry', expiry);
-    data.append('cvc', cvc);
-    data.append('contests', JSON.stringify(contestArray));
-    data.append('price', '100');
-    props.pay({
-      data: {
-        formData: data,
-      },
-      navigate,
-    });
+  }, [hasContests, navigate]);
+
+  const clearError = () => {
+    dispatch(clearPaymentStore());
   };
 
   const goBack = () => {
     navigate(-1);
   };
 
-  const { contests } = props.contestCreationStore;
-  const { error } = props.payment;
-  const { clearPaymentStore } = props;
-  if (isEmpty(contests)) {
-    navigate('/startContest', { replace: true });
+  const handlePayment = values => {
+    const contestArray = Object.values(contests).map(contest => ({
+      ...contest,
+      haveFile: contest.file instanceof File,
+    }));
+
+    const formData = new FormData();
+
+    contestArray.forEach(contest => {
+      if (contest.haveFile) {
+        formData.append('files', contest.file);
+      }
+    });
+
+    formData.append('number', values.number);
+    formData.append('expiry', values.expiry);
+    formData.append('cvc', values.cvc);
+    formData.append('contests', JSON.stringify(contestArray));
+    formData.append('price', '100');
+
+    dispatch(
+      submitPayment({
+        data: {
+          formData,
+        },
+        navigate,
+      })
+    );
+  };
+
+  if (!hasContests) {
+    return null;
   }
+
   return (
     <div className={styles.mainContainer}>
       <div className={styles.paymentContainer}>
@@ -54,10 +74,10 @@ const Payment = (props) => {
           <Error
             data={error.data}
             status={error.status}
-            clearError={clearPaymentStore}
+            clearError={clearError}
           />
         )}
-        <PayForm sendRequest={pay} back={goBack} isPayForOrder />
+        <PayForm sendRequest={handlePayment} back={goBack} isPayForOrder />
       </div>
       <div className={styles.orderInfoContainer}>
         <span className={styles.orderHeader}>Order Summary</span>
@@ -69,20 +89,10 @@ const Payment = (props) => {
           <span>Total:</span>
           <span>$100.00 USD</span>
         </div>
-        <a href="http://www.google.com">Have a promo code?</a>
+        <a href='#'>Have a promo code?</a>
       </div>
     </div>
   );
 };
 
-const mapStateToProps = (state) => ({
-  payment: state.payment,
-  contestCreationStore: state.contestCreationStore,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  pay: ({ data, navigate }) => dispatch(pay({ data, navigate })),
-  clearPaymentStore: () => dispatch(clearPaymentStore()),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Payment);
+export default Payment;

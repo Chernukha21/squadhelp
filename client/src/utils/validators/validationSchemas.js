@@ -2,11 +2,8 @@ import * as yup from 'yup';
 import valid from 'card-validator';
 
 export default {
-  LoginSchem: yup.object().shape({
-    email: yup
-      .string()
-      .email('check email')
-      .required('required'),
+  LoginSchema: yup.object().shape({
+    email: yup.string().email('check email').required('required'),
     password: yup
       .string()
       .test(
@@ -16,11 +13,8 @@ export default {
       )
       .required('required'),
   }),
-  RegistrationSchem: yup.object().shape({
-    email: yup
-      .string()
-      .email('check email')
-      .required('Email is required'),
+  RegistrationSchema: yup.object().shape({
+    email: yup.string().email('check email').required('Email is required'),
     password: yup
       .string()
       .test(
@@ -66,7 +60,7 @@ export default {
       .oneOf([true], 'Must Accept Terms and Conditions')
       .required('Must Accept Terms and Conditions'),
   }),
-  ContestSchem: yup.object({
+  ContestSchema: yup.object({
     nameVenture: yup.string().min(3),
     contestType: yup
       .string()
@@ -103,7 +97,7 @@ export default {
     brandStyle: yup.string().min(1),
     file: yup.mixed(),
   }),
-  filterSchem: yup.object().shape({
+  filterSchema: yup.object().shape({
     typeIndex: yup.number().oneOf[(1, 2, 3, 4, 5, 6, 7)],
     contestId: yup.string(),
     awardSort: yup.string().matches(/(desc|asc)/),
@@ -149,10 +143,7 @@ export default {
       .required('required'),
   }),
   CashoutSchema: yup.object().shape({
-    sum: yup
-      .number()
-      .min(5, 'min sum is 5$')
-      .required('required'),
+    sum: yup.number().min(5, 'min sum is 5$').required('required'),
     number: yup
       .string()
       .test(
@@ -161,10 +152,7 @@ export default {
         value => valid.number(value).isValid
       )
       .required('required'),
-    name: yup
-      .string()
-      .min(1)
-      .required('required'),
+    name: yup.string().min(1).required('required'),
     cvc: yup
       .string()
       .test('test-cvc', 'cvc is invalid', value => valid.cvv(value).isValid)

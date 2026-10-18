@@ -1,39 +1,33 @@
-import React from 'react';
-import { Field } from 'formik';
+import { useId } from 'react';
+import { useField } from 'formik';
 
-const FieldFileInput = ({ classes, ...rest }) => {
+const FieldFileInput = ({ name, classes }) => {
+  const [field, , helpers] = useField(name);
+  const inputId = useId();
+
   const { fileUploadContainer, labelClass, fileNameClass, fileInput } = classes;
 
+  const handleChange = event => {
+    helpers.setValue(event.currentTarget.files?.[0] ?? '');
+  };
+
   return (
-    <Field name={rest.name}>
-      {props => {
-        const { field } = props;
+    <div className={fileUploadContainer}>
+      <label htmlFor={inputId} className={labelClass}>
+        Choose file
+      </label>
 
-        const getFileName = () => {
-          if (props.field.value) {
-            return props.field.value.name;
-          }
-          return '';
-        };
+      <span className={fileNameClass}>{field.value?.name ?? ''}</span>
 
-        return (
-          <div className={fileUploadContainer}>
-            <label htmlFor='fileInput' className={labelClass}>
-              Choose file
-            </label>
-            <span id='fileNameContainer' className={fileNameClass}>
-              {getFileName()}
-            </span>
-            <input
-              {...field}
-              className={fileInput}
-              id='fileInput'
-              type='file'
-            />
-          </div>
-        );
-      }}
-    </Field>
+      <input
+        id={inputId}
+        name={field.name}
+        type='file'
+        className={fileInput}
+        onChange={handleChange}
+        onBlur={field.onBlur}
+      />
+    </div>
   );
 };
 

@@ -262,11 +262,28 @@ module.exports.removeChatFromCatalog = async (req, res, next) => {
 
 module.exports.deleteCatalog = async (req, res, next) => {
   try {
-    await Catalog.remove(
-      { _id: req.body.catalogId, userId: req.tokenData.userId });
-    res.end();
+    const catalogId = req.body?.catalogId;
+
+    if (!catalogId) {
+      return res.status(400).send({
+        message: 'catalogId is required',
+      });
+    }
+
+    const result = await Catalog.deleteOne({
+      _id: catalogId,
+      userId: req.tokenData.userId,
+    });
+
+    if (result.deletedCount === 0) {
+      return res.status(404).send({
+        message: 'Catalog not found',
+      });
+    }
+
+    return res.status(204).end();
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };
 

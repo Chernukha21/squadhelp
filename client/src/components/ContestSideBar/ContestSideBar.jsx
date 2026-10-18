@@ -1,24 +1,30 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import moment from 'moment';
 import styles from './ContestSideBar.module.sass';
 import CONSTANTS from '../../constants';
 
-const ContestSideBar = props => {
+const ContestSideBar = ({ contestData, totalEntries }) => {
+  const currentUserId = useSelector(state => state.userStore.data?.id);
+  const { User, prize } = contestData;
   const getTimeStr = () => {
-    const diff = moment.duration(
-      moment().diff(moment(props.contestData.createdAt))
-    );
-    let str = '';
-    if (diff._data.days !== 0) str = `${diff._data.days} days `;
-    if (diff._data.hours !== 0) str += `${diff._data.hours} hours`;
-    if (str.length === 0) str = 'less than one hour';
-    return str;
+    const diff = moment.duration(moment().diff(moment(contestData.createdAt)));
+
+    const days = Math.floor(diff.asDays());
+    const hours = diff.hours();
+    const parts = [];
+
+    if (days > 0) {
+      parts.push(`${days} days`);
+    }
+
+    if (hours > 0) {
+      parts.push(`${hours} hours`);
+    }
+
+    return parts.join(' ') || 'less than one hour';
   };
 
   const renderContestInfo = () => {
-    const { totalEntries } = props;
-    const { User, prize } = props.contestData;
     return (
       <div className={styles.contestSideBarInfo}>
         <div className={styles.contestInfo}>
@@ -58,7 +64,7 @@ const ContestSideBar = props => {
             </div>
           </div>
         </div>
-        {props.data.id !== User.id && (
+        {currentUserId !== User.id && (
           <div className={styles.infoCustomerContainer}>
             <span className={styles.labelCustomerInfo}>
               About Contest Holder
@@ -86,6 +92,4 @@ const ContestSideBar = props => {
   return renderContestInfo();
 };
 
-const mapStateToProps = state => state.userStore;
-
-export default connect(mapStateToProps, null)(ContestSideBar);
+export default ContestSideBar;
