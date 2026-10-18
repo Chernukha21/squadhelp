@@ -6,7 +6,7 @@ const userQueries =require('../controllers/queries/userQueries');
 module.exports.checkAuth = async (req, res, next) => {
   const accessToken = req.headers.authorization;
   if (!accessToken) {
-    return next(new TokenError('need token'));
+    return next(new TokenError());
   }
   try {
     const tokenData = jwt.verify(accessToken, CONSTANTS.JWT_SECRET);

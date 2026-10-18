@@ -1,10 +1,9 @@
 const ApplicationError = require('./ApplicationError');
 
-class TokenError extends ApplicationError{
-  constructor (message) {
-    super(message || 'token error', 408);
+class TokenError extends ApplicationError {
+  constructor(message) {
+    super(message || 'Unauthorized', 401);
   }
 }
 
 module.exports = TokenError;
-
