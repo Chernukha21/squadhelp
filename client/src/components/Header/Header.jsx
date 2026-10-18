@@ -12,7 +12,9 @@ const Header = () => {
   const { data, isFetching } = useSelector(state => state.userStore);
 
   useEffect(() => {
-    if (!data) {
+    const token = localStorage.getItem(CONSTANTS.ACCESS_TOKEN);
+
+    if (token && !data) {
       dispatch(getUser());
     }
   }, [data, dispatch]);
@@ -130,11 +132,13 @@ const Header = () => {
         </div>
       </div>
       <div className={styles.navContainer}>
-        <img
-          src={`${CONSTANTS.STATIC_IMAGES_PATH}blue-logo.png`}
-          className={styles.logo}
-          alt='blue_logo'
-        />
+        <Link to='/'>
+          <img
+            src={`${CONSTANTS.STATIC_IMAGES_PATH}blue-logo.png`}
+            className={styles.logo}
+            alt='Squadhelp'
+          />
+        </Link>
         <div className={styles.leftNav}>
           <div className={styles.nav}>
             <ul>

@@ -1,23 +1,32 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, Outlet } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 import { getUser } from '../../../store/slices/userSlice';
 import Spinner from '../../Spinner/Spinner';
+import CONSTANTS from '../../../constants';
 
 const OnlyNotAuthorizedUserRoute = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { data, isFetching } = useSelector((state) => state.userStore);
+
+  const { data, isFetching } = useSelector(state => state.userStore);
+
+  const accessToken = localStorage.getItem(CONSTANTS.ACCESS_TOKEN);
 
   useEffect(() => {
-    dispatch(getUser(navigate));
-  }, []);
+    if (accessToken && !data) {
+      dispatch(getUser());
+    }
+  }, [accessToken, data, dispatch]);
+
+  if (!accessToken) {
+    return <Outlet />;
+  }
 
   if (isFetching) {
     return <Spinner />;
   }
 
-  return data ? navigate('/') : <Outlet />;
+  return data ? <Navigate to='/' replace /> : <Outlet />;
 };
 
 export default OnlyNotAuthorizedUserRoute;
