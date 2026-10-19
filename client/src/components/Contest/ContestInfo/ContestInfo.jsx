@@ -1,4 +1,6 @@
-import React from 'react';
+import LightBox from 'react-18-image-lightbox';
+import { useState } from 'react';
+import { toast } from 'react-toastify';
 import styles from '../../Brief/Brief.module.sass';
 import CONSTANTS from '../../../constants';
 import LogoContestSpecialInfo from './LogoContestSpecialInfo';
@@ -22,6 +24,47 @@ const ContestInfo = props => {
     User,
     status,
   } = contestData;
+
+  const [isImageOpen, setIsImageOpen] = useState(false);
+  const appElement = document.getElementById('root');
+  const fileUrl = `${CONSTANTS.publicURL}${fileName}`;
+
+  const handleOpenImage = () => {
+    setIsImageOpen(true);
+  };
+
+  const handleCloseImage = () => {
+    setIsImageOpen(false);
+  };
+
+  const handleDownloadImage = async () => {
+    try {
+      const response = await fetch(fileUrl);
+
+      if (!response.ok) {
+        throw new Error('Failed to download image');
+      }
+
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+
+      link.href = url;
+      link.download = originalFileName || fileName.split('/').pop();
+
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+      setTimeout(() => {
+        URL.revokeObjectURL(url);
+      }, 0);
+    } catch (error) {
+      console.error('Image download failed:', error);
+      toast.error('Failed to download file');
+    }
+  };
+
   return (
     <div className={styles.mainContestInfoContainer}>
       <div className={styles.infoContainer}>
@@ -30,14 +73,15 @@ const ContestInfo = props => {
             <span className={styles.label}>Contest Type</span>
             <span className={styles.data}>{contestType}</span>
           </div>
-          {User.id === userId && status !== CONSTANTS.CONTEST_STATUS_FINISHED && (
-            <div
-              onClick={() => changeEditContest(true)}
-              className={styles.editBtn}
-            >
-              Edit
-            </div>
-          )}
+          {User.id === userId &&
+            status !== CONSTANTS.CONTEST_STATUS_FINISHED && (
+              <div
+                onClick={() => changeEditContest(true)}
+                className={styles.editBtn}
+              >
+                Edit
+              </div>
+            )}
           {role !== CONSTANTS.CUSTOMER && (
             <i onClick={goChat} className='fas fa-comments' />
           )}
@@ -78,18 +122,51 @@ const ContestInfo = props => {
           <span className={styles.label}>Industry of company</span>
           <span className={styles.data}>{industry}</span>
         </div>
-        {originalFileName && (
+        {originalFileName && fileName && (
           <div className={styles.dataContainer}>
             <span className={styles.label}>Additional File</span>
-            <a
-              target='_blank'
-              className={styles.file}
-              href={`${CONSTANTS.publicURL}${fileName}`}
-              download={originalFileName}
-              rel='noreferrer'
+
+            <button
+              type='button'
+              className={styles.filePreviewButton}
+              onClick={handleOpenImage}
             >
-              {originalFileName}
-            </a>
+              <img
+                src={fileUrl}
+                alt={originalFileName}
+                className={styles.filePreview}
+              />
+
+              <span>{originalFileName}</span>
+            </button>
+
+            {isImageOpen && (
+              <LightBox
+                mainSrc={fileUrl}
+                onCloseRequest={handleCloseImage}
+                reactModalProps={{
+                  appElement,
+                }}
+                toolbarButtons={[
+                  <button
+                    key='back'
+                    type='button'
+                    className={styles.lightboxButton}
+                    onClick={handleCloseImage}
+                  >
+                    Back
+                  </button>,
+                  <button
+                    key='download'
+                    type='button'
+                    className={styles.lightboxButton}
+                    onClick={handleDownloadImage}
+                  >
+                    Download
+                  </button>,
+                ]}
+              />
+            )}
           </div>
         )}
       </div>
