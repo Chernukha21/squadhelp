@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import styles from './Header.module.sass';
 import CONSTANTS from '../../constants';
 import { clearUserStore, getUser } from '../../store/slices/userSlice';
+import { controller } from '../../api/ws/socketController';
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -20,6 +21,10 @@ const Header = () => {
   }, [data, dispatch]);
 
   const logOut = () => {
+    if (data?.id != null) {
+      controller?.unsubscribe(data.id);
+    }
+
     localStorage.removeItem(CONSTANTS.ACCESS_TOKEN);
     dispatch(clearUserStore());
     navigate('/login', { replace: true });

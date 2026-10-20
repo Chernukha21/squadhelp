@@ -1,10 +1,11 @@
-import React from 'react';
 import { toast } from 'react-toastify';
 import WebSocket from './WebSocket';
 import Notification from '../../../components/Notification/Notification';
+import { getContestById } from '../../../store/slices/contestByIdSlice';
+import CONSTANTS from '../../../constants';
 
 class NotificationSocket extends WebSocket {
-  constructor (dispatch, getState, room) {
+  constructor(dispatch, getState, room) {
     super(dispatch, getState, room);
   }
 
@@ -15,31 +16,58 @@ class NotificationSocket extends WebSocket {
   };
 
   onChangeMark = () => {
-    this.socket.on('changeMark', () => {
-      toast('Someone liked your offer');
+    this.socket.off(CONSTANTS.NOTIFICATION_CHANGE_MARK);
+    this.socket.on(CONSTANTS.NOTIFICATION_CHANGE_MARK, () => {
+      toast('Your offer received a new rating');
     });
   };
 
   onChangeOfferStatus = () => {
-    this.socket.on('changeOfferStatus', message => {
-      toast(
-        <Notification message={message.message} contestId={message.contestId} />
-      );
-    });
+    this.socket.off(CONSTANTS.NOTIFICATION_CHANGE_OFFER_STATUS);
+
+    this.socket.on(
+      CONSTANTS.NOTIFICATION_CHANGE_OFFER_STATUS,
+      ({ message, contestId }) => {
+        toast(<Notification message={message} contestId={contestId} />);
+
+        this.refreshCurrentContest(contestId);
+      }
+    );
   };
 
   onEntryCreated = () => {
-    this.socket.on('onEntryCreated', () => {
-      toast('New Entry');
-    });
+    this.socket.off(CONSTANTS.NOTIFICATION_ENTRY_CREATED);
+
+    this.socket.on(
+      CONSTANTS.NOTIFICATION_ENTRY_CREATED,
+      ({ contestId } = {}) => {
+        toast(
+          <Notification message='New offer received' contestId={contestId} />
+        );
+
+        this.refreshCurrentContest(contestId);
+      }
+    );
+  };
+
+  refreshCurrentContest = contestId => {
+    const currentContestId = this.getState().contestByIdStore.contestData?.id;
+
+    if (contestId != null && String(currentContestId) === String(contestId)) {
+      this.dispatch(getContestById({ contestId }));
+    }
   };
 
   subscribe = id => {
-    this.socket.emit('subscribe', id);
+    if (id != null) {
+      this.socket.emit(CONSTANTS.SOCKET_SUBSCRIBE, String(id));
+    }
   };
 
-  unsubsctibe = id => {
-    this.socket.emit('unsubscribe', id);
+  unsubscribe = id => {
+    if (id != null) {
+      this.socket.emit(CONSTANTS.SOCKET_UNSUBSCRIBE, String(id));
+    }
   };
 }
 

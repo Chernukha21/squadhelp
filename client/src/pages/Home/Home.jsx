@@ -4,6 +4,7 @@ import CONSTANTS from '../../constants';
 import SlideBar from '../../components/SlideBar/SlideBar';
 import styles from './Home.module.sass';
 import carouselConstants from '../../carouselConstants';
+import Notification from '../../components/Notification/Notification.jsx';
 
 const Home = () => {
   const [index, setIndex] = useState(0);

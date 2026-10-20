@@ -8,12 +8,12 @@ const initialState = {
 
 const reducers = {
   saveContestToStore: (state, { payload: { type, info } }) => {
-    state.contests = {
-      ...state.contests,
-      ...{ [type]: info },
-    };
+    state.contests[type] = info;
   },
-  clearContestStore: () => initialState,
+
+  clearContestStore: () => ({
+    contests: {},
+  }),
 };
 
 const contestSavingSlice = createSlice({

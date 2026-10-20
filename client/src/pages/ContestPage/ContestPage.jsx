@@ -67,12 +67,12 @@ const ContestPage = () => {
     dispatch(clearSetOfferStatusError());
   };
 
-  const handleSetOfferStatus = (creatorId, offerId, command) => {
-    handleClearOfferStatusError();
+  const handleSetOfferStatus = async (creatorId, offerId, command) => {
+    dispatch(clearSetOfferStatusError());
 
     const { id: contestId, orderId, priority } = contestData;
 
-    return dispatch(
+    const result = await dispatch(
       setOfferStatus({
         command,
         offerId,
@@ -82,6 +82,12 @@ const ContestPage = () => {
         contestId,
       })
     );
+
+    if (setOfferStatus.fulfilled.match(result)) {
+      await getData();
+    }
+
+    return result;
   };
 
   const findConversationInfo = interlocutorId => {

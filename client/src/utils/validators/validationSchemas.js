@@ -1,6 +1,10 @@
 import * as yup from 'yup';
 import valid from 'card-validator';
 
+const MAX_OFFER_FILE_SIZE = 5 * 1024 * 1024;
+
+const ALLOWED_OFFER_FILE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
+
 export default {
   LoginSchema: yup.object().shape({
     email: yup.string().email('check email').required('required'),
@@ -103,18 +107,31 @@ export default {
     awardSort: yup.string().matches(/(desc|asc)/),
     industry: yup.string(),
   }),
-  LogoOfferSchema: yup.object().shape({
-    offerData: yup.mixed().required('required'),
+  LogoOfferSchema: yup.object({
+    offerData: yup
+      .mixed()
+      .test(
+        'file-required',
+        'Image is required',
+        value => value instanceof File
+      )
+      .test(
+        'file-type',
+        'Only JPEG, PNG and WEBP images are allowed',
+        value => !value || ALLOWED_OFFER_FILE_TYPES.includes(value.type)
+      )
+      .test(
+        'file-size',
+        'Image must be 5 MB or less',
+        value => !value || value.size <= MAX_OFFER_FILE_SIZE
+      ),
   }),
-  TextOfferSchema: yup.object().shape({
+  TextOfferSchema: yup.object({
     offerData: yup
       .string()
-      .test(
-        'test-offerData',
-        'required',
-        value => value && value.trim().length >= 1
-      )
-      .required('suggestion is required'),
+      .trim()
+      .max(255, 'Suggestion must be 255 characters or less')
+      .required('Suggestion is required'),
   }),
   PaymentSchema: yup.object().shape({
     number: yup

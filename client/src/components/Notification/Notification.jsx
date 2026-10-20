@@ -1,15 +1,19 @@
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import styles from './Notification.module.sass';
 
 const Notification = ({ message, contestId }) => (
   <div>
-    <br />
     <span>{message}</span>
-    <br />
 
-    {contestId && (
-      <Link to={`/contest/${contestId}`} className={styles.goToContest}>
-        Go to contest
+    {contestId != null && (
+      <Link
+        to={`/contest/${contestId}`}
+        className={styles.goToContest}
+        onClick={() => toast.dismiss()}
+      >
+        <br />
+        <span>Go to contest</span>
       </Link>
     )}
   </div>

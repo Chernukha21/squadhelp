@@ -7,6 +7,10 @@ import ContestForm from '../../components/ContestForm/ContestForm';
 import BackButton from '../../components/BackButton/BackButton';
 import ProgressBar from '../../components/ProgressBar/ProgressBar';
 import { saveContestToStore } from '../../store/slices/contestCreationSlice';
+import {
+  getContestFile,
+  setContestFile,
+} from '../../utils/contestFilesStorage';
 
 const ContestCreationPage = ({ contestType, title }) => {
   const formRef = useRef(null);
@@ -16,14 +20,25 @@ const ContestCreationPage = ({ contestType, title }) => {
   const contests = useSelector(state => state.contestCreationStore.contests);
   const bundle = useSelector(state => state.bundleStore.bundle);
 
-  const contestData = contests[contestType] ?? { contestType };
+  const savedContest = contests[contestType] ?? {
+    contestType,
+  };
+
+  const contestData = {
+    ...savedContest,
+    file: getContestFile(contestType) ?? '',
+  };
   const nextStep = bundle?.[contestType];
 
   const handleSubmit = values => {
+    const { file, ...contestInfo } = values;
+
+    setContestFile(contestType, file);
+
     dispatch(
       saveContestToStore({
         type: contestType,
-        info: values,
+        info: contestInfo,
       })
     );
 

@@ -5,6 +5,9 @@ const userQueries = require('./queries/userQueries');
 const controller = require('../socketInit');
 const UtilFunctions = require('../utils/functions');
 const CONSTANTS = require('../constants');
+const BadRequestError = require('../errors/BadRequestError');
+
+
 
 module.exports.dataForContest = async (req, res, next) => {
   const response = {};
@@ -123,25 +126,116 @@ module.exports.updateContest = async (req, res, next) => {
 };
 
 module.exports.setNewOffer = async (req, res, next) => {
-  const obj = {};
-  if (req.body.contestType === CONSTANTS.LOGO_CONTEST) {
-    obj.fileName = req.file.filename;
-    obj.originalFileName = req.file.originalname;
-  } else {
-    obj.text = req.body.offerData;
-  }
-  obj.userId = req.tokenData.userId;
-  obj.contestId = req.body.contestId;
   try {
-    const result = await contestQueries.createOffer(obj);
-    delete result.contestId;
-    delete result.userId;
-    controller.getNotificationController().emitEntryCreated(
-      req.body.customerId);
-    const User = Object.assign({}, req.tokenData, { id: req.tokenData.userId });
-    res.send(Object.assign({}, result, { User }));
-  } catch (e) {
-    return next(new ServerError());
+    const contestId = Number(req.body.contestId);
+
+    if (!Number.isInteger(contestId) || contestId <= 0) {
+      return next(
+        new BadRequestError('Invalid contest ID')
+      );
+    }
+
+    const contest = await db.Contests.findOne({
+      where: {
+        id: contestId,
+      },
+      attributes: [
+        'id',
+        'userId',
+        'contestType',
+        'status',
+      ],
+    });
+
+    if (!contest) {
+      return next(
+        new BadRequestError('Contest not found')
+      );
+    }
+
+    if (
+      contest.status !== CONSTANTS.CONTEST_STATUS_ACTIVE
+    ) {
+      return next(
+        new BadRequestError(
+          'Offers can only be submitted to active contests'
+        )
+      );
+    }
+
+    const offer = {
+      userId: req.tokenData.userId,
+      contestId,
+    };
+
+    if (contest.contestType === CONSTANTS.LOGO_CONTEST) {
+      if (!req.file) {
+        return next(
+          new BadRequestError('Image is required')
+        );
+      }
+
+      offer.fileName = req.file.filename;
+      offer.originalFileName = req.file.originalname;
+    } else {
+      const { offerData } = req.body;
+
+      if (typeof offerData !== 'string') {
+        return next(
+          new BadRequestError('Suggestion is required')
+        );
+      }
+
+      const normalizedOffer = offerData.trim();
+
+      if (!normalizedOffer) {
+        return next(
+          new BadRequestError('Suggestion is required')
+        );
+      }
+
+      if (normalizedOffer.length > 255) {
+        return next(
+          new BadRequestError(
+            'Suggestion must be 255 characters or less'
+          )
+        );
+      }
+
+      offer.text = normalizedOffer;
+    }
+
+    const createdOffer =
+      await contestQueries.createOffer(offer);
+
+    const responseOffer =
+      typeof createdOffer.get === 'function'
+        ? createdOffer.get({ plain: true })
+        : { ...createdOffer };
+
+    delete responseOffer.contestId;
+    delete responseOffer.userId;
+
+    controller
+      .getNotificationController()
+      .emitEntryCreated(
+        String(contest.userId),
+        contestId
+      );
+
+    const User = {
+      ...req.tokenData,
+      id: req.tokenData.userId,
+    };
+
+    return res.send({
+      ...responseOffer,
+      User,
+    });
+  } catch (error) {
+    return next(
+      new ServerError('Cannot create offer')
+    );
   }
 };
 
@@ -154,12 +248,19 @@ const rejectOffer = async (offerId, creatorId, contestId) => {
 };
 
 const resolveOffer = async (
-  contestId, creatorId, orderId, offerId, priority, transaction) => {
+  contestId,
+  creatorId,
+  orderId,
+  offerId,
+  priority,
+  transaction
+) => {
   const finishedContest = await contestQueries.updateContestStatus({
-    status: db.sequelize.literal(`   CASE
-            WHEN "id"=${ contestId }  AND "orderId"='${ orderId }' THEN '${ CONSTANTS.CONTEST_STATUS_FINISHED }'
-            WHEN "orderId"='${ orderId }' AND "priority"=${ priority +
-    1 }  THEN '${ CONSTANTS.CONTEST_STATUS_ACTIVE }'
+    status: db.sequelize.literal(`CASE
+            WHEN "id"=${ contestId }  AND "orderId"='${ orderId }'
+            THEN '${ CONSTANTS.CONTEST_STATUS_FINISHED }'
+            WHEN "orderId"='${orderId}' AND "priority"=${Number(priority) + 1}
+            THEN '${ CONSTANTS.CONTEST_STATUS_ACTIVE }'
             ELSE '${ CONSTANTS.CONTEST_STATUS_PENDING }'
             END
     `),
@@ -167,28 +268,59 @@ const resolveOffer = async (
   await userQueries.updateUser(
     { balance: db.sequelize.literal('balance + ' + finishedContest.prize) },
     creatorId, transaction);
-  const updatedOffers = await contestQueries.updateOfferStatus({
-    status: db.sequelize.literal(` CASE
-            WHEN "id"=${ offerId } THEN '${ CONSTANTS.OFFER_STATUS_WON }'
-            ELSE '${ CONSTANTS.OFFER_STATUS_REJECTED }'
-            END
-    `),
-  }, {
-    contestId,
-  }, transaction);
-  transaction.commit();
-  const arrayRoomsId = [];
-  updatedOffers.forEach(offer => {
-    if (offer.status === CONSTANTS.OFFER_STATUS_REJECTED && creatorId !==
-      offer.userId) {
-      arrayRoomsId.push(offer.userId);
-    }
-  });
-  controller.getNotificationController().emitChangeOfferStatus(arrayRoomsId,
-    'Someone of yours offers was rejected', contestId);
-  controller.getNotificationController().emitChangeOfferStatus(creatorId,
-    'Someone of your offers WIN', contestId);
-  return updatedOffers[ 0 ].dataValues;
+  const updatedOffers = await contestQueries.updateOfferStatus(
+    {
+      status: db.sequelize.literal(`CASE
+      WHEN "id"=${offerId}
+        THEN '${CONSTANTS.OFFER_STATUS_WON}'
+      ELSE '${CONSTANTS.OFFER_STATUS_REJECTED}'
+    END`),
+    },
+    {
+      contestId,
+      status: CONSTANTS.OFFER_STATUS_PENDING,
+    },
+    transaction
+  );
+  const winningOffer = updatedOffers.find(
+    offer => String(offer.id) === String(offerId)
+  );
+  if (!winningOffer) {
+    throw new ServerError('Offer has already been processed');
+  }
+
+  await transaction.commit();
+
+  const rejectedCreatorIds = [
+    ...new Set(
+      updatedOffers
+        .filter(
+          offer =>
+            offer.status === CONSTANTS.OFFER_STATUS_REJECTED &&
+            String(offer.userId) !== String(creatorId)
+        )
+        .map(offer => String(offer.userId))
+    ),
+  ];
+
+  if (rejectedCreatorIds.length > 0) {
+    controller
+      .getNotificationController()
+      .emitChangeOfferStatus(
+        rejectedCreatorIds,
+        'Your offer was rejected',
+        contestId
+      );
+  }
+
+  controller
+    .getNotificationController()
+    .emitChangeOfferStatus(
+      String(creatorId),
+      'Your offer won the contest',
+      contestId
+    );
+  return winningOffer?.dataValues ?? winningOffer;
 };
 
 module.exports.setOfferStatus = async (req, res, next) => {
@@ -201,15 +333,25 @@ module.exports.setOfferStatus = async (req, res, next) => {
     } catch (err) {
       next(err);
     }
-  } else if (req.body.command === 'resolve') {
+}else if (req.body.command === 'resolve') {
     try {
       transaction = await db.sequelize.transaction();
-      const winningOffer = await resolveOffer(req.body.contestId,
-        req.body.creatorId, req.body.orderId, req.body.offerId,
-        req.body.priority, transaction);
+
+      const winningOffer = await resolveOffer(
+        req.body.contestId,
+        req.body.creatorId,
+        req.body.orderId,
+        req.body.offerId,
+        req.body.priority,
+        transaction
+      );
+
       res.send(winningOffer);
     } catch (err) {
-      transaction.rollback();
+      if (transaction && !transaction.finished) {
+        await transaction.rollback();
+      }
+
       next(err);
     }
   }

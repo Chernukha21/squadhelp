@@ -8,6 +8,10 @@ import {
 import PayForm from '../../components/PayForm/PayForm';
 import styles from './Payment.module.sass';
 import Error from '../../components/Error/Error';
+import {
+  getContestFile,
+  clearContestFiles,
+} from '../../utils/contestFilesStorage';
 
 const Payment = () => {
   const dispatch = useDispatch();
@@ -32,19 +36,24 @@ const Payment = () => {
     navigate(-1);
   };
 
-  const handlePayment = values => {
-    const contestArray = Object.values(contests).map(contest => ({
-      ...contest,
-      haveFile: contest.file instanceof File,
-    }));
-
+  const handlePayment = async values => {
     const formData = new FormData();
 
-    contestArray.forEach(contest => {
-      if (contest.haveFile) {
-        formData.append('files', contest.file);
+    const contestArray = Object.entries(contests).map(
+      ([contestType, contest]) => {
+        const file = getContestFile(contestType);
+        const haveFile = file instanceof File;
+
+        if (haveFile) {
+          formData.append('files', file);
+        }
+
+        return {
+          ...contest,
+          haveFile,
+        };
       }
-    });
+    );
 
     formData.append('number', values.number);
     formData.append('expiry', values.expiry);
@@ -52,7 +61,7 @@ const Payment = () => {
     formData.append('contests', JSON.stringify(contestArray));
     formData.append('price', '100');
 
-    dispatch(
+    const result = await dispatch(
       submitPayment({
         data: {
           formData,
@@ -60,6 +69,12 @@ const Payment = () => {
         navigate,
       })
     );
+
+    if (submitPayment.fulfilled.match(result)) {
+      clearContestFiles();
+    }
+
+    return result;
   };
 
   if (!hasContests) {
