@@ -99,6 +99,17 @@ export default {
     typeOfName: yup.string().min(1),
     typeOfTagline: yup.string().min(1),
     brandStyle: yup.string().min(1),
+    domainPreference: yup.string().when('contestType', {
+      is: 'name',
+      then: schema =>
+        schema
+          .oneOf(
+            ['variationsAllowed', 'exactMatch', 'noDomain'],
+            'Select a domain preference'
+          )
+          .required('Domain preference is required'),
+      otherwise: schema => schema.notRequired(),
+    }),
     file: yup.mixed(),
   }),
   filterSchema: yup.object().shape({

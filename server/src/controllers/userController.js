@@ -8,6 +8,7 @@ const controller = require('../socketInit');
 const userQueries = require('./queries/userQueries');
 const bankQueries = require('./queries/bankQueries');
 const ratingQueries = require('./queries/ratingQueries');
+const BadRequestError = require('../errors/BadRequestError');
 
 module.exports.login = async (req, res, next) => {
   try {
@@ -105,47 +106,101 @@ module.exports.changeMark = async (req, res, next) => {
 
 module.exports.payment = async (req, res, next) => {
   let transaction;
+
   try {
-    transaction = await bd.sequelize.transaction();
-    await bankQueries.updateBankBalance({
-      balance: bd.sequelize.literal(`
-                CASE
-            WHEN "cardNumber"='${ req.body.number.replace(/ /g,
-    '') }' AND "cvc"='${ req.body.cvc }' AND "expiry"='${ req.body.expiry }'
-                THEN "balance"-${ req.body.price }
-            WHEN "cardNumber"='${ CONSTANTS.SQUADHELP_BANK_NUMBER }' AND "cvc"='${ CONSTANTS.SQUADHELP_BANK_CVC }' AND "expiry"='${ CONSTANTS.SQUADHELP_BANK_EXPIRY }'
-                THEN "balance"+${ req.body.price } END
-        `),
-    },
-    {
-      cardNumber: {
-        [ bd.Sequelize.Op.in ]: [
-          CONSTANTS.SQUADHELP_BANK_NUMBER,
-          req.body.number.replace(/ /g, ''),
-        ],
-      },
-    },
-    transaction);
+    if (
+      !Array.isArray(req.body.contests) ||
+      req.body.contests.length === 0
+    ) {
+      throw new BadRequestError('Contests are required');
+    }
+
+    const allowedDomainPreferences = Object.values(
+      CONSTANTS.DOMAIN_PREFERENCES
+    );
+
     const orderId = uuid();
-    req.body.contests.forEach((contest, index) => {
-      const prize = index === req.body.contests.length - 1 ? Math.ceil(
-        req.body.price / req.body.contests.length)
-        : Math.floor(req.body.price / req.body.contests.length);
-      contest = Object.assign(contest, {
-        status: index === 0 ? 'active' : 'pending',
+
+    const contests = req.body.contests.map((contest, index) => {
+      const isNameContest =
+        contest.contestType === CONSTANTS.NAME_CONTEST;
+
+      if (
+        isNameContest &&
+        !allowedDomainPreferences.includes(contest.domainPreference)
+      ) {
+        throw new BadRequestError(
+          'Invalid domain preference'
+        );
+      }
+
+      const prize =
+        index === req.body.contests.length - 1
+          ? Math.ceil(req.body.price / req.body.contests.length)
+          : Math.floor(req.body.price / req.body.contests.length);
+
+      return {
+        ...contest,
+
+        domainPreference: isNameContest
+          ? contest.domainPreference
+          : null,
+
+        status:
+          index === 0
+            ? CONSTANTS.CONTEST_STATUS_ACTIVE
+            : CONSTANTS.CONTEST_STATUS_PENDING,
+
         userId: req.tokenData.userId,
         priority: index + 1,
         orderId,
         createdAt: moment().format('YYYY-MM-DD HH:mm'),
         prize,
-      });
+      };
     });
-    await bd.Contests.bulkCreate(req.body.contests, transaction);
-    transaction.commit();
-    res.send();
-  } catch (err) {
-    transaction.rollback();
-    next(err);
+
+    transaction = await bd.sequelize.transaction();
+
+    await bankQueries.updateBankBalance(
+      {
+        balance: bd.sequelize.literal(`
+          CASE
+            WHEN "cardNumber"='${req.body.number.replace(/ /g, '')}'
+              AND "cvc"='${req.body.cvc}'
+              AND "expiry"='${req.body.expiry}'
+            THEN "balance"-${req.body.price}
+
+            WHEN "cardNumber"='${CONSTANTS.SQUADHELP_BANK_NUMBER}'
+              AND "cvc"='${CONSTANTS.SQUADHELP_BANK_CVC}'
+              AND "expiry"='${CONSTANTS.SQUADHELP_BANK_EXPIRY}'
+            THEN "balance"+${req.body.price}
+          END
+        `),
+      },
+      {
+        cardNumber: {
+          [bd.Sequelize.Op.in]: [
+            CONSTANTS.SQUADHELP_BANK_NUMBER,
+            req.body.number.replace(/ /g, ''),
+          ],
+        },
+      },
+      transaction
+    );
+
+    await bd.Contests.bulkCreate(contests, {
+      transaction,
+    });
+
+    await transaction.commit();
+
+    return res.send();
+  } catch (error) {
+    if (transaction && !transaction.finished) {
+      await transaction.rollback();
+    }
+
+    return next(error);
   }
 };
 

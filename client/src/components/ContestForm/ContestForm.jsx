@@ -4,7 +4,7 @@ import { Form, Formik } from 'formik';
 
 import CONSTANTS from '../../constants';
 import { getDataForContest } from '../../store/slices/dataForContestSlice';
-import Schems from '../../utils/validators/validationSchemas.js';
+import Schemas from '../../utils/validators/validationSchemas';
 
 import Spinner from '../Spinner/Spinner';
 import FormInput from '../FormInput/FormInput';
@@ -13,13 +13,34 @@ import FieldFileInput from '../InputComponents/FieldFileInput/FieldFileInput';
 import FormTextArea from '../InputComponents/FormTextArea/FormTextArea';
 import TryAgain from '../TryAgain/TryAgain';
 import OptionalSelects from '../OptionalSelects/OptionalSelects';
+import ButtonGroup from '../ButtonGroup/ButtonGroup';
 
 import styles from './ContestForm.module.sass';
+
+const domainOptions = [
+  {
+    value: 'variationsAllowed',
+    title: 'Yes',
+    description: 'But minor variations are allowed',
+    recommended: true,
+  },
+  {
+    value: 'exactMatch',
+    title: 'Yes',
+    description: 'The Domain should exactly match the name',
+  },
+  {
+    value: 'noDomain',
+    title: 'No',
+    description: 'I am only looking for a name, not a Domain',
+  },
+];
 
 const variableOptions = {
   [CONSTANTS.NAME_CONTEST]: {
     styleName: '',
     typeOfName: '',
+    domainPreference: 'variationsAllowed',
   },
   [CONSTANTS.LOGO_CONTEST]: {
     nameVenture: '',
@@ -97,7 +118,7 @@ const ContestForm = ({ contestType, defaultData, handleSubmit, formRef }) => {
           contestType,
         }}
         onSubmit={handleSubmit}
-        validationSchema={Schems.ContestSchem}
+        validationSchema={Schemas.ContestSchema}
         innerRef={formRef}
         enableReinitialize
       >
@@ -169,7 +190,13 @@ const ContestForm = ({ contestType, defaultData, handleSubmit, formRef }) => {
             contestType={contestType}
             dataForContest={dataForContest}
           />
-
+          {contestType === CONSTANTS.NAME_CONTEST && !isEditContest && (
+            <ButtonGroup
+              name='domainPreference'
+              title='Do you want a matching domain (.com URL) with your name?'
+              options={domainOptions}
+            />
+          )}
           <FieldFileInput
             name='file'
             type='file'

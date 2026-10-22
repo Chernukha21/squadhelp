@@ -24,6 +24,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.ENUM('name', 'tagline', 'logo'),
     },
+      domainPreference: {
+        allowNull: true,
+        type: DataTypes.STRING(32),
+      },
     fileName: {
       allowNull: true,
       type: DataTypes.STRING,

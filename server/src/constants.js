@@ -28,4 +28,9 @@ module.exports = {
   NOTIFICATION_CHANGE_OFFER_STATUS: 'changeOfferStatus',
   NEW_MESSAGE: 'newMessage',
   CHANGE_BLOCK_STATUS: 'CHANGE_BLOCK_STATUS',
+  DOMAIN_PREFERENCES: Object.freeze({
+    MATCH_WITH_VARIATIONS: 'matchWithVariations',
+    EXACT_MATCH: 'exactMatch',
+    NO_DOMAIN: 'noDomain',
+  }),
 };

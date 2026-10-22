@@ -88,4 +88,9 @@ export default {
       items: ['Terms of Service', 'Privacy Policy', 'Cookie Policy'],
     },
   ],
+  DOMAIN_PREFERENCES: Object.freeze({
+    MATCH_WITH_VARIATIONS: 'matchWithVariations',
+    EXACT_MATCH: 'exactMatch',
+    NO_DOMAIN: 'noDomain',
+  }),
 };
