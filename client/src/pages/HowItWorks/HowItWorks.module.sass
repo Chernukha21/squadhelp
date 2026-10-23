@@ -1,0 +1,411 @@
+$primary: #377dff
+$primary-dark: #245fda
+$text: #19184a
+$secondary-text: #6f718f
+$background: #f7f8ff
+$border: #e4e7f3
+
+.page
+  color: $text
+  background-color: #fff
+  font-family: 'Nunito Sans', sans-serif
+
+
+// Hero
+
+.hero
+  display: grid
+  grid-template-columns: minmax(0, 1fr) minmax(450px, 520px)
+  align-items: center
+  gap: 70px
+  width: 100%
+  max-width: 1110px
+  min-height: 550px
+  margin: 0 auto
+  padding: 70px 30px
+  box-sizing: border-box
+
+.content
+  display: flex
+  flex-direction: column
+  align-items: flex-start
+
+  h1
+    margin: 0
+    color: $text
+    font-size: 42px
+    font-weight: 700
+    line-height: 1.15
+    letter-spacing: -1px
+
+.eyebrow
+  display: inline-flex
+  align-items: center
+  min-height: 36px
+  margin-bottom: 14px
+  padding: 0 16px
+  border-radius: 20px
+  background-color: #e8edff
+  color: $primary
+  font-size: 13px
+  font-weight: 500
+
+.heroDescription
+  max-width: 490px
+  margin: 14px 0 0
+  color: #72738f
+  font-size: 16px
+  line-height: 1.55
+
+
+// Video consent placeholder
+
+.consentContainer
+  box-sizing: border-box
+  padding: 38px 5px
+  border-bottom: 3px solid #5f7cff
+  border-radius: 0 0 16px 16px
+  background-color: #e5e5e5
+
+.consentCard
+  padding: 28px 32px 32px
+  border-radius: 4px
+  background-color: #fff
+  box-shadow: 0 8px 20px rgba(0, 0, 0, .12)
+  text-align: center
+
+  h2
+    margin: 0 0 16px
+    color: #111
+    font-size: 20px
+    font-weight: 500
+
+  p
+    max-width: 430px
+    margin: 0 auto 20px
+    color: #111
+    font-size: 13px
+    line-height: 1.6
+
+.consentButtons
+  display: grid
+  grid-template-columns: repeat(2, minmax(0, 1fr))
+  gap: 8px
+
+.preferencesButton,
+.enableButton
+  min-height: 36px
+  border-radius: 3px
+  font-family: inherit
+  font-size: 13px
+  font-weight: 600
+  cursor: pointer
+
+.preferencesButton
+  border: 1px solid #111
+  background-color: #fff
+  color: #111
+
+.enableButton
+  border: 1px solid #111
+  background-color: #111
+  color: #fff
+
+
+// Services
+
+.services
+  padding: 38px 32px 52px
+  background: linear-gradient(110deg, #f3fbfc 0%, #f4f8fe 100%)
+
+.sectionHeader
+  max-width: 720px
+  margin: 0 auto 40px
+  text-align: center
+
+  h2
+    margin: 0
+    color: #101044
+    font-size: 32px
+    font-weight: 800
+    line-height: 1.25
+
+  p
+    margin: 12px 0 0
+    color: #101044
+    font-size: 16px
+    font-weight: 400
+    line-height: 1.5
+
+.sectionBadge
+  display: inline-flex
+  align-items: center
+  min-height: 30px
+  margin-bottom: 16px
+  padding: 0 15px
+  border-radius: 18px
+  background-color: #e7eeff
+  color: $primary
+  font-size: 12px
+  font-weight: 400
+
+.servicesGrid
+  display: grid
+  grid-template-columns: repeat(3, minmax(0, 1fr))
+  gap: 24px
+  width: 100%
+  max-width: 1456px
+  margin: 0 auto
+
+.serviceCard
+  display: flex
+  flex-direction: column
+  min-width: 0
+  min-height: 365px
+  padding: 28px 25px 20px
+  box-sizing: border-box
+  border-radius: 22px
+  background-color: #fff
+  box-shadow: 0 18px 35px rgba(36, 62, 99, .08)
+
+  h3
+    margin: 8px 0
+    color: #050505
+    font-size: 20px
+    font-weight: 800
+    line-height: 1.3
+
+  p
+    flex: 1
+    margin: 0 0 24px
+    color: #656775
+    font-size: 16px
+    font-weight: 400
+    line-height: 1.5
+
+.serviceIcon
+  width: 48px
+  height: 48px
+  object-fit: contain
+  object-position: left center
+
+.serviceButton
+  display: inline-flex
+  align-items: center
+  justify-content: center
+  align-self: flex-start
+  gap: 18px
+  width: fit-content
+  max-width: 100%
+  min-height: 56px
+  margin-top: auto
+  padding: 0 20px
+  box-sizing: border-box
+  border: none
+  border-radius: 7px
+  background-color: #4f61ec
+  color: #fff
+  font-family: inherit
+  font-size: 15px
+  font-weight: 700
+  line-height: 1.2
+  white-space: nowrap
+  cursor: pointer
+  transition: background-color .25s ease, transform .25s ease
+
+  &:hover
+    background-color: #3c50d5
+    transform: translateY(-2px)
+
+    .buttonArrow
+      transform: translateX(15px)
+
+  &:focus-visible
+    outline: 3px solid rgba(55, 125, 255, .35)
+    outline-offset: 3px
+
+.buttonArrow
+  flex-shrink: 0
+  font-size: 25px
+  font-weight: 400
+  line-height: 1
+  transition: transform .25s ease
+
+.contestProcess
+  padding: 80px 24px 90px
+  background-color: #f7f7ff
+
+.processHeading
+  display: flex
+  flex-direction: column
+  align-items: center
+  text-align: center
+  margin-bottom: 72px
+
+  h2
+    margin: 22px 0 0
+    color: #191b45
+    font-size: 30px
+    font-weight: 800
+    line-height: 1.25
+
+.processIcon
+  width: 72px
+  height: 72px
+  object-fit: contain
+
+.stepsList
+  display: grid
+  grid-template-columns: repeat(4, minmax(0, 1fr))
+  gap: 24px
+  max-width: 1120px
+  margin: 0 auto
+  padding: 0
+  list-style: none
+
+.stepCard
+  position: relative
+  min-height: 245px
+  padding: 24px 25px
+  box-sizing: border-box
+  background-color: #fff
+  border-radius: 20px
+  box-shadow: 0 12px 35px rgba(31, 48, 91, .07)
+
+  &:not(:last-child)::after
+    content: '⟶'
+    position: absolute
+    z-index: 2
+    top: 50%
+    right: -26px
+    color: #5557ef
+    font-size: 27px
+    font-weight: 400
+    line-height: 1
+    transform: translateY(-50%)
+
+  p
+    margin: 18px 0 0
+    color: #6f7180
+    font-size: 16px
+    line-height: 1.5
+
+.stepBadge
+  display: inline-flex
+  align-items: center
+  justify-content: center
+  min-width: 68px
+  height: 33px
+  padding: 0 15px
+  box-sizing: border-box
+  border-radius: 18px
+  color: #fff
+  background: linear-gradient(135deg, #6657f2, #4248e8)
+  font-size: 13px
+  font-weight: 700
+
+// Tablet
+
+@media (max-width: 1000px)
+  .hero
+    grid-template-columns: 1fr
+    gap: 50px
+    min-height: auto
+    padding-top: 60px
+    text-align: center
+
+  .content
+    align-items: center
+
+  .consentContainer
+    width: 100%
+    max-width: 520px
+    justify-self: center
+
+  .servicesGrid
+    grid-template-columns: repeat(2, minmax(0, 1fr))
+
+  .serviceCard:last-child
+    grid-column: 1 / -1
+  .stepsList
+    grid-template-columns: repeat(2, minmax(0, 1fr))
+
+  .stepCard
+    min-height: 210px
+
+    &::after
+      display: none
+
+// Mobile
+
+@media (max-width: 700px)
+  .services
+    padding: 60px 20px
+
+  .servicesGrid
+    grid-template-columns: 1fr
+
+  .serviceCard,
+  .serviceCard:last-child
+    grid-column: auto
+    min-height: auto
+
+  .serviceButton
+    align-self: flex-start
+
+
+@media (max-width: 600px)
+  .contestProcess
+    padding: 60px 18px
+
+  .processHeading
+    margin-bottom: 42px
+
+    h2
+      font-size: 26px
+
+  .stepsList
+    grid-template-columns: 1fr
+
+  .stepCard
+    min-height: auto
+
+@media (max-width: 500px)
+  .hero
+    gap: 35px
+    padding: 45px 20px
+
+  .content
+    h1
+      font-size: 36px
+
+  .consentContainer
+    padding: 24px 5px
+
+  .consentCard
+    padding: 24px 18px
+
+  .consentButtons
+    grid-template-columns: 1fr
+
+
+@media (max-width: 420px)
+  .content
+    h1
+      font-size: 34px
+
+  .sectionHeader
+    h2
+      font-size: 28px
+
+  .serviceCard
+    padding: 25px 20px 20px
+
+  .serviceButton
+    gap: 14px
+    min-height: 52px
+    padding: 0 16px
+    font-size: 14px
+
+  .buttonArrow
+    font-size: 22px
