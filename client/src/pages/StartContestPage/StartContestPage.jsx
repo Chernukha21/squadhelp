@@ -1,4 +1,3 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { updateBundle } from '../../store/slices/bundleSlice';

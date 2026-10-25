@@ -39,7 +39,7 @@
   },
   "scripts": {
     "start": "vite",
-    "build": "vite dev",
+    "build": "vite build",
     "preview": "vite preview",
     "storybook": "start-storybook",
     "build-storybook": "build-storybook -s public",

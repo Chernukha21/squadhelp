@@ -23,6 +23,7 @@
     }
   },
   "rules": {
+    "react/jsx-props-no-spreading": "off",
     "react/prop-types": "off",
     "react/jsx-filename-extension": [
       "error",
@@ -57,6 +58,18 @@
       "files": ["**/*.test.js", "**/*.test.jsx", "src/setupTests.js"],
       "env": {
         "jest": true
+      }
+    },
+    {
+      "files": ["src/store/slices/**/*.js", "src/utils/store.js"],
+      "rules": {
+        "no-param-reassign": [
+          "error",
+          {
+            "props": true,
+            "ignorePropertyModificationsFor": ["state"]
+          }
+        ]
       }
     }
   ],

@@ -7,10 +7,6 @@ import {
 } from '../../../store/slices/chatSlice';
 
 class ChatSocket extends WebSocket {
-  constructor(dispatch, getState, room) {
-    super(dispatch, getState, room);
-  }
-
   userId = null;
 
   anotherSubscribes = () => {
@@ -48,7 +44,7 @@ class ChatSocket extends WebSocket {
           preview.interlocutor?.displayName ||
           preview.interlocutor?.firstName ||
           'Someone';
-        const toastId = toast.info(`${senderName}: ${message.body}`);
+        toast.info(`${senderName}: ${message.body}`);
       }
     });
   };

@@ -5,10 +5,6 @@ import { getContestById } from '../../../store/slices/contestByIdSlice';
 import CONSTANTS from '../../../constants';
 
 class NotificationSocket extends WebSocket {
-  constructor(dispatch, getState, room) {
-    super(dispatch, getState, room);
-  }
-
   anotherSubscribes = () => {
     this.onEntryCreated();
     this.onChangeMark();

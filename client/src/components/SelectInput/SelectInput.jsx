@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from 'react';
+import { useLayoutEffect } from 'react';
 import { Field, ErrorMessage } from 'formik';
 
 const SelectInput = ({
@@ -10,13 +10,12 @@ const SelectInput = ({
 }) => {
   const {
     form: { setFieldValue },
-    meta: { initialValue },
     field,
   } = props;
 
   const getOptionsArray = () => {
     const array = [];
-    for (let i = 0; optionsArray && i < optionsArray.length; i++) {
+    for (let i = 0; optionsArray && i < optionsArray.length; i += 1) {
       let option;
       if (valueArray) {
         option = (
@@ -33,10 +32,18 @@ const SelectInput = ({
   };
 
   useLayoutEffect(() => {
-    if (!initialValue && optionsArray) {
-      setFieldValue(field.name, valueArray ? valueArray[0] : optionsArray[0]);
+    const hasValue = field.value != null && field.value !== '';
+
+    if (hasValue || !optionsArray?.length) {
+      return;
     }
-  }, []);
+
+    const firstValue = valueArray ? valueArray[0] : optionsArray[0];
+
+    if (firstValue != null && firstValue !== field.value) {
+      setFieldValue(field.name, firstValue);
+    }
+  }, [field.name, field.value, optionsArray, valueArray, setFieldValue]);
 
   return (
     <div className={classes.inputContainer}>

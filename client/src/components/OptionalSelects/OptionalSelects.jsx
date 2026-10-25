@@ -1,4 +1,3 @@
-import React from 'react';
 import CONSTANTS from '../../constants';
 import SelectInput from '../SelectInput/SelectInput';
 import FormInput from '../FormInput/FormInput';

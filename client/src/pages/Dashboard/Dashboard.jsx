@@ -1,11 +1,10 @@
-import React from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import CONSTANTS from '../../constants';
 import CustomerDashboard from '../../components/CustomerDashboard/CustomerDashboard';
 import CreatorDashboard from '../../components/CreatorDashboard/CreatorDashboard';
 
-const Dashboard = props => {
+const Dashboard = () => {
   const navigate = useNavigate();
   const params = useParams();
 
@@ -16,6 +15,5 @@ const Dashboard = props => {
     <CreatorDashboard navigate={navigate} params={params} />
   );
 };
-
 
 export default Dashboard;

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import Logo from '../../Logo';
 import styles from './AuthHeader.module.sass';
@@ -13,9 +12,12 @@ const AuthHeader = () => {
     <div className={styles.container}>
       <div className={styles.loginContainer}>
         <div className={styles.headerAuthPage}>
-          <Logo src={`${CONSTANTS.STATIC_IMAGES_PATH}logo.png`} alt="logo" />
+          <Logo src={`${CONSTANTS.STATIC_IMAGES_PATH}logo.png`} alt='logo' />
           <div className={styles.linkAuthContainer}>
-            <Link to={isLoginPage ?"/registration" : "/login"} style={{ textDecoration: 'none' }}>
+            <Link
+              to={isLoginPage ? '/registration' : '/login'}
+              style={{ textDecoration: 'none' }}
+            >
               <span>{isLoginPage ? 'Signup' : 'Login'}</span>
             </Link>
           </div>

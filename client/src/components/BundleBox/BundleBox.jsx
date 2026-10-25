@@ -1,4 +1,3 @@
-import React from 'react';
 import styles from './BundleBox.module.sass';
 import CONSTANTS from '../../constants';
 
@@ -23,9 +22,8 @@ const BundleBox = props => {
   const mouseOverHandler = () => {
     const element = document.getElementById(props.header);
     for (let i = 0; i < element.children[0].children.length; i++) {
-      element.children[0].children[
-        i
-      ].src = `${defaultPathToImages}blue_${props.path[i]}`;
+      element.children[0].children[i].src =
+        `${defaultPathToImages}blue_${props.path[i]}`;
     }
   };
 

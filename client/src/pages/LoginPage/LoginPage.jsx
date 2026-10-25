@@ -1,9 +1,8 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import LoginForm from '../../components/LoginForm/LoginForm';
 import styles from './LoginPage.module.sass';
 
-const LoginPage = (props) => {
+const LoginPage = () => {
   const navigate = useNavigate();
 
   return (
