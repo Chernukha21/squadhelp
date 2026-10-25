@@ -1,5 +1,6 @@
 import * as yup from 'yup';
 import valid from 'card-validator';
+import moment from 'moment';
 
 const MAX_OFFER_FILE_SIZE = 5 * 1024 * 1024;
 
@@ -240,5 +241,36 @@ export default {
         value => value && value.trim().length >= 1
       )
       .required('required'),
+  }),
+  EventSchema: yup.object({
+    name: yup
+      .string()
+      .trim()
+      .required('Event name is required')
+      .max(100, 'Maximum 100 characters'),
+
+    eventAt: yup
+      .string()
+      .required('Date and time are required')
+      .test(
+        'future-date',
+        'Select a valid date and time in the future',
+        value => {
+          if (!value) {
+            return true;
+          }
+
+          const eventDate = moment(value, 'YYYY-MM-DDTHH:mm', true);
+
+          return eventDate.isValid() && eventDate.isAfter(moment());
+        }
+      ),
+
+    notifyBeforeMinutes: yup
+      .number()
+      .typeError('Enter the number of minutes')
+      .required('Notification time is required')
+      .integer('Enter a whole number')
+      .min(0, 'Cannot be negative'),
   }),
 };

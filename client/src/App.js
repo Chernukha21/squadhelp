@@ -20,6 +20,7 @@ import Layout from './pages/Layout/Layout';
 import OnlyNotAuthorizedUserRoute from './components/Routes/OnlyNotAuthorizedUserRoute/OnlyNotAuthorizedUserRoute';
 import PrivateRoute from './components/Routes/PrivateRoute/PrivateRoute';
 import HowItWorks from './pages/HowItWorks/HowItWorks';
+import Events from './pages/Events/Events';
 
 const App = () => (
   <Router history={browserHistory}>
@@ -44,6 +45,7 @@ const App = () => (
         </Route>
 
         <Route element={<PrivateRoute />}>
+          <Route path='events' element={<Events />} />
           <Route path='/payment' element={<Payment />} />
           <Route path='/startContest' element={<StartContestPage />} />
           <Route

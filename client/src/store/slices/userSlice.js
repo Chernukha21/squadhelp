@@ -7,7 +7,8 @@ import { changeEditModeOnUserProfile } from './userProfileSlice';
 const USER_SLICE_NAME = 'user';
 
 const initialState = {
-  isFetching: true,
+  isFetching: false,
+  isAuthChecked: false,
   error: null,
   data: null,
 };
@@ -49,9 +50,12 @@ export const updateUser = createAsyncThunk(
 
 const reducers = {
   clearUserStore: state => {
+    state.isFetching = false;
+    state.isAuthChecked = false;
     state.error = null;
     state.data = null;
   },
+
   clearUserError: state => {
     state.error = null;
   },
@@ -60,14 +64,23 @@ const reducers = {
 const extraReducers = builder => {
   builder.addCase(getUser.pending, state => {
     state.isFetching = true;
+    state.isAuthChecked = false;
     state.error = null;
-    state.data = null;
   });
+
   builder.addCase(getUser.fulfilled, (state, { payload }) => {
     state.isFetching = false;
+    state.isAuthChecked = true;
+    state.error = null;
     state.data = payload;
   });
-  builder.addCase(getUser.rejected, rejectedReducer);
+
+  builder.addCase(getUser.rejected, (state, action) => {
+    rejectedReducer(state, action);
+
+    state.isAuthChecked = true;
+    state.data = null;
+  });
 
   builder.addCase(updateUser.fulfilled, (state, { payload }) => {
     state.data = { ...state.data, ...payload };

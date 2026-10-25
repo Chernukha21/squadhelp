@@ -5,6 +5,7 @@ import styles from './Header.module.sass';
 import CONSTANTS from '../../constants';
 import { clearUserStore, getUser } from '../../store/slices/userSlice';
 import { controller } from '../../api/ws/socketController';
+import EventsBadge from '../EventsBadge/EventsBadge';
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -35,6 +36,10 @@ const Header = () => {
   };
 
   const renderLoginButtons = () => {
+    if (isFetching && !data) {
+      return <span>Loading...</span>;
+    }
+
     if (!data) {
       return (
         <>
@@ -113,10 +118,6 @@ const Header = () => {
       </>
     );
   };
-
-  if (isFetching) {
-    return null;
-  }
 
   return (
     <div className={styles.headerContainer}>
@@ -210,6 +211,14 @@ const Header = () => {
                   </li>
                 </ul>
               </li>
+              {data && (
+                <li>
+                  <Link to='/events' className={styles.eventsLink}>
+                    EVENTS
+                    <EventsBadge />
+                  </Link>
+                </li>
+              )}
               <li>
                 <span>Our Work</span>
                 <img
