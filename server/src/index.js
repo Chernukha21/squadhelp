@@ -7,6 +7,7 @@ require('./dbMongo/mongoose');
 const router = require('./router');
 const controller = require('./socketInit');
 const handlerError = require('./handlerError/handler');
+const { startLogArchiving } = require('./utils/logArchiveScheduler');
 
 const PORT = process.env.PORT || 3000;
 const app = express();
@@ -20,3 +21,6 @@ app.use(handlerError);
 const server = http.createServer(app);
 server.listen(PORT, () =>  console.log(`Example app listening on port ${PORT}!`));
 controller.createConnection(server);
+
+const stopLogArchiving = startLogArchiving();
+server.on('close', stopLogArchiving);
