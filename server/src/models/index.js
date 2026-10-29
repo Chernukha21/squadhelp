@@ -48,6 +48,105 @@ db[ 'Ratings' ].belongsTo(db[ 'Users' ],
 db[ 'Ratings' ].belongsTo(db[ 'Offers' ],
   { foreignKey: 'offerId', targetKey: 'id' });
 
+
+db.Chats.hasMany(db.Messages, {
+  foreignKey: 'chat',
+  sourceKey: '_id',
+  as: 'messages',
+});
+
+db.Messages.belongsTo(db.Chats, {
+  foreignKey: 'chat',
+  targetKey: '_id',
+  as: 'conversation',
+});
+
+db.Users.hasMany(db.Messages, {
+  foreignKey: 'sender',
+  sourceKey: 'id',
+  as: 'sentMessages',
+});
+
+db.Messages.belongsTo(db.Users, {
+  foreignKey: 'sender',
+  targetKey: 'id',
+  as: 'senderUser',
+});
+
+db.Chats.hasMany(db.ConversationParticipants, {
+  foreignKey: 'chat',
+  sourceKey: '_id',
+  as: 'participantRows',
+});
+
+db.ConversationParticipants.belongsTo(db.Chats, {
+  foreignKey: 'chat',
+  targetKey: '_id',
+  as: 'conversation',
+});
+
+db.Users.hasMany(db.ConversationParticipants, {
+  foreignKey: 'userId',
+  sourceKey: 'id',
+  as: 'chatParticipations',
+});
+
+db.ConversationParticipants.belongsTo(db.Users, {
+  foreignKey: 'userId',
+  targetKey: 'id',
+  as: 'user',
+});
+
+db.Users.hasMany(db.Catalogs, {
+  foreignKey: 'userId',
+  sourceKey: 'id',
+  as: 'catalogs',
+});
+
+db.Catalogs.belongsTo(db.Users, {
+  foreignKey: 'userId',
+  targetKey: 'id',
+  as: 'owner',
+});
+
+db.Catalogs.hasMany(db.CatalogChats, {
+  foreignKey: 'catalogId',
+  sourceKey: '_id',
+  as: 'catalogLinks',
+});
+
+db.CatalogChats.belongsTo(db.Catalogs, {
+  foreignKey: 'catalogId',
+  targetKey: '_id',
+  as: 'catalog',
+});
+
+db.Chats.hasMany(db.CatalogChats, {
+  foreignKey: 'chatId',
+  sourceKey: '_id',
+  as: 'catalogLinks',
+});
+
+db.CatalogChats.belongsTo(db.Chats, {
+  foreignKey: 'chatId',
+  targetKey: '_id',
+  as: 'chat',
+});
+
+db.Catalogs.belongsToMany(db.Chats, {
+  through: db.CatalogChats,
+  foreignKey: 'catalogId',
+  otherKey: 'chatId',
+  as: 'chats',
+});
+
+db.Chats.belongsToMany(db.Catalogs, {
+  through: db.CatalogChats,
+  foreignKey: 'chatId',
+  otherKey: 'catalogId',
+  as: 'catalogs',
+});
+
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
