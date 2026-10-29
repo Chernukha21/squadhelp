@@ -41,11 +41,21 @@ module.exports.dataForContest = async (req, res, next) => {
 
 module.exports.getContestById = async (req, res, next) => {
   try {
-    let contestInfo = await db.Contests.findOne({
-      where: { id: req.headers.contestid },
-      order: [
-        [db.Offers, 'id', 'asc'],
-      ],
+    const offersWhere =
+      req.tokenData.role === CONSTANTS.CREATOR
+        ? {
+          userId: req.tokenData.userId,
+        }
+        : {
+          moderationStatus:
+          CONSTANTS.OFFER_MODERATION_STATUS_APPROVED,
+        };
+
+    const contest = await db.Contests.findOne({
+      where: {
+        id: req.headers.contestid,
+      },
+      order: [[db.Offers, 'id', 'ASC']],
       include: [
         {
           model: db.Users,
@@ -62,10 +72,10 @@ module.exports.getContestById = async (req, res, next) => {
         {
           model: db.Offers,
           required: false,
-          where: req.tokenData.role === CONSTANTS.CREATOR
-            ? { userId: req.tokenData.userId }
-            : {},
-          attributes: { exclude: ['userId', 'contestId'] },
+          where: offersWhere,
+          attributes: {
+            exclude: ['userId', 'contestId'],
+          },
           include: [
             {
               model: db.Users,
@@ -82,23 +92,41 @@ module.exports.getContestById = async (req, res, next) => {
             {
               model: db.Ratings,
               required: false,
-              where: { userId: req.tokenData.userId },
-              attributes: { exclude: ['userId', 'offerId'] },
+              where: {
+                userId: req.tokenData.userId,
+              },
+              attributes: {
+                exclude: ['userId', 'offerId'],
+              },
             },
           ],
         },
       ],
     });
-    contestInfo = contestInfo.get({ plain: true });
+
+    if (!contest) {
+      return next(
+        new BadRequestError('Contest not found')
+      );
+    }
+
+    const contestInfo = contest.get({
+      plain: true,
+    });
+
     contestInfo.Offers.forEach(offer => {
       if (offer.Rating) {
         offer.mark = offer.Rating.mark;
       }
+
       delete offer.Rating;
     });
-    res.send(contestInfo);
-  } catch (e) {
-    next(new ServerError());
+
+    return res.send(contestInfo);
+  } catch (error) {
+    return next(
+      new ServerError('Cannot get contest')
+    );
   }
 };
 
@@ -166,6 +194,8 @@ module.exports.setNewOffer = async (req, res, next) => {
     const offer = {
       userId: req.tokenData.userId,
       contestId,
+      moderationStatus:
+      CONSTANTS.OFFER_MODERATION_STATUS_PENDING,
     };
 
     if (contest.contestType === CONSTANTS.LOGO_CONTEST) {
@@ -216,13 +246,6 @@ module.exports.setNewOffer = async (req, res, next) => {
     delete responseOffer.contestId;
     delete responseOffer.userId;
 
-    controller
-      .getNotificationController()
-      .emitEntryCreated(
-        String(contest.userId),
-        contestId
-      );
-
     const User = {
       ...req.tokenData,
       id: req.tokenData.userId,
@@ -239,11 +262,31 @@ module.exports.setNewOffer = async (req, res, next) => {
   }
 };
 
-const rejectOffer = async (offerId, creatorId, contestId) => {
+const rejectOffer = async (
+  offerId,
+  creatorId,
+  contestId
+) => {
   const rejectedOffer = await contestQueries.updateOffer(
-    { status: CONSTANTS.OFFER_STATUS_REJECTED }, { id: offerId });
-  controller.getNotificationController().emitChangeOfferStatus(creatorId,
-    'Someone of yours offers was rejected', contestId);
+      {
+        status: CONSTANTS.OFFER_STATUS_REJECTED,
+      },
+      {
+        id: offerId,
+        contestId,
+        status: CONSTANTS.OFFER_STATUS_PENDING,
+        moderationStatus: CONSTANTS.OFFER_MODERATION_STATUS_APPROVED,
+      }
+    );
+
+  controller
+    .getNotificationController()
+    .emitChangeOfferStatus(
+      String(creatorId),
+      'Your offer was rejected',
+      contestId
+    );
+
   return rejectedOffer;
 };
 
@@ -277,8 +320,10 @@ const resolveOffer = async (
     END`),
     },
     {
-      contestId,
+    contestId,
       status: CONSTANTS.OFFER_STATUS_PENDING,
+    moderationStatus:
+    CONSTANTS.OFFER_MODERATION_STATUS_APPROVED,
     },
     transaction
   );
@@ -323,37 +368,62 @@ const resolveOffer = async (
   return winningOffer?.dataValues ?? winningOffer;
 };
 
-module.exports.setOfferStatus = async (req, res, next) => {
+module.exports.setOfferStatus = async (
+  req,
+  res,
+  next
+) => {
   let transaction;
-  if (req.body.command === 'reject') {
-    try {
-      const offer = await rejectOffer(req.body.offerId, req.body.creatorId,
-        req.body.contestId);
-      res.send(offer);
-    } catch (err) {
-      next(err);
-    }
-}else if (req.body.command === 'resolve') {
-    try {
-      transaction = await db.sequelize.transaction();
 
-      const winningOffer = await resolveOffer(
-        req.body.contestId,
-        req.body.creatorId,
-        req.body.orderId,
-        req.body.offerId,
-        req.body.priority,
-        transaction
+  try {
+    const { command } = req.body;
+
+    if (
+      command !== 'reject' &&
+      command !== 'resolve'
+    ) {
+      return next(
+        new BadRequestError(
+          'Unknown offer status command'
+        )
+      );
+    }
+
+    const contest = req.contestForDecision;
+    const offer = req.offerForDecision;
+
+    if (command === 'reject') {
+      const rejectedOffer = await rejectOffer(
+        offer.id,
+        offer.userId,
+        contest.id
       );
 
-      res.send(winningOffer);
-    } catch (err) {
-      if (transaction && !transaction.finished) {
-        await transaction.rollback();
-      }
-
-      next(err);
+      return res.send(rejectedOffer);
     }
+
+    transaction =
+      await db.sequelize.transaction();
+
+    const winningOffer = await resolveOffer(
+      contest.id,
+      offer.userId,
+      contest.orderId,
+      offer.id,
+      contest.priority,
+      transaction
+    );
+
+    return res.send(winningOffer);
+  } catch (error) {
+    if (
+      transaction &&
+      !transaction.finished
+    ) {
+      await transaction.rollback();
+    }
+
+    return next(error);
   }
 };
 
@@ -383,33 +453,73 @@ module.exports.getCustomersContests = (req, res, next) => {
     .catch(err => next(new ServerError(err)));
 };
 
-module.exports.getContests = (req, res, next) => {
-  const predicates = UtilFunctions.createWhereForAllContests(req.body.typeIndex,
-    req.body.contestId, req.body.industry, req.body.awardSort);
-  db.Contests.findAll({
-    where: predicates.where,
-    order: predicates.order,
-    limit: req.body.limit,
-    offset: req.body.offset ? req.body.offset : 0,
-    include: [
-      {
-        model: db.Offers,
-        required: req.body.ownEntries,
-        where: req.body.ownEntries ? { userId: req.tokenData.userId } : {},
-        attributes: ['id'],
-      },
-    ],
-  })
-    .then(contests => {
-      contests.forEach(
-        contest => contest.dataValues.count = contest.dataValues.Offers.length);
-      let haveMore = true;
-      if (contests.length === 0) {
-        haveMore = false;
+module.exports.getContests = async (
+  req,
+  res,
+  next
+) => {
+  try {
+    const predicates =
+      UtilFunctions.createWhereForAllContests(
+        req.body.typeIndex,
+        req.body.contestId,
+        req.body.industry,
+        req.body.awardSort
+      );
+
+    const ownEntries = Boolean(
+      req.body.ownEntries
+    );
+
+    const offersWhere = ownEntries
+      ? {
+        userId: req.tokenData.userId,
       }
-      res.send({ contests, haveMore });
-    })
-    .catch(err => {
-      next(new ServerError());
+      : {
+        [db.Sequelize.Op.or]: [
+          {
+            moderationStatus:
+            CONSTANTS.OFFER_MODERATION_STATUS_APPROVED,
+          },
+          {
+            userId: req.tokenData.userId,
+          },
+        ],
+      };
+
+    const contests = await db.Contests.findAll({
+      where: predicates.where,
+      order: predicates.order,
+      limit: req.body.limit,
+      offset: req.body.offset || 0,
+      include: [
+        {
+          model: db.Offers,
+          required: ownEntries,
+          where: offersWhere,
+          attributes: ['id'],
+        },
+      ],
     });
+
+    const contestsWithCount = contests.map(contest => {
+      const plainContest = contest.get({
+        plain: true,
+      });
+
+      return {
+        ...plainContest,
+        count: plainContest.Offers.length,
+      };
+    });
+
+    return res.send({
+      contests: contestsWithCount,
+      haveMore: contests.length > 0,
+    });
+  } catch (error) {
+    return next(
+      new ServerError('Cannot get contests')
+    );
+  }
 };

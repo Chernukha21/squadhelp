@@ -47,66 +47,64 @@ module.exports.canGetContest = async (req, res, next) => {
 };
 
 module.exports.onlyForCreative = (req, res, next) => {
-  if (req.tokenData.role === CONSTANTS.CUSTOMER) {
-    next(new RightsError());
-  } else {
-    next();
+  if (req.tokenData.role !== CONSTANTS.CREATOR) {
+    return next(new RightsError('This action is only for creatives'));
   }
 
+  return next();
 };
 
 module.exports.onlyForCustomer = (req, res, next) => {
-  if (req.tokenData.role === CONSTANTS.CREATOR) {
-    return next(new RightsError('this page only for customers'));
-  } else {
-    next();
+  if (req.tokenData.role !== CONSTANTS.CUSTOMER) {
+    return next(new RightsError('This action is only for customers'));
   }
+
+  return next();
+};
+
+module.exports.onlyForModerator = (req, res, next) => {
+  if (req.tokenData.role !== CONSTANTS.MODERATOR) {
+    return next(new RightsError('This action is only for moderators'));
+  }
+
+  return next();
+};
+
+module.exports.onlyForRegularUsers = (req, res, next) => {
+  const allowedRoles = [
+    CONSTANTS.CUSTOMER,
+    CONSTANTS.CREATOR,
+  ];
+
+  if (!allowedRoles.includes(req.tokenData.role)) {
+    return next(
+      new RightsError('This action is not available for moderators')
+    );
+  }
+
+  return next();
 };
 
 module.exports.canSendOffer = async (req, res, next) => {
-  if (req.tokenData.role === CONSTANTS.CUSTOMER) {
-    return next(new RightsError());
+  if (req.tokenData.role !== CONSTANTS.CREATOR) {
+    return next(new RightsError('Only creatives can submit offers'));
   }
+
   try {
-    const result = await bd.Contests.findOne({
+    const contest = await bd.Contests.findOne({
       where: {
         id: req.body.contestId,
       },
       attributes: ['status'],
     });
-    if (result.get({ plain: true }).status ===
-      CONSTANTS.CONTEST_STATUS_ACTIVE) {
-      next();
-    } else {
-      return next(new RightsError());
-    }
-  } catch (e) {
-    next(new ServerError());
-  }
-
-};
-
-module.exports.onlyForCustomerWhoCreateContest = async (req, res, next) => {
-  try {
-    if (req.tokenData.role !== CONSTANTS.CUSTOMER) {
-      return next(new RightsError('Only customers can change offer status'));
-    }
-
-    const contest = await bd.Contests.findByPk(req.body.contestId, {
-      attributes: ['id', 'userId', 'status'],
-    });
 
     if (!contest) {
-      return next(new RightsError('Contest not found'));
-    }
-
-    if (contest.userId !== req.tokenData.userId) {
-      return next(new RightsError('You are not the owner of this contest'));
+      return next(new BadRequestError('Contest not found'));
     }
 
     if (contest.status !== CONSTANTS.CONTEST_STATUS_ACTIVE) {
       return next(
-        new RightsError(`Contest is not active. Current status: ${contest.status}`)
+        new RightsError('Offers can only be submitted to active contests')
       );
     }
 
@@ -116,21 +114,137 @@ module.exports.onlyForCustomerWhoCreateContest = async (req, res, next) => {
   }
 };
 
-module.exports.canUpdateContest = async (req, res, next) => {
+module.exports.onlyForCustomerWhoCreateContest = async (
+  req,
+  res,
+  next
+) => {
   try {
-    const result = bd.Contests.findOne({
+    if (
+      req.tokenData.role !== CONSTANTS.CUSTOMER
+    ) {
+      return next(
+        new RightsError(
+          'Only customers can change offer status'
+        )
+      );
+    }
+
+    const contestId = Number(req.body.contestId);
+    const offerId = Number(req.body.offerId);
+
+    if (
+      !Number.isInteger(contestId) ||
+      contestId <= 0 ||
+      !Number.isInteger(offerId) ||
+      offerId <= 0
+    ) {
+      return next(
+        new BadRequestError(
+          'Invalid contest or offer ID'
+        )
+      );
+    }
+
+    const contest = await bd.Contests.findByPk(
+      contestId,
+      {
+        attributes: [
+          'id',
+          'userId',
+          'status',
+          'orderId',
+          'priority',
+        ],
+      }
+    );
+
+    if (!contest) {
+      return next(
+        new RightsError('Contest not found')
+      );
+    }
+
+    if (
+      contest.userId !== req.tokenData.userId
+    ) {
+      return next(
+        new RightsError(
+          'You are not the owner of this contest'
+        )
+      );
+    }
+
+    if (
+      contest.status !==
+      CONSTANTS.CONTEST_STATUS_ACTIVE
+    ) {
+      return next(
+        new RightsError(
+          `Contest is not active. Current status: ${contest.status}`
+        )
+      );
+    }
+
+    const offer = await bd.Offers.findOne({
+      where: {
+        id: offerId,
+        contestId,
+        status: CONSTANTS.OFFER_STATUS_PENDING,
+        moderationStatus:
+        CONSTANTS.OFFER_MODERATION_STATUS_APPROVED,
+      },
+      attributes: [
+        'id',
+        'userId',
+        'contestId',
+        'status',
+        'moderationStatus',
+      ],
+    });
+
+    if (!offer) {
+      return next(
+        new RightsError(
+          'Offer is not approved or has already been processed'
+        )
+      );
+    }
+
+    req.contestForDecision = contest;
+    req.offerForDecision = offer;
+
+    return next();
+  } catch (error) {
+    return next(new ServerError(error));
+  }
+};
+
+module.exports.canUpdateContest = async (req, res, next) => {
+  if (req.tokenData.role !== CONSTANTS.CUSTOMER) {
+    return next(new RightsError('Only customers can update contests'));
+  }
+
+  try {
+    const contest = await bd.Contests.findOne({
       where: {
         userId: req.tokenData.userId,
         id: req.body.contestId,
-        status: { [ bd.Sequelize.Op.not ]: CONSTANTS.CONTEST_STATUS_FINISHED },
+        status: {
+          [bd.Sequelize.Op.not]: CONSTANTS.CONTEST_STATUS_FINISHED,
+        },
       },
     });
-    if (!result) {
-      return next(new RightsError());
+
+    if (!contest) {
+      return next(
+        new RightsError('Contest not found or cannot be updated')
+      );
     }
-    next();
-  } catch (e) {
-    next(new ServerError());
+
+    return next();
+  } catch (error) {
+    return next(new ServerError(error));
   }
 };
 

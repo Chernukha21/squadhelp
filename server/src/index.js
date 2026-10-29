@@ -1,6 +1,9 @@
 const http = require('http');
 // ============================
 require('dotenv').config();
+if (!process.env.JWT_SECRET?.trim()) {
+  throw new Error('JWT_SECRET is required');
+}
 const express = require('express');
 const cors = require('cors');
 require('./dbMongo/mongoose');

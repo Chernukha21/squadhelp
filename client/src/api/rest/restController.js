@@ -61,3 +61,21 @@ export const getContestById = data =>
       contestId: data.contestId,
     },
   });
+
+export const getModeratorOffers = ({
+  page = 1,
+  limit = 20,
+  moderationStatus,
+} = {}) =>
+  http.get('moderator/offers', {
+    params: {
+      page,
+      limit,
+      moderationStatus,
+    },
+  });
+
+export const moderateOffer = ({ offerId, decision }) =>
+  http.patch(`moderator/offers/${offerId}`, {
+    decision,
+  });

@@ -33,8 +33,27 @@ module.exports.login = async (req, res, next) => {
 };
 module.exports.registration = async (req, res, next) => {
   try {
-    const newUser = await userQueries.userCreation(
-      Object.assign(req.body, { password: req.hashPass }));
+    const { firstName, lastName, displayName, email, role } = req.body;
+
+    const publicRoles = [
+      CONSTANTS.CUSTOMER,
+      CONSTANTS.CREATOR,
+    ];
+
+    if (!publicRoles.includes(role)) {
+      return next(
+        new BadRequestError('Only customer and creator can register')
+      );
+    }
+
+    const newUser = await userQueries.userCreation({
+      firstName,
+      lastName,
+      displayName,
+      email,
+      role,
+      password: req.hashPass,
+    });
     const accessToken = jwt.sign({
       firstName: newUser.firstName,
       userId: newUser.id,
@@ -47,12 +66,12 @@ module.exports.registration = async (req, res, next) => {
       rating: newUser.rating,
     }, CONSTANTS.JWT_SECRET, { expiresIn: CONSTANTS.ACCESS_TOKEN_TIME });
     await userQueries.updateUser({ accessToken }, newUser.id);
-    res.send({ token: accessToken });
+    return res.send({ token: accessToken });
   } catch (err) {
     if (err.name === 'SequelizeUniqueConstraintError') {
-      next(new NotUniqueEmail());
+      return  next(new NotUniqueEmail());
     } else {
-      next(err);
+      return next(err);
     }
   }
 };
@@ -206,12 +225,39 @@ module.exports.payment = async (req, res, next) => {
 
 module.exports.updateUser = async (req, res, next) => {
   try {
+    const body = req.body || {};
+
+    const allowedFields = [
+      'firstName',
+      'lastName',
+      'displayName',
+      'email',
+    ];
+
+    const updates = {};
+
+    allowedFields.forEach(field => {
+      if (Object.prototype.hasOwnProperty.call(body, field)) {
+        updates[field] = body[field];
+      }
+    });
+
     if (req.file) {
-      req.body.avatar = req.file.filename;
+      updates.avatar = req.file.filename;
     }
-    const updatedUser = await userQueries.updateUser(req.body,
-      req.tokenData.userId);
-    res.send({
+
+    if (Object.keys(updates).length === 0) {
+      return next(
+        new BadRequestError('No supported profile fields provided')
+      );
+    }
+
+    const updatedUser = await userQueries.updateUser(
+      updates,
+      req.tokenData.userId
+    );
+
+    return res.send({
       firstName: updatedUser.firstName,
       lastName: updatedUser.lastName,
       displayName: updatedUser.displayName,
@@ -221,8 +267,8 @@ module.exports.updateUser = async (req, res, next) => {
       role: updatedUser.role,
       id: updatedUser.id,
     });
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    return next(error);
   }
 };
 

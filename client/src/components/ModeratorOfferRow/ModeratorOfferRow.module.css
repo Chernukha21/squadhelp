@@ -1,0 +1,187 @@
+.row {
+  transition: background-color 0.2s ease;
+}
+.row:hover {
+  background: #f9fbfd;
+}
+
+.idCell {
+  color: #455a89;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.offerCell {
+  width: 34%;
+  min-width: 240px;
+}
+
+.offerText {
+  display: -webkit-box;
+  overflow: hidden;
+  max-width: 420px;
+  margin: 0;
+  color: #26334d;
+  font-size: 14px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+.imageLink {
+  display: inline-flex;
+  border-radius: 7px;
+  outline: none;
+}
+.imageLink:focus {
+  box-shadow: 0 0 0 3px rgba(40, 210, 208, 0.2);
+}
+
+.offerImage {
+  display: block;
+  width: 92px;
+  height: 70px;
+  border: 1px solid #e4e8f0;
+  border-radius: 7px;
+  object-fit: contain;
+  background: #fff;
+}
+
+.noContent {
+  color: #a0a8b5;
+  font-style: italic;
+}
+
+.statusBadge {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 82px;
+  min-height: 28px;
+  padding: 0 10px;
+  box-sizing: border-box;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.pending {
+  background: #fff4d6;
+  color: #a66c00;
+}
+
+.approved,
+.active,
+.won {
+  background: #def8e8;
+  color: #237a48;
+}
+
+.rejected {
+  background: #ffe2e2;
+  color: #b43b3b;
+}
+
+.finished {
+  background: #e7edff;
+  color: #455a89;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.actionButton {
+  min-width: 82px;
+  min-height: 36px;
+  padding: 0 13px;
+  border-radius: 5px;
+  background: #fff;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.actionButton:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.approveButton {
+  border: 1px solid #28b88b;
+  color: #218b6c;
+}
+.approveButton:hover:not(:disabled) {
+  background: #28b88b;
+  color: #fff;
+}
+
+.rejectButton {
+  border: 1px solid #dd6565;
+  color: #bd4444;
+}
+.rejectButton:hover:not(:disabled) {
+  background: #dd6565;
+  color: #fff;
+}
+
+.processed {
+  color: #718888;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+@media (max-width: 760px) {
+  .row {
+    display: block;
+    overflow: hidden;
+    border: 1px solid #e4e8f0;
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 0 5px 16px rgba(38, 51, 77, 0.06);
+  }
+  .row:hover {
+    background: #fff;
+  }
+  .row td {
+    display: grid;
+    grid-template-columns: 115px minmax(0, 1fr);
+    align-items: center;
+    gap: 14px;
+    width: auto;
+    min-width: 0;
+    padding: 13px 16px;
+    border-bottom: 1px solid #e4e8f0;
+  }
+  .row td::before {
+    content: attr(data-label);
+    color: #718888;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+  }
+  .row td:last-child {
+    border-bottom: none;
+  }
+  .offerCell {
+    width: auto;
+    min-width: 0;
+  }
+  .offerText {
+    max-width: none;
+  }
+  .actions {
+    flex-wrap: wrap;
+  }
+  .actionButton {
+    flex: 1;
+  }
+}
+
+/*# sourceMappingURL=ModeratorOfferRow.module.css.map */

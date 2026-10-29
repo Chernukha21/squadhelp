@@ -3,6 +3,7 @@ import * as restController from '../../api/rest/restController';
 import { controller } from '../../api/ws/socketController';
 import { rejectedReducer } from '../../utils/store';
 import { changeEditModeOnUserProfile } from './userProfileSlice';
+import CONSTANTS from '../../constants';
 
 const USER_SLICE_NAME = 'user';
 
@@ -18,9 +19,15 @@ export const getUser = createAsyncThunk(
   async (navigate, { rejectWithValue }) => {
     try {
       const { data } = await restController.getUser();
-      controller.subscribe(data.id);
+      if (data.role !== CONSTANTS.MODERATOR) {
+        controller.subscribe(data.id);
+      }
       if (navigate) {
-        navigate('/', { replace: true });
+        const targetPath =
+          data.role === CONSTANTS.MODERATOR ? '/moderator/offers' : '/';
+        navigate(targetPath, {
+          replace: true,
+        });
       }
       return data;
     } catch (err) {
@@ -75,9 +82,9 @@ const extraReducers = builder => {
     state.data = payload;
   });
 
-  builder.addCase(getUser.rejected, (state, action) => {
+  builder.addCase(getUser.rejected, (state, action, payload) => {
     rejectedReducer(state, action);
-
+    state.error = payload;
     state.isAuthChecked = true;
     state.data = null;
   });

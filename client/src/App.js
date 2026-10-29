@@ -1,6 +1,7 @@
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, Navigate } from 'react-router-dom';
 import './App.css';
 import { ToastContainer } from 'react-toastify';
+import { useSelector } from 'react-redux';
 import Router from './router';
 import LoginPage from './pages/LoginPage/LoginPage';
 import RegistrationPage from './pages/RegistrationPage/RegistrationPage';
@@ -21,69 +22,92 @@ import OnlyNotAuthorizedUserRoute from './components/Routes/OnlyNotAuthorizedUse
 import PrivateRoute from './components/Routes/PrivateRoute/PrivateRoute';
 import HowItWorks from './pages/HowItWorks/HowItWorks';
 import Events from './pages/Events/Events';
+import ModeratorRoute from './components/Routes/ModeratorRoute/ModeratorRoute';
+import ModeratorOffersPage from './pages/ModeratorOffers/ModeratorOffersPage';
+import RegularUserRoute from './components/Routes/RegularUserRoute/RegularUserRoute';
 
-const App = () => (
-  <Router history={browserHistory}>
-    <ToastContainer
-      position='top-center'
-      autoClose={5000}
-      hideProgressBar
-      newestOnTop={false}
-      closeOnClick
-      rtl={false}
-      pauseOnVisibilityChange
-      draggable
-      pauseOnHover
-    />
-    <Routes>
-      <Route path='/' element={<Layout />}>
-        <Route index element={<Home />} />
-        <Route path='/how-it-works' element={<HowItWorks />} />
-        <Route element={<OnlyNotAuthorizedUserRoute />}>
-          <Route path='/login' element={<LoginPage />} />
-          <Route path='/registration' element={<RegistrationPage />} />
-        </Route>
+const App = () => {
+  const role = useSelector(state => state.userStore.data?.role);
 
+  const canUseChat = [CONSTANTS.CUSTOMER, CONSTANTS.CREATOR].includes(role);
+  return (
+    <Router history={browserHistory}>
+      <ToastContainer
+        position='top-center'
+        autoClose={5000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnVisibilityChange
+        draggable
+        pauseOnHover
+      />
+      <Routes>
         <Route element={<PrivateRoute />}>
-          <Route path='events' element={<Events />} />
-          <Route path='/payment' element={<Payment />} />
-          <Route path='/startContest' element={<StartContestPage />} />
-          <Route
-            path='/startContest/nameContest'
-            element={
-              <ContestCreationPage
-                contestType={CONSTANTS.NAME_CONTEST}
-                title='Company Name'
-              />
-            }
-          />
-          <Route
-            path='/startContest/taglineContest'
-            element={
-              <ContestCreationPage
-                contestType={CONSTANTS.TAGLINE_CONTEST}
-                title='TAGLINE'
-              />
-            }
-          />
-          <Route
-            path='/startContest/logoContest'
-            element={
-              <ContestCreationPage
-                contestType={CONSTANTS.LOGO_CONTEST}
-                title='LOGO'
-              />
-            }
-          />
-          <Route path='/dashboard' element={<Dashboard />} />
-          <Route path='/contest/:id' element={<ContestPage />} />
-          <Route path='/account' element={<UserProfile />} />
+          <Route element={<ModeratorRoute />}>
+            <Route path='/moderator/offers' element={<ModeratorOffersPage />} />
+          </Route>
         </Route>
-        <Route path='*' element={<NotFound />} />
-      </Route>
-    </Routes>
-    <ChatContainer />
-  </Router>
-);
+        <Route path='/' element={<Layout />}>
+          <Route
+            index
+            element={
+              role === CONSTANTS.MODERATOR ? (
+                <Navigate to='/moderator/offers' replace />
+              ) : (
+                <Home />
+              )
+            }
+          />
+          <Route path='/how-it-works' element={<HowItWorks />} />
+          <Route element={<OnlyNotAuthorizedUserRoute />}>
+            <Route path='/login' element={<LoginPage />} />
+            <Route path='/registration' element={<RegistrationPage />} />
+          </Route>
 
+          <Route element={<PrivateRoute />}>
+            <Route element={<RegularUserRoute />}>
+              <Route path='events' element={<Events />} />
+              <Route path='/payment' element={<Payment />} />
+              <Route path='/startContest' element={<StartContestPage />} />
+              <Route
+                path='/startContest/nameContest'
+                element={
+                  <ContestCreationPage
+                    contestType={CONSTANTS.NAME_CONTEST}
+                    title='Company Name'
+                  />
+                }
+              />
+              <Route
+                path='/startContest/taglineContest'
+                element={
+                  <ContestCreationPage
+                    contestType={CONSTANTS.TAGLINE_CONTEST}
+                    title='TAGLINE'
+                  />
+                }
+              />
+              <Route
+                path='/startContest/logoContest'
+                element={
+                  <ContestCreationPage
+                    contestType={CONSTANTS.LOGO_CONTEST}
+                    title='LOGO'
+                  />
+                }
+              />
+              <Route path='/dashboard' element={<Dashboard />} />
+              <Route path='/contest/:id' element={<ContestPage />} />
+              <Route path='/account' element={<UserProfile />} />
+            </Route>
+          </Route>
+          <Route path='*' element={<NotFound />} />
+        </Route>
+      </Routes>
+      {canUseChat && <ChatContainer />}
+    </Router>
+  );
+};
 export default App;
