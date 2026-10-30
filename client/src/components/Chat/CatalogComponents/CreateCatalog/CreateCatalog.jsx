@@ -10,14 +10,12 @@ const CreateCatalog = () => {
 
   const addChatId = useSelector(state => state.chatStore.addChatId);
 
-  const handleSubmit = values => {
-    return dispatch(
+  const handleSubmit = values => dispatch(
       createCatalog({
         catalogName: values.catalogName,
         chatId: addChatId,
       })
     );
-  };
   return (
     <Formik
       onSubmit={handleSubmit}

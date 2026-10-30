@@ -3,10 +3,10 @@ const { archiveErrors } = require('./errorLogger');
 const CHECK_INTERVAL_MS = 10 * 1000;
 
 const startLogArchiving = ({
-                             hour = 0,
-                             minute = 0,
-                             timeZone = 'Europe/Kyiv',
-                           } = {}) => {
+  hour = 0,
+  minute = 0,
+  timeZone = 'Europe/Kyiv',
+} = {}) => {
   if (
     !Number.isInteger(hour) ||
     hour < 0 ||
@@ -34,7 +34,7 @@ const startLogArchiving = ({
     const parts = Object.fromEntries(
       formatter
         .formatToParts(new Date())
-        .map(({ type, value }) => [type, value])
+        .map(({ type, value }) => [type, value]),
     );
 
     const currentDate = [

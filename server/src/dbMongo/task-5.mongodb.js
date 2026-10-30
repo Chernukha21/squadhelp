@@ -1,3 +1,5 @@
+/* global db */
+
 db.getCollection('messages').aggregate([
   {
     $match: {

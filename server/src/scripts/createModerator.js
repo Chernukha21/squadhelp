@@ -15,13 +15,13 @@ const createModerator = async () => {
 
   if (!email || !password) {
     throw new Error(
-      'MODERATOR_EMAIL and MODERATOR_PASSWORD are required'
+      'MODERATOR_EMAIL and MODERATOR_PASSWORD are required',
     );
   }
 
   if (password.length < 8) {
     throw new Error(
-      'Moderator password must contain at least 8 characters'
+      'Moderator password must contain at least 8 characters',
     );
   }
 
@@ -37,12 +37,12 @@ const createModerator = async () => {
       existingUser.role !== CONSTANTS.MODERATOR
     ) {
       throw new Error(
-        'A regular user already exists with this email'
+        'A regular user already exists with this email',
       );
     }
 
     console.log(
-      `Moderator already exists: ${existingUser.email}`
+      `Moderator already exists: ${existingUser.email}`,
     );
 
     return;
@@ -50,7 +50,7 @@ const createModerator = async () => {
 
   const passwordHash = await bcrypt.hash(
     password,
-    CONSTANTS.SALT_ROUNDS
+    CONSTANTS.SALT_ROUNDS,
   );
 
   const moderator = await db.Users.create({
@@ -72,7 +72,7 @@ const createModerator = async () => {
   });
 
   console.log(
-    `Moderator created with ID ${moderator.id}`
+    `Moderator created with ID ${moderator.id}`,
   );
 };
 
@@ -80,7 +80,7 @@ createModerator()
   .catch(error => {
     console.error(
       'Cannot create moderator:',
-      error.message
+      error.message,
     );
 
     process.exitCode = 1;

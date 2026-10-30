@@ -45,6 +45,7 @@ const UserProfile = () => {
           <span className={styles.headerAside}>Select Option</span>
           <div className={styles.optionsContainer}>
             <button
+              type='button'
               className={classNames(styles.optionContainer, {
                 [styles.currentOption]:
                   profileViewMode === CONSTANTS.USER_INFO_MODE,
@@ -55,6 +56,7 @@ const UserProfile = () => {
             </button>
             {role === CONSTANTS.CREATOR && (
               <button
+                type='button'
                 className={classNames(styles.optionContainer, {
                   [styles.currentOption]:
                     profileViewMode === CONSTANTS.CASHOUT_MODE,

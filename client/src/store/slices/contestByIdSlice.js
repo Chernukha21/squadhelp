@@ -24,7 +24,7 @@ const initialState = {
   imagePath: null,
 };
 
-//---------- getContestById
+// ---------- getContestById
 export const getContestById = decorateAsyncThunk({
   key: `${CONTEST_BY_ID_SLICE_NAME}/getContest`,
   thunk: async payload => {
@@ -52,7 +52,7 @@ const getContestByIdExtraReducers = createExtraReducers({
   rejectedReducer,
 });
 
-//---------- addOffer
+// ---------- addOffer
 export const addOffer = decorateAsyncThunk({
   key: `${CONTEST_BY_ID_SLICE_NAME}/addOffer`,
   thunk: async payload => {
@@ -72,7 +72,7 @@ const addOfferExtraReducers = createExtraReducers({
   },
 });
 
-//---------- setOfferStatus
+// ---------- setOfferStatus
 export const setOfferStatus = decorateAsyncThunk({
   key: `${CONTEST_BY_ID_SLICE_NAME}/setOfferStatus`,
   thunk: async payload => {
@@ -101,7 +101,7 @@ const setOfferStatusExtraReducers = createExtraReducers({
   },
 });
 
-//---------- changeMark
+// ---------- changeMark
 export const changeMark = decorateAsyncThunk({
   key: `${CONTEST_BY_ID_SLICE_NAME}/changeMark`,
   thunk: async payload => {

@@ -32,7 +32,7 @@ const Chat = () => {
 
   useEffect(() => {
     if (userId == null) {
-      return;
+      return undefined;
     }
 
     chatController.subscribeChat(userId);

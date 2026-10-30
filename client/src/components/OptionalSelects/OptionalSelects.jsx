@@ -4,11 +4,18 @@ import FormInput from '../FormInput/FormInput';
 import styles from '../ContestForm/ContestForm.module.sass';
 import Spinner from '../Spinner/Spinner';
 
-const OptionalSelects = props => {
-  if (props.isFetching) {
+const OptionalSelects = ({ contestType, dataForContest }) => {
+  const { isFetching, data } = dataForContest;
+
+  if (isFetching) {
     return <Spinner />;
   }
-  switch (props.contestType) {
+
+  if (!data) {
+    return null;
+  }
+
+  switch (contestType) {
     case CONSTANTS.NAME_CONTEST: {
       return (
         <>
@@ -21,7 +28,7 @@ const OptionalSelects = props => {
               selectInput: styles.select,
               warning: styles.warning,
             }}
-            optionsArray={props.dataForContest.data.typeOfName}
+            optionsArray={data.typeOfName}
           />
           <SelectInput
             name='styleName'
@@ -32,7 +39,7 @@ const OptionalSelects = props => {
               selectInput: styles.select,
               warning: styles.warning,
             }}
-            optionsArray={props.dataForContest.data.nameStyle}
+            optionsArray={data.nameStyle}
           />
         </>
       );
@@ -64,7 +71,7 @@ const OptionalSelects = props => {
               warning: styles.warning,
             }}
             header='Brand Style'
-            optionsArray={props.dataForContest.data.brandStyle}
+            optionsArray={data.brandStyle}
           />
         </>
       );
@@ -96,11 +103,13 @@ const OptionalSelects = props => {
               warning: styles.warning,
             }}
             header='Type tagline'
-            optionsArray={props.dataForContest.data.typeOfTagline}
+            optionsArray={data.typeOfTagline}
           />
         </>
       );
     }
+    default:
+      return null;
   }
 };
 

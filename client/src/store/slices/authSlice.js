@@ -18,9 +18,11 @@ const initialState = {
 export const checkAuth = decorateAsyncThunk({
   key: `${AUTH_SLICE_NAME}/checkAuth`,
   thunk: async ({ data: authInfo, navigate, authMode }) => {
-    authMode === CONSTANTS.AUTH_MODE.LOGIN
-      ? await restController.loginRequest(authInfo)
-      : await restController.registerRequest(authInfo);
+    if (authMode === CONSTANTS.AUTH_MODE.LOGIN) {
+      await restController.loginRequest(authInfo);
+    } else {
+      await restController.registerRequest(authInfo);
+    }
     navigate('/', { replace: true });
   },
 });

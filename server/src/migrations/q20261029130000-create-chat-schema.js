@@ -16,18 +16,18 @@ module.exports = {
             allowNull: false,
             type: Sequelize.DATE,
             defaultValue: Sequelize.literal(
-              'CURRENT_TIMESTAMP'
+              'CURRENT_TIMESTAMP',
             ),
           },
           updatedAt: {
             allowNull: false,
             type: Sequelize.DATE,
             defaultValue: Sequelize.literal(
-              'CURRENT_TIMESTAMP'
+              'CURRENT_TIMESTAMP',
             ),
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -66,18 +66,18 @@ module.exports = {
             allowNull: false,
             type: Sequelize.DATE,
             defaultValue: Sequelize.literal(
-              'CURRENT_TIMESTAMP'
+              'CURRENT_TIMESTAMP',
             ),
           },
           updatedAt: {
             allowNull: false,
             type: Sequelize.DATE,
             defaultValue: Sequelize.literal(
-              'CURRENT_TIMESTAMP'
+              'CURRENT_TIMESTAMP',
             ),
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -116,7 +116,7 @@ module.exports = {
             defaultValue: false,
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -145,11 +145,11 @@ module.exports = {
             allowNull: false,
             type: Sequelize.DATE,
             defaultValue: Sequelize.literal(
-              'CURRENT_TIMESTAMP'
+              'CURRENT_TIMESTAMP',
             ),
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.createTable(
@@ -178,7 +178,7 @@ module.exports = {
             onDelete: 'CASCADE',
           },
         },
-        { transaction }
+        { transaction },
       );
 
       await transaction.commit();
@@ -195,27 +195,27 @@ module.exports = {
     try {
       await queryInterface.dropTable(
         'CatalogChats',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.dropTable(
         'ConversationParticipants',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.dropTable(
         'Messages',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.dropTable(
         'Catalogs',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.dropTable(
         'Chats',
-        { transaction }
+        { transaction },
       );
 
       await transaction.commit();

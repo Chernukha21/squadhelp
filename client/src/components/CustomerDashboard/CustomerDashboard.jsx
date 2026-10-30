@@ -11,7 +11,7 @@ import CONSTANTS from '../../constants';
 import ContestsContainer from '../ContestsContainer/ContestsContainer';
 import styles from './CustomerDashboard.module.sass';
 import TryAgain from '../TryAgain/TryAgain';
-import ContestBox from '../ContestBox/ContestBox.jsx';
+import ContestBox from '../ContestBox/ContestBox';
 
 const CustomerDashboard = () => {
   const dispatch = useDispatch();
@@ -21,32 +21,35 @@ const CustomerDashboard = () => {
     state => state.contestsList
   );
 
-  const loadFirstPage = useCallback(() => {
-    return dispatch(
-      getContests({
-        requestData: {
-          limit: 8,
-          offset: 0,
-          contestStatus: customerFilter,
-        },
-        role: CONSTANTS.CUSTOMER,
-      })
-    );
-  }, [dispatch, customerFilter]);
+  const loadFirstPage = useCallback(
+    () =>
+      dispatch(
+        getContests({
+          requestData: {
+            limit: 8,
+            offset: 0,
+            contestStatus: customerFilter,
+          },
+          role: CONSTANTS.CUSTOMER,
+        })
+      ),
+    [dispatch, customerFilter]
+  );
 
   useEffect(() => {
     loadFirstPage();
   }, [loadFirstPage]);
 
-  useEffect(() => {
-    return () => {
+  useEffect(
+    () => () => {
       dispatch(clearContestsList());
-    };
-  }, [dispatch]);
+    },
+    [dispatch]
+  );
 
   const loadMore = useCallback(
-    offset => {
-      return dispatch(
+    offset =>
+      dispatch(
         getContests({
           requestData: {
             limit: 8,
@@ -55,8 +58,7 @@ const CustomerDashboard = () => {
           },
           role: CONSTANTS.CUSTOMER,
         })
-      );
-    },
+      ),
     [dispatch, customerFilter]
   );
 

@@ -9,13 +9,13 @@ module.exports = {
           allowNull: false,
           defaultValue: 'approved',
         },
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         `ALTER TABLE public."Offers"
          ALTER COLUMN "moderationStatus" SET DEFAULT 'pending';`,
-        { transaction }
+        { transaction },
       );
     });
   },
@@ -25,12 +25,12 @@ module.exports = {
       await queryInterface.removeColumn(
         { tableName: 'Offers', schema: 'public' },
         'moderationStatus',
-        { transaction }
+        { transaction },
       );
 
       await queryInterface.sequelize.query(
         'DROP TYPE IF EXISTS public."enum_Offers_moderationStatus";',
-        { transaction }
+        { transaction },
       );
     });
   },

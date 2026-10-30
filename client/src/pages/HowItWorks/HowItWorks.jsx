@@ -30,7 +30,7 @@ const HowItWorks = () => (
   <main className={styles.page}>
     <section className={styles.hero}>
       <div className={styles.content}>
-        <span className={styles.eyebrow}>World's #1 Naming Platform</span>
+        <span className={styles.eyebrow}>World’s #1 Naming Platform</span>
 
         <h1>How Does Atom Work?</h1>
 

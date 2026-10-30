@@ -37,12 +37,12 @@ const getTransporter = () => {
 };
 
 const sendOfferModerationEmail = async ({
-                                          email,
-                                          creatorName,
-                                          offerId,
-                                          contestId,
-                                          decision,
-                                        }) => {
+  email,
+  creatorName,
+  offerId,
+  contestId,
+  decision,
+}) => {
   const isApproved =
     decision ===
     CONSTANTS.OFFER_MODERATION_STATUS_APPROVED;

@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       tableName: 'CatalogChats',
       timestamps: false,
-    }
+    },
   );
 
   return CatalogChat;

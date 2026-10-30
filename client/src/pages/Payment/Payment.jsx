@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -16,6 +16,7 @@ import {
 const Payment = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [isPromoCodeVisible, setIsPromoCodeVisible] = useState(false);
 
   const contests = useSelector(state => state.contestCreationStore.contests);
   const error = useSelector(state => state.payment.error);
@@ -104,7 +105,25 @@ const Payment = () => {
           <span>Total:</span>
           <span>$100.00 USD</span>
         </div>
-        <a href='#'>Have a promo code?</a>
+        <button
+          type='button'
+          className={styles.promoLink}
+          aria-expanded={isPromoCodeVisible}
+          aria-controls='promo-code-placeholder'
+          onClick={() => setIsPromoCodeVisible(currentValue => !currentValue)}
+        >
+          Have a promo code?
+        </button>
+
+        {isPromoCodeVisible && (
+          <p
+            id='promo-code-placeholder'
+            className={styles.promoPlaceholder}
+            role='status'
+          >
+            Promo codes are not available yet.
+          </p>
+        )}
       </div>
     </div>
   );

@@ -8,12 +8,10 @@ const CONSTANTS = require('../constants');
 const BadRequestError = require('../errors/BadRequestError');
 
 
-
 module.exports.dataForContest = async (req, res, next) => {
   const response = {};
   try {
     const { body: { characteristic1, characteristic2 } } = req;
-    console.log(req.body, characteristic1, characteristic2);
     const types = [characteristic1, characteristic2, 'industry'].filter(Boolean);
 
     const characteristics = await db.Selects.findAll({
@@ -34,7 +32,6 @@ module.exports.dataForContest = async (req, res, next) => {
     });
     res.send(response);
   } catch (err) {
-    console.log(err);
     next(new ServerError('cannot get contest preferences'));
   }
 };
@@ -106,7 +103,7 @@ module.exports.getContestById = async (req, res, next) => {
 
     if (!contest) {
       return next(
-        new BadRequestError('Contest not found')
+        new BadRequestError('Contest not found'),
       );
     }
 
@@ -125,7 +122,7 @@ module.exports.getContestById = async (req, res, next) => {
     return res.send(contestInfo);
   } catch (error) {
     return next(
-      new ServerError('Cannot get contest')
+      new ServerError('Cannot get contest'),
     );
   }
 };
@@ -159,7 +156,7 @@ module.exports.setNewOffer = async (req, res, next) => {
 
     if (!Number.isInteger(contestId) || contestId <= 0) {
       return next(
-        new BadRequestError('Invalid contest ID')
+        new BadRequestError('Invalid contest ID'),
       );
     }
 
@@ -177,7 +174,7 @@ module.exports.setNewOffer = async (req, res, next) => {
 
     if (!contest) {
       return next(
-        new BadRequestError('Contest not found')
+        new BadRequestError('Contest not found'),
       );
     }
 
@@ -186,8 +183,8 @@ module.exports.setNewOffer = async (req, res, next) => {
     ) {
       return next(
         new BadRequestError(
-          'Offers can only be submitted to active contests'
-        )
+          'Offers can only be submitted to active contests',
+        ),
       );
     }
 
@@ -201,7 +198,7 @@ module.exports.setNewOffer = async (req, res, next) => {
     if (contest.contestType === CONSTANTS.LOGO_CONTEST) {
       if (!req.file) {
         return next(
-          new BadRequestError('Image is required')
+          new BadRequestError('Image is required'),
         );
       }
 
@@ -212,7 +209,7 @@ module.exports.setNewOffer = async (req, res, next) => {
 
       if (typeof offerData !== 'string') {
         return next(
-          new BadRequestError('Suggestion is required')
+          new BadRequestError('Suggestion is required'),
         );
       }
 
@@ -220,15 +217,15 @@ module.exports.setNewOffer = async (req, res, next) => {
 
       if (!normalizedOffer) {
         return next(
-          new BadRequestError('Suggestion is required')
+          new BadRequestError('Suggestion is required'),
         );
       }
 
       if (normalizedOffer.length > 255) {
         return next(
           new BadRequestError(
-            'Suggestion must be 255 characters or less'
-          )
+            'Suggestion must be 255 characters or less',
+          ),
         );
       }
 
@@ -257,7 +254,7 @@ module.exports.setNewOffer = async (req, res, next) => {
     });
   } catch (error) {
     return next(
-      new ServerError('Cannot create offer')
+      new ServerError('Cannot create offer'),
     );
   }
 };
@@ -265,26 +262,26 @@ module.exports.setNewOffer = async (req, res, next) => {
 const rejectOffer = async (
   offerId,
   creatorId,
-  contestId
+  contestId,
 ) => {
   const rejectedOffer = await contestQueries.updateOffer(
-      {
-        status: CONSTANTS.OFFER_STATUS_REJECTED,
-      },
-      {
-        id: offerId,
-        contestId,
-        status: CONSTANTS.OFFER_STATUS_PENDING,
-        moderationStatus: CONSTANTS.OFFER_MODERATION_STATUS_APPROVED,
-      }
-    );
+    {
+      status: CONSTANTS.OFFER_STATUS_REJECTED,
+    },
+    {
+      id: offerId,
+      contestId,
+      status: CONSTANTS.OFFER_STATUS_PENDING,
+      moderationStatus: CONSTANTS.OFFER_MODERATION_STATUS_APPROVED,
+    },
+  );
 
   controller
     .getNotificationController()
     .emitChangeOfferStatus(
       String(creatorId),
       'Your offer was rejected',
-      contestId
+      contestId,
     );
 
   return rejectedOffer;
@@ -296,7 +293,7 @@ const resolveOffer = async (
   orderId,
   offerId,
   priority,
-  transaction
+  transaction,
 ) => {
   const finishedContest = await contestQueries.updateContestStatus({
     status: db.sequelize.literal(`CASE
@@ -320,15 +317,15 @@ const resolveOffer = async (
     END`),
     },
     {
-    contestId,
+      contestId,
       status: CONSTANTS.OFFER_STATUS_PENDING,
-    moderationStatus:
+      moderationStatus:
     CONSTANTS.OFFER_MODERATION_STATUS_APPROVED,
     },
-    transaction
+    transaction,
   );
   const winningOffer = updatedOffers.find(
-    offer => String(offer.id) === String(offerId)
+    offer => String(offer.id) === String(offerId),
   );
   if (!winningOffer) {
     throw new ServerError('Offer has already been processed');
@@ -342,9 +339,9 @@ const resolveOffer = async (
         .filter(
           offer =>
             offer.status === CONSTANTS.OFFER_STATUS_REJECTED &&
-            String(offer.userId) !== String(creatorId)
+            String(offer.userId) !== String(creatorId),
         )
-        .map(offer => String(offer.userId))
+        .map(offer => String(offer.userId)),
     ),
   ];
 
@@ -354,7 +351,7 @@ const resolveOffer = async (
       .emitChangeOfferStatus(
         rejectedCreatorIds,
         'Your offer was rejected',
-        contestId
+        contestId,
       );
   }
 
@@ -363,7 +360,7 @@ const resolveOffer = async (
     .emitChangeOfferStatus(
       String(creatorId),
       'Your offer won the contest',
-      contestId
+      contestId,
     );
   return winningOffer?.dataValues ?? winningOffer;
 };
@@ -371,7 +368,7 @@ const resolveOffer = async (
 module.exports.setOfferStatus = async (
   req,
   res,
-  next
+  next,
 ) => {
   let transaction;
 
@@ -384,8 +381,8 @@ module.exports.setOfferStatus = async (
     ) {
       return next(
         new BadRequestError(
-          'Unknown offer status command'
-        )
+          'Unknown offer status command',
+        ),
       );
     }
 
@@ -396,7 +393,7 @@ module.exports.setOfferStatus = async (
       const rejectedOffer = await rejectOffer(
         offer.id,
         offer.userId,
-        contest.id
+        contest.id,
       );
 
       return res.send(rejectedOffer);
@@ -411,7 +408,7 @@ module.exports.setOfferStatus = async (
       contest.orderId,
       offer.id,
       contest.priority,
-      transaction
+      transaction,
     );
 
     return res.send(winningOffer);
@@ -429,34 +426,45 @@ module.exports.setOfferStatus = async (
 
 module.exports.getCustomersContests = (req, res, next) => {
   db.Contests.findAll({
-    where: { status: req.headers.status, userId: req.tokenData.userId },
+    where: {
+      status: req.headers.status,
+      userId: req.tokenData.userId,
+    },
     limit: req.body.limit,
-    offset: req.body.offset ? req.body.offset : 0,
+    offset: req.body.offset || 0,
     order: [['id', 'DESC']],
     include: [
       {
         model: db.Offers,
         required: false,
         attributes: ['id'],
+        where: {
+          moderationStatus:
+          CONSTANTS.OFFER_MODERATION_STATUS_APPROVED,
+        },
       },
     ],
   })
     .then(contests => {
-      contests.forEach(
-        contest => contest.dataValues.count = contest.dataValues.Offers.length);
-      let haveMore = true;
-      if (contests.length === 0) {
-        haveMore = false;
-      }
-      res.send({ contests, haveMore });
+      contests.forEach(contest => {
+        contest.dataValues.count =
+          contest.dataValues.Offers.length;
+      });
+
+      const haveMore = contests.length > 0;
+
+      return res.send({
+        contests,
+        haveMore,
+      });
     })
-    .catch(err => next(new ServerError(err)));
+    .catch(error => next(new ServerError(error)));
 };
 
 module.exports.getContests = async (
   req,
   res,
-  next
+  next,
 ) => {
   try {
     const predicates =
@@ -464,11 +472,11 @@ module.exports.getContests = async (
         req.body.typeIndex,
         req.body.contestId,
         req.body.industry,
-        req.body.awardSort
+        req.body.awardSort,
       );
 
     const ownEntries = Boolean(
-      req.body.ownEntries
+      req.body.ownEntries,
     );
 
     const offersWhere = ownEntries
@@ -519,7 +527,7 @@ module.exports.getContests = async (
     });
   } catch (error) {
     return next(
-      new ServerError('Cannot get contests')
+      new ServerError('Cannot get contests'),
     );
   }
 };

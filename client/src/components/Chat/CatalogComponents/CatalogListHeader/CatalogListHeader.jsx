@@ -24,14 +24,12 @@ const CatalogListHeader = () => {
     dispatch(changeRenameCatalogMode());
   };
 
-  const handleSubmit = values => {
-    return dispatch(
+  const handleSubmit = values => dispatch(
       changeCatalogName({
         catalogName: values.catalogName,
         catalogId: currentCatalog._id,
       })
     );
-  };
 
   if (!currentCatalog) {
     return null;

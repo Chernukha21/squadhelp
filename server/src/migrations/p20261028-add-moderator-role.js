@@ -2,7 +2,7 @@ module.exports = {
   async up(queryInterface) {
     await queryInterface.sequelize.query(
       `ALTER TYPE public."enum_Users_role"
-       ADD VALUE IF NOT EXISTS 'moderator';`
+       ADD VALUE IF NOT EXISTS 'moderator';`,
     );
   },
 
@@ -12,7 +12,7 @@ module.exports = {
 
       await queryInterface.sequelize.query(
         'LOCK TABLE public."Users" IN ACCESS EXCLUSIVE MODE;',
-        options
+        options,
       );
 
       const [moderators] = await queryInterface.sequelize.query(
@@ -20,12 +20,12 @@ module.exports = {
          FROM public."Users"
          WHERE "role"::text = 'moderator'
          LIMIT 1;`,
-        options
+        options,
       );
 
       if (moderators.length > 0) {
         throw new Error(
-          'Cannot rollback: moderator accounts still exist'
+          'Cannot rollback: moderator accounts still exist',
         );
       }
 
@@ -35,7 +35,7 @@ module.exports = {
          WHERE table_schema = 'public'
            AND table_name = 'Users'
            AND column_name = 'role';`,
-        options
+        options,
       );
 
       const originalDefault = columns[0].column_default;
@@ -56,14 +56,14 @@ module.exports = {
            USING "role"::text::public."enum_Users_role";
 
          DROP TYPE public."enum_Users_role_with_moderator";`,
-        options
+        options,
       );
 
       if (originalDefault !== null) {
         await queryInterface.sequelize.query(
           `ALTER TABLE public."Users"
            ALTER COLUMN "role" SET DEFAULT ${originalDefault};`,
-          options
+          options,
         );
       }
     });

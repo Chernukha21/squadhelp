@@ -78,7 +78,7 @@ module.exports.onlyForRegularUsers = (req, res, next) => {
 
   if (!allowedRoles.includes(req.tokenData.role)) {
     return next(
-      new RightsError('This action is not available for moderators')
+      new RightsError('This action is not available for moderators'),
     );
   }
 
@@ -104,7 +104,7 @@ module.exports.canSendOffer = async (req, res, next) => {
 
     if (contest.status !== CONSTANTS.CONTEST_STATUS_ACTIVE) {
       return next(
-        new RightsError('Offers can only be submitted to active contests')
+        new RightsError('Offers can only be submitted to active contests'),
       );
     }
 
@@ -117,7 +117,7 @@ module.exports.canSendOffer = async (req, res, next) => {
 module.exports.onlyForCustomerWhoCreateContest = async (
   req,
   res,
-  next
+  next,
 ) => {
   try {
     if (
@@ -125,8 +125,8 @@ module.exports.onlyForCustomerWhoCreateContest = async (
     ) {
       return next(
         new RightsError(
-          'Only customers can change offer status'
-        )
+          'Only customers can change offer status',
+        ),
       );
     }
 
@@ -141,8 +141,8 @@ module.exports.onlyForCustomerWhoCreateContest = async (
     ) {
       return next(
         new BadRequestError(
-          'Invalid contest or offer ID'
-        )
+          'Invalid contest or offer ID',
+        ),
       );
     }
 
@@ -156,12 +156,12 @@ module.exports.onlyForCustomerWhoCreateContest = async (
           'orderId',
           'priority',
         ],
-      }
+      },
     );
 
     if (!contest) {
       return next(
-        new RightsError('Contest not found')
+        new RightsError('Contest not found'),
       );
     }
 
@@ -170,8 +170,8 @@ module.exports.onlyForCustomerWhoCreateContest = async (
     ) {
       return next(
         new RightsError(
-          'You are not the owner of this contest'
-        )
+          'You are not the owner of this contest',
+        ),
       );
     }
 
@@ -181,8 +181,8 @@ module.exports.onlyForCustomerWhoCreateContest = async (
     ) {
       return next(
         new RightsError(
-          `Contest is not active. Current status: ${contest.status}`
-        )
+          `Contest is not active. Current status: ${contest.status}`,
+        ),
       );
     }
 
@@ -206,8 +206,8 @@ module.exports.onlyForCustomerWhoCreateContest = async (
     if (!offer) {
       return next(
         new RightsError(
-          'Offer is not approved or has already been processed'
-        )
+          'Offer is not approved or has already been processed',
+        ),
       );
     }
 
@@ -238,7 +238,7 @@ module.exports.canUpdateContest = async (req, res, next) => {
 
     if (!contest) {
       return next(
-        new RightsError('Contest not found or cannot be updated')
+        new RightsError('Contest not found or cannot be updated'),
       );
     }
 

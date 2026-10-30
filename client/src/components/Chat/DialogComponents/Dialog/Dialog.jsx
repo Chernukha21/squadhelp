@@ -28,11 +28,9 @@ const Dialog = ({ userId }) => {
     }
   }, [dispatch, interlocutorId]);
 
-  useEffect(() => {
-    return () => {
+  useEffect(() => () => {
       dispatch(clearMessageList());
-    };
-  }, [dispatch]);
+    }, [dispatch]);
 
   useEffect(() => {
     messagesEnd.current?.scrollIntoView({

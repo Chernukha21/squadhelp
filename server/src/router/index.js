@@ -7,7 +7,7 @@ const checkToken = require('../middlewares/checkToken');
 const validators = require('../middlewares/validators');
 const chatController = require('../controllers/chatController');
 const moderatorController = require(
-  '../controllers/moderatorController'
+  '../controllers/moderatorController',
 );
 const upload = require('../utils/fileUpload');
 const router = express.Router();
@@ -34,19 +34,19 @@ router.get(
   '/moderator/offers',
   checkToken.checkToken,
   basicMiddlewares.onlyForModerator,
-  moderatorController.getOffers
+  moderatorController.getOffers,
 );
 
 router.patch(
   '/moderator/offers/:offerId',
   checkToken.checkToken,
   basicMiddlewares.onlyForModerator,
-  moderatorController.moderateOffer
+  moderatorController.moderateOffer,
 );
 
 router.use(
   checkToken.checkToken,
-  basicMiddlewares.onlyForRegularUsers
+  basicMiddlewares.onlyForRegularUsers,
 );
 
 router.post(

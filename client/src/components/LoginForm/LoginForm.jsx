@@ -15,11 +15,9 @@ const LoginForm = () => {
 
   const { error, isFetching } = useSelector(state => state.auth);
 
-  useEffect(() => {
-    return () => {
+  useEffect(() => () => {
       dispatch(clearAuth());
-    };
-  }, [dispatch]);
+    }, [dispatch]);
 
   const handleSubmit = values => {
     dispatch(

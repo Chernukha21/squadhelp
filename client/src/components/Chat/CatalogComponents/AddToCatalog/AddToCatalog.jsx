@@ -12,14 +12,12 @@ const AddToCatalog = () => {
   const catalogNames = catalogList.map(catalog => catalog.catalogName);
   const catalogIds = catalogList.map(catalog => catalog._id);
 
-  const handleSubmit = values => {
-    return dispatch(
+  const handleSubmit = values => dispatch(
       addChatToCatalog({
         chatId: addChatId,
         catalogId: values.catalogId,
       })
     );
-  };
 
   return catalogNames.length > 0 ? (
     <Formik onSubmit={handleSubmit} initialValues={{ catalogId: '' }}>

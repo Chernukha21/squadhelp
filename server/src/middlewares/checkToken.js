@@ -14,7 +14,7 @@ module.exports.checkAuth = async (req, res, next) => {
   try {
     const tokenData = jwt.verify(
       accessToken,
-      CONSTANTS.JWT_SECRET
+      CONSTANTS.JWT_SECRET,
     );
 
     const foundUser = await userQueries.findUser({
@@ -48,7 +48,7 @@ module.exports.checkToken = async (req, res, next) => {
   try {
     tokenData = jwt.verify(
       accessToken,
-      CONSTANTS.JWT_SECRET
+      CONSTANTS.JWT_SECRET,
     );
   } catch (error) {
     return next(new TokenError());

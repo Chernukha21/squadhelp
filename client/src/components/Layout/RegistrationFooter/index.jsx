@@ -24,7 +24,7 @@ const RegistrationFooter = () => (
           Comprehensive Trademark Validation, you receive best-in-class support
           for your branding projects. Breadth: Our Contest-Based Crowdsourcing
           approach allows you to receive an unmatched breadth of name ideas from
-          dozens of unique, creative minds while working with the world's
+          dozens of unique, creative minds while working with the world’s
           largest branding community. Quality and Collaboration: Using an
           advanced Quality Scoring Algorithm, we ensure that you receive more
           ideas from our top-quality creatives, and we use Gamification best

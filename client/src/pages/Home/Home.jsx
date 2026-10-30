@@ -61,7 +61,7 @@ const Home = () => {
             <h3>Largest Naming Community</h3>
             <p>
               Our unique approach allows you to receive an unmatched breadth of
-              business name ideas from world's largest community of naming
+              business name ideas from world’s largest community of naming
               experts. With 75,000+ creatives and 15,000+ successful naming
               projects, Squadhelp is by far the largest naming platform across
               the globe .
@@ -87,7 +87,7 @@ const Home = () => {
             />
             <h3>Agency-Level Features</h3>
             <p>
-              Squadhelp's high end Audience Testing service allows you to poll
+              Squadhelp’s high end Audience Testing service allows you to poll
               your target demographics to get unbiased feedback on your favorite
               names. Also receive Trademark support from our team of Licensed
               Trademark Attorneys, so you can pick your name with confidence.

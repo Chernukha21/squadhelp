@@ -55,8 +55,7 @@ const CreatorDashboard = () => {
   }, [location.search]);
 
   const loadContests = useCallback(
-    (offset = 0) => {
-      return dispatch(
+    (offset = 0) => dispatch(
         getContests({
           requestData: {
             limit: 8,
@@ -65,8 +64,7 @@ const CreatorDashboard = () => {
           },
           role: CONSTANTS.CREATOR,
         })
-      );
-    },
+      ),
     [dispatch, creatorFilter]
   );
 

@@ -24,8 +24,7 @@ const ContestSideBar = ({ contestData, totalEntries }) => {
     return parts.join(' ') || 'less than one hour';
   };
 
-  const renderContestInfo = () => {
-    return (
+  const renderContestInfo = () => (
       <div className={styles.contestSideBarInfo}>
         <div className={styles.contestInfo}>
           <div className={styles.awardAndTimeContainer}>
@@ -87,7 +86,6 @@ const ContestSideBar = ({ contestData, totalEntries }) => {
         )}
       </div>
     );
-  };
 
   return renderContestInfo();
 };

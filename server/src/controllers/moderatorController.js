@@ -27,12 +27,12 @@ module.exports.getOffers = async (req, res, next) => {
   try {
     const requestedPage = Number.parseInt(
       req.query.page,
-      10
+      10,
     );
 
     const requestedLimit = Number.parseInt(
       req.query.limit,
-      10
+      10,
     );
 
     const page =
@@ -52,13 +52,13 @@ module.exports.getOffers = async (req, res, next) => {
     if (req.query.moderationStatus) {
       if (
         !MODERATION_STATUSES.includes(
-          req.query.moderationStatus
+          req.query.moderationStatus,
         )
       ) {
         return next(
           new BadRequestError(
-            'Invalid moderation status'
-          )
+            'Invalid moderation status',
+          ),
         );
       }
 
@@ -94,7 +94,7 @@ module.exports.getOffers = async (req, res, next) => {
     });
   } catch (error) {
     return next(
-      new ServerError('Cannot get offers')
+      new ServerError('Cannot get offers'),
     );
   }
 };
@@ -102,7 +102,7 @@ module.exports.getOffers = async (req, res, next) => {
 module.exports.moderateOffer = async (
   req,
   res,
-  next
+  next,
 ) => {
   try {
     const offerId = Number(req.params.offerId);
@@ -113,7 +113,7 @@ module.exports.moderateOffer = async (
       offerId <= 0
     ) {
       return next(
-        new BadRequestError('Invalid offer ID')
+        new BadRequestError('Invalid offer ID'),
       );
     }
 
@@ -125,8 +125,8 @@ module.exports.moderateOffer = async (
     if (!allowedDecisions.includes(decision)) {
       return next(
         new BadRequestError(
-          'Decision must be approved or rejected'
-        )
+          'Decision must be approved or rejected',
+        ),
       );
     }
 
@@ -146,8 +146,8 @@ module.exports.moderateOffer = async (
     if (!pendingOffer) {
       return next(
         new BadRequestError(
-          'Offer not found or already moderated'
-        )
+          'Offer not found or already moderated',
+        ),
       );
     }
 
@@ -161,12 +161,12 @@ module.exports.moderateOffer = async (
         pendingOffer.contestId,
         {
           attributes: ['id', 'userId'],
-        }
+        },
       );
 
       if (!contest) {
         return next(
-          new BadRequestError('Contest not found')
+          new BadRequestError('Contest not found'),
         );
       }
     }
@@ -183,14 +183,14 @@ module.exports.moderateOffer = async (
             CONSTANTS.OFFER_MODERATION_STATUS_PENDING,
           },
           returning: true,
-        }
+        },
       );
 
     if (updatedCount === 0) {
       return next(
         new BadRequestError(
-          'Offer has already been moderated'
-        )
+          'Offer has already been moderated',
+        ),
       );
     }
 
@@ -204,7 +204,7 @@ module.exports.moderateOffer = async (
         .getNotificationController()
         .emitEntryCreated(
           String(contest.userId),
-          contest.id
+          contest.id,
         );
     }
 
@@ -219,7 +219,7 @@ module.exports.moderateOffer = async (
       .emitChangeOfferStatus(
         String(pendingOffer.userId),
         creatorMessage,
-        pendingOffer.contestId
+        pendingOffer.contestId,
       );
 
     try {
@@ -231,12 +231,12 @@ module.exports.moderateOffer = async (
             'displayName',
             'firstName',
           ],
-        }
+        },
       );
 
       if (!creator) {
         throw new Error(
-          `Creative for offer #${offerId} was not found`
+          `Creative for offer #${offerId} was not found`,
         );
       }
 
@@ -251,16 +251,16 @@ module.exports.moderateOffer = async (
     } catch (emailError) {
       console.error(
         `Cannot send moderation email for offer #${offerId}:`,
-        emailError
+        emailError,
       );
     }
 
     return res.send(
-      getSafeOffer(updatedOffer)
+      getSafeOffer(updatedOffer),
     );
   } catch (error) {
     return next(
-      new ServerError('Cannot moderate offer')
+      new ServerError('Cannot moderate offer'),
     );
   }
 };

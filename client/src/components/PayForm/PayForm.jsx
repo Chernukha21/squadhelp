@@ -4,7 +4,7 @@ import 'react-credit-cards-2/dist/es/styles-compiled.css';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from './PayForm.module.sass';
 import PayInput from '../InputComponents/PayInput/PayInput';
-import Schema from '../../utils/validators/validationSchemas.js';
+import Schema from '../../utils/validators/validationSchemas';
 import { changeFocusOnCard } from '../../store/slices/paymentSlice';
 
 const PayForm = ({ back, sendRequest, isPayForOrder }) => {
@@ -148,7 +148,7 @@ const PayForm = ({ back, sendRequest, isPayForOrder }) => {
           <span>{isPayForOrder ? 'Pay Now' : 'CashOut'}</span>
         </button>
         {isPayForOrder && (
-          <button onClick={back} className={styles.backButton}>
+          <button type='button' onClick={back} className={styles.backButton}>
             <span>Back</span>
           </button>
         )}

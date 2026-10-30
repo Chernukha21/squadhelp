@@ -2,31 +2,44 @@ import moment from 'moment';
 import styles from './ContestBox.module.sass';
 import CONSTANTS from '../../constants';
 
-const ContestBox = props => {
+const ContestBox = ({ data, goToExtended }) => {
   const getTimeStr = () => {
-    const diff = moment.duration(moment().diff(moment(props.data.createdAt)));
-    let str = '';
-    if (diff._data.days !== 0) str = `${diff._data.days}d `;
-    if (diff._data.hours !== 0) str += `${diff._data.hours}h`;
-    if (str.length === 0) str = 'less than one hour';
-    return str;
+    const duration = moment.duration(moment().diff(moment(data.createdAt)));
+    const days = Math.floor(duration.asDays());
+    const hours = duration.hours();
+    const timeParts = [];
+
+    if (days > 0) {
+      timeParts.push(`${days}d`);
+    }
+
+    if (hours > 0) {
+      timeParts.push(`${hours}h`);
+    }
+
+    return timeParts.length > 0 ? timeParts.join(' ') : 'less than one hour';
   };
 
   const getPreferenceContest = () => {
-    const { data } = props;
-    if (data.contestType === CONSTANTS.NAME_CONTEST) return data.typeOfName;
-    if (data.contestType === CONSTANTS.LOGO_CONTEST) return data.brandStyle;
+    if (data.contestType === CONSTANTS.NAME_CONTEST) {
+      return data.typeOfName;
+    }
+
+    if (data.contestType === CONSTANTS.LOGO_CONTEST) {
+      return data.brandStyle;
+    }
+
     return data.typeOfTagline;
   };
 
   const ucFirstLetter = string =>
     string.charAt(0).toUpperCase() + string.slice(1);
 
-  const { id, title, contestType, prize, count } = props.data;
+  const { id, title, contestType, prize, count } = data;
   return (
     <div
       className={styles.contestBoxContainer}
-      onClick={() => props.goToExtended(id)}
+      onClick={() => goToExtended(id)}
     >
       <div className={styles.mainContestInfo}>
         <div className={styles.titleAndIdContainer}>

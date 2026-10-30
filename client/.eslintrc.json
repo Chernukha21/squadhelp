@@ -23,6 +23,37 @@
     }
   },
   "rules": {
+    "react/destructuring-assignment": "off",
+    "no-plusplus": "off",
+
+    "no-param-reassign": [
+      "error",
+      {
+        "props": true,
+        "ignorePropertyModificationsFor": [
+          "state",
+          "config",
+          "registration",
+          "preview",
+          "chatPreview",
+          "offer"
+        ]
+      }
+    ],
+    "no-shadow": "warn",
+    "no-nested-ternary": "warn",
+    "no-use-before-define": "warn",
+    "prefer-destructuring": "off",
+    "react/require-default-props": "off",
+    "jsx-a11y/label-has-associated-control": "warn",
+    "jsx-a11y/click-events-have-key-events": "warn",
+    "jsx-a11y/no-static-element-interactions": "warn",
+    "jsx-a11y/mouse-events-have-key-events": "warn",
+    "jsx-a11y/no-noninteractive-element-interactions": "warn",
+
+    "react/no-array-index-key": "warn",
+    "class-methods-use-this": "warn",
+    "import/no-mutable-exports": "warn",
     "react/jsx-props-no-spreading": "off",
     "react/prop-types": "off",
     "react/jsx-filename-extension": [
@@ -67,7 +98,14 @@
           "error",
           {
             "props": true,
-            "ignorePropertyModificationsFor": ["state"]
+            "ignorePropertyModificationsFor": [
+              "state",
+              "config",
+              "registration",
+              "preview",
+              "chatPreview",
+              "offer"
+            ]
           }
         ]
       }

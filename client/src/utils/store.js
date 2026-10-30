@@ -47,13 +47,23 @@ export const decorateAsyncThunk = ({ key, thunk }) => {
  * @returns {Function} Extra reducers for thunk with pending/fulfilled/rejected reducers
  */
 
-export const createExtraReducers = ({
-  thunk,
-  pendingReducer,
-  fulfilledReducer,
-  rejectedReducer,
-}) => builder => {
-  pendingReducer && builder.addCase(thunk.pending, pendingReducer);
-  fulfilledReducer && builder.addCase(thunk.fulfilled, fulfilledReducer);
-  rejectedReducer && builder.addCase(thunk.rejected, rejectedReducer);
-};
+export const createExtraReducers =
+  ({
+    thunk,
+    pendingReducer: onPending,
+    fulfilledReducer: onFulfilled,
+    rejectedReducer: onRejected,
+  }) =>
+  builder => {
+    if (onPending) {
+      builder.addCase(thunk.pending, onPending);
+    }
+
+    if (onFulfilled) {
+      builder.addCase(thunk.fulfilled, onFulfilled);
+    }
+
+    if (onRejected) {
+      builder.addCase(thunk.rejected, onRejected);
+    }
+  };

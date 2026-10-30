@@ -13,7 +13,6 @@ class ChatController extends WebSocket{
       const roomId = String(id);
 
       socket.join(roomId);
-      console.log(`Socket ${socket.id} joined chat room ${roomId}`);
     });
   }
 
@@ -26,7 +25,6 @@ class ChatController extends WebSocket{
   emitNewMessage(target, payload) {
     const roomId = String(target);
 
-    console.log(`Sending new message to chat room ${roomId}`);
 
     this.io.to(roomId).emit(CONSTANTS.NEW_MESSAGE, {
       message: payload,

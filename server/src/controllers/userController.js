@@ -42,7 +42,7 @@ module.exports.registration = async (req, res, next) => {
 
     if (!publicRoles.includes(role)) {
       return next(
-        new BadRequestError('Only customer and creator can register')
+        new BadRequestError('Only customer and creator can register'),
       );
     }
 
@@ -135,7 +135,7 @@ module.exports.payment = async (req, res, next) => {
     }
 
     const allowedDomainPreferences = Object.values(
-      CONSTANTS.DOMAIN_PREFERENCES
+      CONSTANTS.DOMAIN_PREFERENCES,
     );
 
     const orderId = uuid();
@@ -149,7 +149,7 @@ module.exports.payment = async (req, res, next) => {
         !allowedDomainPreferences.includes(contest.domainPreference)
       ) {
         throw new BadRequestError(
-          'Invalid domain preference'
+          'Invalid domain preference',
         );
       }
 
@@ -204,7 +204,7 @@ module.exports.payment = async (req, res, next) => {
           ],
         },
       },
-      transaction
+      transaction,
     );
 
     await bd.Contests.bulkCreate(contests, {
@@ -248,13 +248,13 @@ module.exports.updateUser = async (req, res, next) => {
 
     if (Object.keys(updates).length === 0) {
       return next(
-        new BadRequestError('No supported profile fields provided')
+        new BadRequestError('No supported profile fields provided'),
       );
     }
 
     const updatedUser = await userQueries.updateUser(
       updates,
-      req.tokenData.userId
+      req.tokenData.userId,
     );
 
     return res.send({

@@ -19,7 +19,7 @@ const devFilePath = path.resolve(
   '..',
   '..',
   'public',
-  'images'
+  'images',
 );
 
 const filePath =
@@ -44,7 +44,7 @@ const storageContestFiles = multer.diskStorage({
 const logoFileFilter = (req, file, cb) => {
   if (!ALLOWED_OFFER_FILE_TYPES.has(file.mimetype)) {
     return cb(
-      new Error('Only JPEG, PNG and WEBP images are allowed')
+      new Error('Only JPEG, PNG and WEBP images are allowed'),
     );
   }
 
@@ -85,11 +85,11 @@ const handleUpload = upload => (req, res, next) => {
 module.exports.uploadAvatar = handleUpload(uploadAvatars);
 
 module.exports.uploadContestFiles = handleUpload(
-  uploadContestFiles
+  uploadContestFiles,
 );
 
 module.exports.updateContestFile = handleUpload(
-  updateContestFile
+  updateContestFile,
 );
 
 module.exports.uploadLogoFiles = (req, res, next) => {
@@ -103,14 +103,14 @@ module.exports.uploadLogoFiles = (req, res, next) => {
       err.code === 'LIMIT_FILE_SIZE'
     ) {
       return next(
-        new BadRequestError('Image must be 5 MB or less')
+        new BadRequestError('Image must be 5 MB or less'),
       );
     }
 
     return next(
       new BadRequestError(
-        err.message || 'Cannot upload image'
-      )
+        err.message || 'Cannot upload image',
+      ),
     );
   });
 };

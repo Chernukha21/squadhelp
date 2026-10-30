@@ -81,11 +81,7 @@ const ImageUpload = ({ name, classes }) => {
       {meta.touched && meta.error && <span role='alert'>{meta.error}</span>}
 
       {previewUrl && (
-        <img
-          src={previewUrl}
-          className={imgStyle}
-          alt='Selected image preview'
-        />
+        <img src={previewUrl} className={imgStyle} alt='Upload preview' />
       )}
     </div>
   );

@@ -31,7 +31,7 @@ const logError = error => {
       await fs.appendFile(
         ERROR_LOG_PATH,
         `${JSON.stringify(record)}\n`,
-        'utf8'
+        'utf8',
       );
     })
     .catch(writeError => {
@@ -76,7 +76,7 @@ const archiveErrors = () => {
 
       const archivePath = path.join(
         ARCHIVE_DIRECTORY,
-        `errors-${Date.now()}-${uuid()}.log`
+        `errors-${Date.now()}-${uuid()}.log`,
       );
 
       await fs.writeFile(archivePath, `${archiveContent}\n`, {

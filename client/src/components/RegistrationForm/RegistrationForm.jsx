@@ -17,11 +17,9 @@ const RegistrationForm = () => {
 
   const { error, isFetching } = useSelector(state => state.auth);
 
-  useEffect(() => {
-    return () => {
+  useEffect(() => () => {
       dispatch(clearAuth());
-    };
-  }, [dispatch]);
+    }, [dispatch]);
 
   const handleClearAuth = () => {
     dispatch(clearAuth());
