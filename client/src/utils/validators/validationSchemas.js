@@ -1,6 +1,7 @@
 import * as yup from 'yup';
 import valid from 'card-validator';
 import moment from 'moment';
+import CONSTANTS from '../../constants';
 
 const MAX_OFFER_FILE_SIZE = 5 * 1024 * 1024;
 
@@ -101,11 +102,11 @@ export default {
     typeOfTagline: yup.string().min(1),
     brandStyle: yup.string().min(1),
     domainPreference: yup.string().when('contestType', {
-      is: 'name',
+      is: CONSTANTS.NAME_CONTEST,
       then: schema =>
         schema
           .oneOf(
-            ['variationsAllowed', 'exactMatch', 'noDomain'],
+            Object.values(CONSTANTS.DOMAIN_PREFERENCES),
             'Select a domain preference'
           )
           .required('Domain preference is required'),

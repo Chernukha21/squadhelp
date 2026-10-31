@@ -182,27 +182,10 @@ module.exports.payment = async (req, res, next) => {
 
     await bankQueries.updateBankBalance(
       {
-        balance: bd.sequelize.literal(`
-          CASE
-            WHEN "cardNumber"='${req.body.number.replace(/ /g, '')}'
-              AND "cvc"='${req.body.cvc}'
-              AND "expiry"='${req.body.expiry}'
-            THEN "balance"-${req.body.price}
-
-            WHEN "cardNumber"='${CONSTANTS.SQUADHELP_BANK_NUMBER}'
-              AND "cvc"='${CONSTANTS.SQUADHELP_BANK_CVC}'
-              AND "expiry"='${CONSTANTS.SQUADHELP_BANK_EXPIRY}'
-            THEN "balance"+${req.body.price}
-          END
-        `),
-      },
-      {
-        cardNumber: {
-          [bd.Sequelize.Op.in]: [
-            CONSTANTS.SQUADHELP_BANK_NUMBER,
-            req.body.number.replace(/ /g, ''),
-          ],
-        },
+        cardNumber: req.body.number.replace(/\s/g, ''),
+        cvc: req.body.cvc,
+        expiry: req.body.expiry,
+        amount: req.body.price,
       },
       transaction,
     );

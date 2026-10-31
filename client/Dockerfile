@@ -1,21 +1,15 @@
-ARG VERSION=lts-alpine
+ARG VERSION=24-alpine
 
-FROM node:$VERSION
-
-ARG NODE_ENV="development"
-
-RUN mkdir -p ./client
+FROM node:${VERSION}
 
 WORKDIR /client
 
 COPY package*.json ./
 
-COPY . .
-
-EXPOSE 5000
-
 RUN npm install
 
-RUN chown -R node:node /client/node_modules
+COPY . .
 
-CMD npm start
+EXPOSE 3000
+
+CMD ["npm", "start"]

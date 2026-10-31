@@ -19,20 +19,20 @@ import styles from './ContestForm.module.sass';
 
 const domainOptions = [
   {
-    value: 'variationsAllowed',
-    title: 'Yes',
-    description: 'But minor variations are allowed',
+    title: 'Exact Match',
+    description: 'The domain should exactly match the suggested name.',
+    value: CONSTANTS.DOMAIN_PREFERENCES.EXACT_MATCH,
+  },
+  {
+    title: 'Variations Allowed',
+    description: 'Minor variations of the suggested name are acceptable.',
+    value: CONSTANTS.DOMAIN_PREFERENCES.MATCH_WITH_VARIATIONS,
     recommended: true,
   },
   {
-    value: 'exactMatch',
-    title: 'Yes',
-    description: 'The Domain should exactly match the name',
-  },
-  {
-    value: 'noDomain',
-    title: 'No',
-    description: 'I am only looking for a name, not a Domain',
+    title: 'No Domain',
+    description: 'A matching domain is not required.',
+    value: CONSTANTS.DOMAIN_PREFERENCES.NO_DOMAIN,
   },
 ];
 
@@ -40,7 +40,7 @@ const variableOptions = {
   [CONSTANTS.NAME_CONTEST]: {
     styleName: '',
     typeOfName: '',
-    domainPreference: 'variationsAllowed',
+    domainPreference: CONSTANTS.DOMAIN_PREFERENCES.MATCH_WITH_VARIATIONS,
   },
   [CONSTANTS.LOGO_CONTEST]: {
     nameVenture: '',

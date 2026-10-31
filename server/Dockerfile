@@ -1,28 +1,17 @@
-ARG VERSION=lts-alpine
+ARG VERSION=24-alpine
 
-FROM node:$VERSION
-
-ARG NODE_ENV="development"
-
-RUN mkdir /server \
-    && mkdir -p /public/images
-
-RUN mkdir -p /var/www/html/images
+FROM node:${VERSION}
 
 WORKDIR /server
 
+RUN mkdir -p /public/images /var/www/html/images
+
 COPY package*.json ./
 
-# RUN npm install -g nodemon
-# RUN npm install -g sequelize-cli
-
 RUN npm install
-
-RUN chown -R node:node /server/node_modules
 
 COPY . .
 
 EXPOSE 3000
 
-CMD sequelize db:migrate && sequelize db:seed:all && npm start
-CMD npm start
+CMD ["npm", "start"]
