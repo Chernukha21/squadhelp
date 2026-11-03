@@ -1,0 +1,79 @@
+.messageBlock {
+  display: inline-block;
+  color: red;
+  width: 100%;
+  text-align: center;
+}
+
+.messageList {
+  height: min(280px, max(80px, 100dvh - 140px));
+  overflow: auto;
+  padding: 0 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.messageList::-webkit-scrollbar {
+  width: 5px;
+}
+.messageList::-webkit-scrollbar-track {
+  background: #f3f3f3;
+}
+.messageList::-webkit-scrollbar-thumb {
+  background: #6b89b0;
+}
+.messageList .date {
+  align-self: center;
+  margin: 4px 0;
+  color: white;
+  background-color: black;
+  opacity: 0.4;
+  border-radius: 6px;
+  padding: 2px;
+}
+.messageList .ownMessage {
+  align-self: flex-end;
+  color: white;
+  max-width: 200px;
+  padding: 6px;
+  background-color: #6b89b0;
+  border-bottom-left-radius: 8px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 8px;
+  margin: 4px 0;
+  overflow-wrap: break-word;
+  box-sizing: border-box;
+}
+.messageList .ownMessage .messageTime {
+  position: relative;
+  float: right;
+  margin-left: 5px;
+  top: 12px;
+  font-size: 10px;
+  color: white;
+}
+.messageList .message {
+  align-self: flex-start;
+  color: white;
+  max-width: 200px;
+  background-color: #4e618d;
+  border-bottom-left-radius: 8px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  margin: 4px 0;
+  padding: 6px;
+  overflow-wrap: break-word;
+  box-sizing: border-box;
+}
+.messageList .message .messageTime {
+  position: relative;
+  float: right;
+  margin-left: 5px;
+  top: 12px;
+  font-size: 10px;
+  color: white;
+}
+
+/*# sourceMappingURL=Dialog.module.css.map */

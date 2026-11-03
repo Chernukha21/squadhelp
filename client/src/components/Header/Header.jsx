@@ -188,15 +188,17 @@ const Header = () => {
         <a href={PLACEHOLDER_URL}>Read Announcement</a>
       </div>
 
-      <div className={styles.loginSignnUpHeaders}>
-        <a href='tel:8773553585' className={styles.numberContainer}>
-          <img src={`${CONSTANTS.STATIC_IMAGES_PATH}phone.png`} alt='' />
+      <div className={styles.loginSignnUpBar}>
+        <div className={styles.loginSignnUpHeaders}>
+          <a href='tel:8773553585' className={styles.numberContainer}>
+            <img src={`${CONSTANTS.STATIC_IMAGES_PATH}phone.png`} alt='' />
 
-          <span>(877)&nbsp;355-3585</span>
-        </a>
+            <span>(877)&nbsp;355-3585</span>
+          </a>
 
-        <div className={styles.userButtonsContainer}>
-          {renderLoginButtons()}
+          <div className={styles.userButtonsContainer}>
+            {renderLoginButtons()}
+          </div>
         </div>
       </div>
 
