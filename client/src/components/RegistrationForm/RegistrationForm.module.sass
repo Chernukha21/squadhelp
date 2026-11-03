@@ -1,177 +1,305 @@
-.signUpFormContainer
-  width: 60%
-  display: flex
-  min-width: 280px
-  margin: 0 auto
-  flex-direction: column
-  justify-content: center
-  align-items: center
-  margin-top: 80px
-  padding: 10px 20px 30px
+$white: #fff
+$accent: #28d2d0
+$accent-dark: #1fbab8
+$danger: #b72522
+
+@mixin up-to($width)
+  @media (max-width: $width)
+    @content
+
+*,
+*::before,
+*::after
   box-sizing: border-box
 
-  .choseRoleContainer
-    display: flex
-    flex-direction: column
-    justify-content: center
-    align-items: stretch
-    align-self: stretch
-    min-width: 260px
-    margin-left: 20px
-    margin-right: 20px
-    @media(max-width: 850px)
-      align-self: auto
+.signUpFormContainer
+  display: flex
+  flex-direction: column
+  align-items: center
+  width: 100%
+  max-width: 780px
+  min-width: 0
+  margin: 80px auto 0
+  padding: 10px 20px 40px
 
-  .submitContainer
-    align-self: stretch
-    min-width: 260px
-    border-radius: 5px
-    display: flex
-    justify-content: center
-    align-items: center
-    background-color: #28d2d0
-    height: 64px
-    margin-left: 20px
-    padding: 0
-    border: 0
-    width: -moz-available
-    width: -webkit-fill-available
-    margin-right: 20px
-    @media(max-width: 850px)
-      align-self: auto
+  @include up-to(850px)
+    margin-top: 60px
+
+  @include up-to(600px)
+    margin-top: 40px
+    padding: 10px 16px 32px
+
+  @include up-to(420px)
+    margin-top: 24px
+    padding: 8px 12px 28px
+
+  @include up-to(340px)
+    padding: 8px 8px 24px
 
 
-  .inscription
-    font-size: 16px
-    color: white
-
-  .termsOfService
-    text-align: center
-    color: white
-    font-size: 16px
-    min-width: 260px
-    align-self: stretch
-    margin-right: 20px
-    margin-left: 20px
-    margin-bottom: 10px
-
-
-    .fieldWarning
-      font-size: 15px
-      display: flex
-      flex-direction: row
-      justify-content: center
-      align-items: center
-      color: white
-      border: 1px solid #b72522
-      margin-bottom: 15px
-      padding-bottom: 5px
-      padding-top: 5px
-      text-align: center
-
-    @media(max-width: 850px)
-      align-self: auto
-
-    a
-      color: white
-      font-size: 16px
-
-
-  .error
-    text-align: center
-    color: white
-    font-size: 20px
-    min-width: 260px
-    align-self: stretch
-    margin-right: 20px
-    margin-left: 20px
-    border: 1px solid white
-    background-color: red
-    padding-top: 5px
-    padding-bottom: 5px
-    border-radius: 6px
-    margin-bottom: 10px
-    @media(max-width: 850px)
-      align-self: auto
-
-  .row
-    width: 100%
-    min-width: 260px
-    display: flex
-    flex-direction: row
-    flex-wrap: wrap
-    align-items: center
-    justify-content: space-between
-    @media (max-width: 795px)
-      width: auto
-
-    .inputContainer
-      display: flex
-      flex-direction: column
-      justify-content: center
-      align-self: flex-start
-      margin-right: 20px
-      margin-left: 20px
-      flex: 1 1
-
-      .fieldWarning
-        font-size: 15px
-        display: flex
-        flex-direction: row
-        justify-content: center
-        align-items: center
-        color: white
-        border: 1px solid #b72522
-        margin-bottom: 15px
-        padding-bottom: 5px
-        padding-top: 5px
-        text-align: center
-
-    .input
-      background-color: white
-      border: none
-      border-radius: 4px
-      color: #9ca8b7
-      font-size: 18px
-      padding: 23px 20px 23px 20px
-      outline: none
-      margin-bottom: 15px
-      flex: 1
-      @media(max-width: 1400px)
-        align-self: normal
-
-    .notValid
-      border: 2px solid red !important
-
-    .valid
-      border: 2px solid green
-
+  // ---------- Header ----------
 
   .headerFormContainer
     display: flex
     flex-direction: column
     justify-content: center
     align-items: center
-    margin-bottom: 18px
+    width: 100%
+    margin-bottom: 24px
     text-align: center
 
-
     h2
-      color: white
+      margin: 20px 0 10px
+      color: $white
       font-size: 42px
       font-weight: 600
       line-height: 1.1
-      margin-top: 20px
-      margin-bottom: 10px
       letter-spacing: 1px
+      overflow-wrap: break-word
+      transition: font-size .25s ease
+
+      @include up-to(1000px)
+        font-size: 40px
+
+      @include up-to(850px)
+        font-size: 36px
+
+      @include up-to(700px)
+        font-size: 32px
+
+      @include up-to(560px)
+        font-size: 28px
+        letter-spacing: .5px
+
+      @include up-to(420px)
+        margin-top: 12px
+        font-size: 25px
+
+      @include up-to(340px)
+        font-size: 22px
+        letter-spacing: 0
 
     h4
-      color: white
+      width: 88%
+      margin: 0 0 13px
+      color: $white
       font-size: 20px
       font-weight: 500
+      line-height: 1.35
       word-spacing: 3px
-      width: 88%
-      margin: 0
-      margin-bottom: 13px
       text-align: center
-      line-height: 27px
+      transition: font-size .25s ease
+
+      @include up-to(850px)
+        font-size: 19px
+
+      @include up-to(700px)
+        width: 100%
+        font-size: 18px
+        word-spacing: 2px
+
+      @include up-to(560px)
+        font-size: 17px
+
+      @include up-to(420px)
+        font-size: 16px
+        word-spacing: 1px
+
+      @include up-to(340px)
+        font-size: 15px
+
+
+  // ---------- Error from <Error /> wrapper ----------
+
+  .error
+    width: 100%
+    margin-bottom: 10px
+    padding: 5px 10px
+    border: 1px solid $white
+    border-radius: 6px
+    background-color: red
+    color: $white
+    font-size: 20px
+    text-align: center
+
+    @include up-to(600px)
+      font-size: 17px
+
+    @include up-to(420px)
+      font-size: 15px
+
+
+  // ---------- Fields ----------
+
+  .row
+    display: grid
+    grid-template-columns: repeat(2, minmax(0, 1fr))
+    column-gap: 20px
+    align-items: start
+    width: 100%
+
+    @include up-to(700px)
+      grid-template-columns: minmax(0, 1fr)
+      column-gap: 0
+
+  .inputContainer
+    display: flex
+    flex-direction: column
+    justify-content: center
+    min-width: 0
+    margin: 0
+
+  .input
+    display: block
+    width: 100%
+    min-width: 0
+    margin-bottom: 15px
+    padding: 23px 20px
+    border: 2px solid transparent
+    border-radius: 4px
+    outline: none
+    background-color: $white
+    color: #9ca8b7
+    font-family: inherit
+    font-size: 18px
+    transition: border-color .25s ease, box-shadow .25s ease, font-size .25s ease, padding .25s ease
+
+    &:focus
+      box-shadow: 0 0 0 3px rgba(255, 255, 255, .45)
+
+    @include up-to(850px)
+      padding: 21px 18px
+
+    @include up-to(600px)
+      padding: 19px 16px
+      font-size: 17px
+
+    @include up-to(420px)
+      padding: 17px 14px
+      font-size: 16px
+
+  .valid
+    border-color: green
+
+  .notValid
+    border-color: red !important
+
+  .fieldWarning
+    display: flex
+    flex-direction: row
+    justify-content: center
+    align-items: center
+    width: 100%
+    margin-bottom: 15px
+    padding: 5px 8px
+    border: 1px solid $danger
+    color: $white
+    font-size: 15px
+    line-height: 1.3
+    text-align: center
+    overflow-wrap: anywhere
+
+    @include up-to(420px)
+      font-size: 14px
+
+
+  // ---------- Role cards ----------
+
+  .choseRoleContainer
+    display: flex
+    flex-direction: column
+    justify-content: center
+    align-items: stretch
+    gap: 6px
+    width: 100%
+    min-width: 0
+    margin: 0 0 10px
+
+    > *
+      min-width: 0
+      max-width: 100%
+
+
+  // ---------- Terms ----------
+
+  .termsOfService
+    width: 100%
+    min-width: 0
+    margin: 0 0 10px
+    color: $white
+    font-size: 16px
+    text-align: center
+    overflow-wrap: break-word
+
+    .termsOfService
+      margin: 0
+
+    a
+      color: $white
+      font-size: inherit
+      text-decoration: underline
+      text-underline-offset: 2px
+      transition: opacity .2s ease
+
+      &:hover
+        opacity: .8
+
+    @include up-to(600px)
+      font-size: 15px
+
+    @include up-to(420px)
+      font-size: 14px
+
+
+  // ---------- Submit ----------
+
+  .submitContainer
+    display: flex
+    justify-content: center
+    align-items: center
+    width: 100%
+    min-width: 0
+    height: 64px
+    margin: 0
+    padding: 0 16px
+    border: 0
+    border-radius: 5px
+    background-color: $accent
+    cursor: pointer
+    transition: background-color .25s ease, transform .25s ease, box-shadow .25s ease, opacity .25s ease
+
+    &:hover:not(:disabled)
+      background-color: $accent-dark
+      transform: translateY(-2px)
+      box-shadow: 0 8px 18px rgba(0, 0, 0, .15)
+
+    &:active:not(:disabled)
+      transform: translateY(0)
+
+    &:focus-visible
+      outline: 3px solid rgba(255, 255, 255, .7)
+      outline-offset: 3px
+
+    &:disabled
+      opacity: .6
+      cursor: not-allowed
+
+    @include up-to(600px)
+      height: 58px
+
+    @include up-to(420px)
+      height: 54px
+
+  .inscription
+    color: $white
+    font-size: 16px
+    transition: font-size .25s ease
+
+    @include up-to(420px)
+      font-size: 15px
+
+
+@media (prefers-reduced-motion: reduce)
+  .signUpFormContainer
+    *
+      transition: none !important

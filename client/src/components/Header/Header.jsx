@@ -1,17 +1,24 @@
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
+
 import styles from './Header.module.sass';
 import CONSTANTS from '../../constants';
 import { clearUserStore, getUser } from '../../store/slices/userSlice';
 import { controller } from '../../api/ws/socketController';
 import EventsBadge from '../EventsBadge/EventsBadge';
+import { EVENTS_MENU_ITEM, MENU_ITEMS, PLACEHOLDER_URL } from './Header.data';
 
 const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const { data, isFetching } = useSelector(state => state.userStore);
+
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [openSubmenu, setOpenSubmenu] = useState(null);
+
+  const menuRef = useRef(null);
+  const userMenuRef = useRef(null);
 
   useEffect(() => {
     const token = localStorage.getItem(CONSTANTS.ACCESS_TOKEN);
@@ -21,6 +28,51 @@ const Header = () => {
     }
   }, [data, dispatch]);
 
+  useEffect(() => {
+    const handleEscape = event => {
+      if (event.key !== 'Escape') return;
+
+      setIsMenuOpen(false);
+      setOpenSubmenu(null);
+
+      if (userMenuRef.current) {
+        userMenuRef.current.open = false;
+      }
+    };
+
+    window.addEventListener('keydown', handleEscape);
+
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, []);
+
+  const closeUserMenu = () => {
+    if (userMenuRef.current) {
+      userMenuRef.current.open = false;
+    }
+  };
+
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+    setOpenSubmenu(null);
+    closeUserMenu();
+  };
+
+  const toggleMobileMenu = () => {
+    setIsMenuOpen(current => !current);
+    setOpenSubmenu(null);
+    closeUserMenu();
+    menuRef.current?.scrollTo({ top: 0 });
+  };
+
+  const closeSubmenu = () => {
+    setOpenSubmenu(null);
+    menuRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const toggleSubmenu = key => {
+    setOpenSubmenu(current => (current === key ? null : key));
+  };
+
   const logOut = () => {
     if (data?.id != null) {
       controller?.unsubscribe(data.id);
@@ -28,10 +80,12 @@ const Header = () => {
 
     localStorage.removeItem(CONSTANTS.ACCESS_TOKEN);
     dispatch(clearUserStore());
+    closeMenu();
     navigate('/login', { replace: true });
   };
 
   const startContests = () => {
+    closeMenu();
     navigate('/startContest');
   };
 
@@ -43,12 +97,12 @@ const Header = () => {
     if (!data) {
       return (
         <>
-          <Link to='/login' style={{ textDecoration: 'none' }}>
-            <span className={styles.btn}>LOGIN</span>
+          <Link to='/login' className={styles.authLink}>
+            LOGIN
           </Link>
 
-          <Link to='/registration' style={{ textDecoration: 'none' }}>
-            <span className={styles.btn}>SIGN UP</span>
+          <Link to='/registration' className={styles.authLink}>
+            SIGN UP
           </Link>
         </>
       );
@@ -56,250 +110,207 @@ const Header = () => {
 
     return (
       <>
-        <div className={styles.userInfo}>
-          <img
-            src={
-              data.avatar === 'anon.png'
-                ? CONSTANTS.ANONYM_IMAGE_PATH
-                : `${CONSTANTS.publicURL}${data.avatar}`
-            }
-            alt='user'
-          />
+        <details className={styles.userInfo} ref={userMenuRef}>
+          <summary className={styles.userToggle}>
+            <img
+              src={
+                data.avatar === 'anon.png'
+                  ? CONSTANTS.ANONYM_IMAGE_PATH
+                  : `${CONSTANTS.publicURL}${data.avatar}`
+              }
+              alt=''
+              className={styles.avatar}
+            />
 
-          <span>{`Hi, ${data.displayName}`}</span>
+            <span>Hi, {data.displayName}</span>
 
-          <img
-            src={`${CONSTANTS.STATIC_IMAGES_PATH}menu-down.png`}
-            alt='menu'
-          />
+            <img
+              src={`${CONSTANTS.STATIC_IMAGES_PATH}menu-down.png`}
+              alt=''
+              className={styles.dropdownArrow}
+            />
+          </summary>
 
-          <ul>
+          <ul className={styles.userDropdown}>
             <li>
-              <Link to='/dashboard' style={{ textDecoration: 'none' }}>
-                <span>View Dashboard</span>
+              <Link to='/dashboard' onClick={closeUserMenu}>
+                View Dashboard
               </Link>
             </li>
 
             <li>
-              <Link to='/account' style={{ textDecoration: 'none' }}>
-                <span>My Account</span>
+              <Link to='/account' onClick={closeUserMenu}>
+                My Account
               </Link>
             </li>
 
             <li>
-              <Link
-                to='https://www.google.com'
-                style={{ textDecoration: 'none' }}
-              >
-                <span>Messages</span>
-              </Link>
+              <a href={PLACEHOLDER_URL}>Messages</a>
             </li>
 
             <li>
-              <Link
-                to='https://www.google.com'
-                style={{ textDecoration: 'none' }}
-              >
-                <span>Affiliate Dashboard</span>
-              </Link>
+              <a href={PLACEHOLDER_URL}>Affiliate Dashboard</a>
             </li>
 
             <li>
-              <span onClick={logOut}>Logout</span>
+              <button type='button' onClick={logOut}>
+                Logout
+              </button>
             </li>
           </ul>
-        </div>
+        </details>
 
         <img
           src={`${CONSTANTS.STATIC_IMAGES_PATH}email.png`}
           className={styles.emailIcon}
-          alt='email'
+          alt=''
         />
       </>
     );
   };
 
+  const navigationItems = data
+    ? [...MENU_ITEMS.slice(0, 2), EVENTS_MENU_ITEM, ...MENU_ITEMS.slice(2)]
+    : MENU_ITEMS;
+
+  const openSubmenuLabel = navigationItems.find(
+    item => item.key === openSubmenu
+  )?.label;
+
   return (
-    <div className={styles.headerContainer}>
+    <header className={styles.headerContainer}>
       <div className={styles.fixedHeader}>
-        <span className={styles.info}>
+        <span>
           Squadhelp recognized as one of the Most Innovative Companies by Inc
           Magazine.
         </span>
-        <a href='http://www.google.com'>Read Announcement</a>
+
+        <a href={PLACEHOLDER_URL}>Read Announcement</a>
       </div>
+
       <div className={styles.loginSignnUpHeaders}>
-        <div className={styles.numberContainer}>
-          <img src={`${CONSTANTS.STATIC_IMAGES_PATH}phone.png`} alt='phone' />
+        <a href='tel:8773553585' className={styles.numberContainer}>
+          <img src={`${CONSTANTS.STATIC_IMAGES_PATH}phone.png`} alt='' />
+
           <span>(877)&nbsp;355-3585</span>
-        </div>
+        </a>
+
         <div className={styles.userButtonsContainer}>
           {renderLoginButtons()}
         </div>
       </div>
+
       <div className={styles.navContainer}>
-        <Link to='/'>
-          <img
-            src={`${CONSTANTS.STATIC_IMAGES_PATH}blue-logo.png`}
-            className={styles.logo}
-            alt='Squadhelp'
-          />
-        </Link>
-        <div className={styles.leftNav}>
-          <div className={styles.nav}>
-            <ul>
-              <li>
-                <span>NAME IDEAS</span>
-                <img
-                  src={`${CONSTANTS.STATIC_IMAGES_PATH}menu-down.png`}
-                  alt='menu'
-                />
-                <ul>
-                  <li>
-                    <a href='http://www.google.com'>Beauty</a>
+        <div className={styles.navInner}>
+          <Link to='/' className={styles.logoLink} onClick={closeMenu}>
+            <img
+              src={`${CONSTANTS.STATIC_IMAGES_PATH}blue-logo.png`}
+              className={styles.logo}
+              alt='Squadhelp — home'
+            />
+          </Link>
+
+          <button
+            type='button'
+            className={`${styles.menuToggle} ${
+              isMenuOpen ? styles.menuToggleOpen : ''
+            }`}
+            aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={isMenuOpen}
+            aria-controls='primary-navigation'
+            onClick={toggleMobileMenu}
+          >
+            <span />
+            <span />
+            <span />
+          </button>
+
+          <div
+            id='primary-navigation'
+            ref={menuRef}
+            className={`${styles.leftNav} ${isMenuOpen ? styles.menuOpen : ''}`}
+          >
+            {openSubmenu && (
+              <button
+                type='button'
+                className={styles.submenuClose}
+                onClick={closeSubmenu}
+              >
+                ↑ Close {openSubmenuLabel}
+              </button>
+            )}
+
+            <nav className={styles.nav} aria-label='Main navigation'>
+              <ul>
+                {navigationItems.map(item => (
+                  <li
+                    key={item.key}
+                    className={`${styles.navItem} ${
+                      openSubmenu === item.key ? styles.submenuOpen : ''
+                    }`}
+                  >
+                    {item.to ? (
+                      <Link
+                        to={item.to}
+                        className={styles.navLink}
+                        onClick={closeMenu}
+                      >
+                        {item.label}
+                        {item.key === 'events' && <EventsBadge />}
+                      </Link>
+                    ) : (
+                      <>
+                        <button
+                          type='button'
+                          className={styles.navTrigger}
+                          aria-expanded={openSubmenu === item.key}
+                          aria-controls={`${item.key}-submenu`}
+                          onClick={() => toggleSubmenu(item.key)}
+                        >
+                          {item.label}
+
+                          <img
+                            src={`${CONSTANTS.STATIC_IMAGES_PATH}menu-down.png`}
+                            alt=''
+                          />
+                        </button>
+
+                        <ul
+                          id={`${item.key}-submenu`}
+                          className={styles.dropdown}
+                        >
+                          {item.links.map(link => (
+                            <li key={link.label}>
+                              {link.to ? (
+                                <Link to={link.to} onClick={closeMenu}>
+                                  {link.label}
+                                </Link>
+                              ) : (
+                                <a href={link.href}>{link.label}</a>
+                              )}
+                            </li>
+                          ))}
+                        </ul>
+                      </>
+                    )}
                   </li>
-                  <li>
-                    <a href='http://www.google.com'>Consulting</a>
-                  </li>
-                  <li>
-                    <a href='http://www.google.com'>E-Commerce</a>
-                  </li>
-                  <li>
-                    <a href='http://www.google.com'>Fashion & Clothing</a>
-                  </li>
-                  <li>
-                    <a href='http://www.google.com'>Finance</a>
-                  </li>
-                  <li>
-                    <a href='http://www.google.com'>Real Estate</a>
-                  </li>
-                  <li>
-                    <a href='http://www.google.com'>Tech</a>
-                  </li>
-                  <li className={styles.last}>
-                    <a href='http://www.google.com'>More Categories</a>
-                  </li>
-                </ul>
-              </li>
-              <li>
-                <span>CONTESTS</span>
-                <img
-                  src={`${CONSTANTS.STATIC_IMAGES_PATH}menu-down.png`}
-                  alt='menu'
-                />
-                <ul>
-                  <li>
-                    <Link to='/how-it-works'>HOW IT WORKS</Link>
-                  </li>
-                  <li>
-                    <a href='http://www.google.com'>PRICING</a>
-                  </li>
-                  <li>
-                    <a href='http://www.google.com'>AGENCY SERVICE</a>
-                  </li>
-                  <li>
-                    <a href='http://www.google.com'>ACTIVE CONTESTS</a>
-                  </li>
-                  <li>
-                    <a href='http://www.google.com'>WINNERS</a>
-                  </li>
-                  <li>
-                    <a href='http://www.google.com'>LEADERBOARD</a>
-                  </li>
-                  <li className={styles.last}>
-                    <a href='http://www.google.com'>BECOME A CREATIVE</a>
-                  </li>
-                </ul>
-              </li>
-              {data && (
-                <li>
-                  <Link to='/events' className={styles.eventsLink}>
-                    EVENTS
-                    <EventsBadge />
-                  </Link>
-                </li>
-              )}
-              <li>
-                <span>Our Work</span>
-                <img
-                  src={`${CONSTANTS.STATIC_IMAGES_PATH}menu-down.png`}
-                  alt='menu'
-                />
-                <ul>
-                  <li>
-                    <a href='http://www.google.com'>NAMES</a>
-                  </li>
-                  <li>
-                    <a href='http://www.google.com'>TAGLINES</a>
-                  </li>
-                  <li>
-                    <a href='http://www.google.com'>LOGOS</a>
-                  </li>
-                  <li className={styles.last}>
-                    <a href='http://www.google.com'>TESTIMONIALS</a>
-                  </li>
-                </ul>
-              </li>
-              <li>
-                <span>Names For Sale</span>
-                <img
-                  src={`${CONSTANTS.STATIC_IMAGES_PATH}menu-down.png`}
-                  alt='menu'
-                />
-                <ul>
-                  <li>
-                    <a href='http://www.google.com'>POPULAR NAMES</a>
-                  </li>
-                  <li>
-                    <a href='http://www.google.com'>SHORT NAMES</a>
-                  </li>
-                  <li>
-                    <a href='http://www.google.com'>INTRIGUING NAMES</a>
-                  </li>
-                  <li>
-                    <a href='http://www.google.com'>NAMES BY CATEGORY</a>
-                  </li>
-                  <li>
-                    <a href='http://www.google.com'>VISUAL NAME SEARCH</a>
-                  </li>
-                  <li className={styles.last}>
-                    <a href='http://www.google.com'>SELL YOUR DOMAINS</a>
-                  </li>
-                </ul>
-              </li>
-              <li>
-                <span>Blog</span>
-                <img
-                  src={`${CONSTANTS.STATIC_IMAGES_PATH}menu-down.png`}
-                  alt='menu'
-                />
-                <ul>
-                  <li>
-                    <a href='http://www.google.com'>ULTIMATE NAMING GUIDE</a>
-                  </li>
-                  <li>
-                    <a href='http://www.google.com'>
-                      POETIC DEVICES IN BUSINESS NAMING
-                    </a>
-                  </li>
-                  <li>
-                    <a href='http://www.google.com'>CROWDED BAR THEORY</a>
-                  </li>
-                  <li className={styles.last}>
-                    <a href='http://www.google.com'>ALL ARTICLES</a>
-                  </li>
-                </ul>
-              </li>
-            </ul>
+                ))}
+              </ul>
+            </nav>
+
+            {data && data.role !== CONSTANTS.CREATOR && (
+              <button
+                type='button'
+                className={styles.startContestBtn}
+                onClick={startContests}
+              >
+                START CONTEST
+              </button>
+            )}
           </div>
-          {data && data.role !== CONSTANTS.CREATOR && (
-            <div className={styles.startContestBtn} onClick={startContests}>
-              START CONTEST
-            </div>
-          )}
         </div>
       </div>
-    </div>
+    </header>
   );
 };
 

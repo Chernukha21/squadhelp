@@ -1,0 +1,186 @@
+.contestSideBarInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  min-width: 0;
+}
+.contestSideBarInfo .infoCustomerContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  margin-bottom: 22px;
+  box-shadow: 0 5px 10px 3px rgba(0, 0, 0, 0.1);
+}
+.contestSideBarInfo .infoCustomerContainer .customerInfo {
+  display: flex;
+  align-items: center;
+  padding: 15px 20px;
+}
+.contestSideBarInfo .infoCustomerContainer .customerInfo img {
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  margin-right: 16px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.contestSideBarInfo .infoCustomerContainer .customerInfo .customerNameContainer {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.contestSideBarInfo .infoCustomerContainer .customerInfo .customerNameContainer span {
+  margin: 2px 0;
+  color: #337ab7;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+.contestSideBarInfo .infoCustomerContainer .labelCustomerInfo {
+  padding: 15px 20px;
+  background: #f3f3f3;
+  font-size: 15px;
+  font-weight: 700;
+}
+.contestSideBarInfo .contestInfo {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+}
+.contestSideBarInfo .contestInfo .contestStats,
+.contestSideBarInfo .contestInfo .awardAndTimeContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  margin-bottom: 22px;
+  box-shadow: 0 5px 10px 3px rgba(0, 0, 0, 0.1);
+}
+.contestSideBarInfo .contestInfo .contestStats > span {
+  display: block;
+  padding: 15px 20px;
+  background: #f3f3f3;
+  color: #000;
+  font-size: 15px;
+  font-weight: 700;
+}
+.contestSideBarInfo .contestInfo .contestStats .totalEntrie {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 15px 20px;
+  background: #fff;
+}
+.contestSideBarInfo .contestInfo .contestStats .totalEntrie span {
+  padding: 0;
+  background: #fff;
+  color: #6b89b0;
+  font-size: 14px;
+  font-weight: 600;
+}
+.contestSideBarInfo .contestInfo .contestStats .totalEntrie .totalEntriesLabel {
+  color: #333;
+  font-size: 15px;
+  font-weight: 400;
+}
+.contestSideBarInfo .contestInfo .awardAndTimeContainer .guaranteedPrize {
+  display: flex;
+  align-items: center;
+  margin: 10px 0 15px;
+  padding: 0 15px;
+}
+.contestSideBarInfo .contestInfo .awardAndTimeContainer .guaranteedPrize div {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 8px;
+  background: #8aca6b;
+}
+.contestSideBarInfo .contestInfo .awardAndTimeContainer .guaranteedPrize span {
+  margin-left: 5px;
+  color: #333;
+  font-size: 14px;
+}
+.contestSideBarInfo .contestInfo .awardAndTimeContainer .timeContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 10px;
+  padding: 0 15px;
+}
+.contestSideBarInfo .contestInfo .awardAndTimeContainer .timeContainer .time {
+  margin-left: 32px;
+  color: #455a89;
+  font-size: 15px;
+}
+.contestSideBarInfo .contestInfo .awardAndTimeContainer .timeContainer .timeDesc {
+  display: flex;
+  align-items: center;
+}
+.contestSideBarInfo .contestInfo .awardAndTimeContainer .timeContainer .timeDesc span {
+  margin-left: 10px;
+  color: #333;
+  font-size: 14px;
+}
+.contestSideBarInfo .contestInfo .prizeContainer {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 12px 20px;
+  box-sizing: border-box;
+  background: #6b89b0;
+}
+.contestSideBarInfo .contestInfo .prizeContainer span {
+  margin-left: 10px;
+  color: #fff;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+@media (max-width: 1000px) {
+  .contestSideBarInfo .contestInfo {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+    gap: 16px;
+  }
+  .contestSideBarInfo .contestInfo .contestStats,
+  .contestSideBarInfo .contestInfo .awardAndTimeContainer {
+    margin-bottom: 0;
+  }
+}
+@media (max-width: 800px) {
+  .contestSideBarInfo .infoCustomerContainer {
+    margin-bottom: 16px;
+  }
+  .contestSideBarInfo .infoCustomerContainer .customerInfo,
+  .contestSideBarInfo .infoCustomerContainer .labelCustomerInfo {
+    padding: 12px 14px;
+  }
+  .contestSideBarInfo .contestInfo .contestStats > span,
+  .contestSideBarInfo .contestInfo .contestStats .totalEntrie {
+    padding: 12px 14px;
+  }
+  .contestSideBarInfo .contestInfo .awardAndTimeContainer .guaranteedPrize {
+    margin-bottom: 12px;
+  }
+  .contestSideBarInfo .contestInfo .prizeContainer {
+    padding: 10px 14px;
+  }
+  .contestSideBarInfo .contestInfo .prizeContainer span {
+    font-size: 18px;
+  }
+}
+@media (max-width: 600px) {
+  .contestSideBarInfo .contestInfo {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/*# sourceMappingURL=ContestSideBar.module.css.map */

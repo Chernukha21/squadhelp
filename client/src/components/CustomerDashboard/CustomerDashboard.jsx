@@ -1,7 +1,7 @@
-import classNames from 'classnames';
 import { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+
 import {
   clearContestsList,
   getContests,
@@ -9,9 +9,24 @@ import {
 } from '../../store/slices/contestsSlice';
 import CONSTANTS from '../../constants';
 import ContestsContainer from '../ContestsContainer/ContestsContainer';
-import styles from './CustomerDashboard.module.sass';
 import TryAgain from '../TryAgain/TryAgain';
 import ContestBox from '../ContestBox/ContestBox';
+import styles from './CustomerDashboard.module.sass';
+
+const filters = [
+  {
+    status: CONSTANTS.CONTEST_STATUS_ACTIVE,
+    label: 'Active contests',
+  },
+  {
+    status: CONSTANTS.CONTEST_STATUS_FINISHED,
+    label: 'Completed contests',
+  },
+  {
+    status: CONSTANTS.CONTEST_STATUS_PENDING,
+    label: 'Inactive contests',
+  },
+];
 
 const CustomerDashboard = () => {
   const dispatch = useDispatch();
@@ -36,17 +51,6 @@ const CustomerDashboard = () => {
     [dispatch, customerFilter]
   );
 
-  useEffect(() => {
-    loadFirstPage();
-  }, [loadFirstPage]);
-
-  useEffect(
-    () => () => {
-      dispatch(clearContestsList());
-    },
-    [dispatch]
-  );
-
   const loadMore = useCallback(
     offset =>
       dispatch(
@@ -60,6 +64,17 @@ const CustomerDashboard = () => {
         })
       ),
     [dispatch, customerFilter]
+  );
+
+  useEffect(() => {
+    loadFirstPage();
+  }, [loadFirstPage]);
+
+  useEffect(
+    () => () => {
+      dispatch(clearContestsList());
+    },
+    [dispatch]
   );
 
   const handleFilterChange = filter => {
@@ -79,40 +94,22 @@ const CustomerDashboard = () => {
 
   return (
     <div className={styles.mainContainer}>
-      <div className={styles.filterContainer}>
-        <div
-          onClick={() => handleFilterChange(CONSTANTS.CONTEST_STATUS_ACTIVE)}
-          className={classNames({
-            [styles.activeFilter]:
-              CONSTANTS.CONTEST_STATUS_ACTIVE === customerFilter,
-            [styles.filter]: CONSTANTS.CONTEST_STATUS_ACTIVE !== customerFilter,
-          })}
-        >
-          Active Contests
-        </div>
-        <div
-          onClick={() => handleFilterChange(CONSTANTS.CONTEST_STATUS_FINISHED)}
-          className={classNames({
-            [styles.activeFilter]:
-              CONSTANTS.CONTEST_STATUS_FINISHED === customerFilter,
-            [styles.filter]:
-              CONSTANTS.CONTEST_STATUS_FINISHED !== customerFilter,
-          })}
-        >
-          Completed contests
-        </div>
-        <div
-          onClick={() => handleFilterChange(CONSTANTS.CONTEST_STATUS_PENDING)}
-          className={classNames({
-            [styles.activeFilter]:
-              CONSTANTS.CONTEST_STATUS_PENDING === customerFilter,
-            [styles.filter]:
-              CONSTANTS.CONTEST_STATUS_PENDING !== customerFilter,
-          })}
-        >
-          Inactive contests
-        </div>
+      <div className={styles.filterContainer} aria-label='Contest status'>
+        {filters.map(({ status, label }) => (
+          <button
+            key={status}
+            type='button'
+            className={
+              status === customerFilter ? styles.activeFilter : styles.filter
+            }
+            aria-pressed={status === customerFilter}
+            onClick={() => handleFilterChange(status)}
+          >
+            {label}
+          </button>
+        ))}
       </div>
+
       <div className={styles.contestsContainer}>
         {error ? (
           <TryAgain getData={handleRetry} />

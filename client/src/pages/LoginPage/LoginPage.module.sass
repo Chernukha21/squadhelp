@@ -1,47 +1,80 @@
 .mainContainer
-  background-color: #3ea9f5
   display: flex
-  justify-content: center
-  align-items: flex-start
-  padding-top: 40px
   flex: 1
+  align-items: flex-start
+  justify-content: center
+  width: 100%
+  min-width: 0
+  padding: clamp(32px, 5vw, 70px) 24px 80px
+  box-sizing: border-box
+  overflow-x: hidden
+  background-color: #3ea9f5
 
   .loginContainer
-    background-color: #3ea9f5
-    min-width: 300px
-    width: 1200px
     display: flex
     flex-direction: column
+    width: 100%
+    max-width: 1200px
+    min-width: 0
+    background-color: transparent
+
+  .loginFormContainer
+    display: flex
+    align-items: center
+    justify-content: center
+    width: 100%
+    min-width: 0
+    margin-top: clamp(24px, 5vw, 80px)
+
+    > *
+      width: 100%
+      max-width: 520px
+      min-width: 0
+
+  .headerSignUpPage
+    display: flex
+    flex-flow: row wrap
+    align-items: center
+    justify-content: space-between
+    gap: 16px
+    width: 100%
+    margin-top: 26px
+    padding: 0 clamp(20px, 5vw, 100px)
+    box-sizing: border-box
+
+  .linkLoginContainer
+    display: flex
+    flex-shrink: 0
+    align-items: center
+    justify-content: center
+    width: 80px
+    height: 40px
+    border: 1px solid #fff
+    border-radius: 4px
+    color: #fff
+    font-size: 18px
+    font-weight: 700
+    text-decoration: none
+
+    span
+      color: inherit
+
+@media (max-width: 600px)
+  .mainContainer
+    padding: 24px 16px 48px
 
     .loginFormContainer
-      display: flex
-      align-items: center
-      justify-content: center
-      margin-top: 80px
-
+      margin-top: 24px
 
     .headerSignUpPage
-      display: flex
-      flex-direction: row
-      justify-content: space-between
-      align-items: center
-      margin-top: 26px
-      padding-left: 45px
-      padding-right: 100px
-      @media (max-width: 530px)
-        padding-right: 45px
+      margin-top: 16px
+      padding: 0
 
-    .linkLoginContainer
-      border: 1px solid white
-      width: 80px
-      border-radius: 4px
-      display: flex
-      justify-content: center
-      align-items: center
-      font-size: 18px
-      font-weight: bold
-      height: 40px
-      text-decoration: none
+@media (max-width: 380px)
+  .mainContainer
+    padding-right: 12px
+    padding-left: 12px
 
-      span
-        color: white
+    .headerSignUpPage
+      align-items: flex-start
+      flex-direction: column

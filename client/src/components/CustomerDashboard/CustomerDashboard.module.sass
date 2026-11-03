@@ -1,80 +1,111 @@
 .mainContainer
-  width: 1200px
-  margin: 0 auto
-  margin-top: 50px
+  display: grid
+  grid-template-columns: 250px minmax(0, 1fr)
+  align-items: start
+  gap: 30px
+  width: 100%
+  max-width: 1200px
+  min-width: 0
+  margin: 50px auto 0
+  padding: 0 20px 40px
+  box-sizing: border-box
+
+.filterContainer
   display: flex
-  flex-direction: row
-  justify-content: flex-start
-  @media(max-width: 1400px)
-    width: auto
-  @media(max-width: 1000px)
-    flex-direction: column
+  flex-direction: column
+  gap: 8px
+  min-width: 0
+  padding: 18px
+  box-sizing: border-box
+  border-radius: 8px
+  background: #fff
+  box-shadow: 0 5px 10px 3px rgba(0, 0, 0, .1)
 
-  .errorContainer
-    margin: 0 auto
-    text-align: center
-    display: flex
-    flex-direction: column
-    width: 260px
-    padding: 15px
+.filter,
+.activeFilter
+  display: flex
+  align-items: center
+  justify-content: center
+  width: 100%
+  min-width: 0
+  min-height: 48px
+  padding: 10px 12px
+  box-sizing: border-box
+  border: 0
+  border-radius: 10px
+  font: inherit
+  font-size: 16px
+  line-height: 1.25
+  text-align: center
+  white-space: normal
+  cursor: pointer
+  transition: background-color .25s ease, color .25s ease
 
-    .message
-      color: red
-      font-size: 18px
+  &:focus-visible
+    outline: 2px solid #46568a
+    outline-offset: 2px
 
-    .try
-      color: #333
-      font-size: 18px
+.filter
+  background: transparent
+  color: #46568a
 
-  .contestsContainer
-    display: flex
-    justify-content: center
+  &:hover
+    background: #eefaea
+
+.activeFilter
+  background: #4e618d
+  color: #fff
+
+.contestsContainer
+  display: flex
+  justify-content: center
+  width: 100%
+  min-width: 0
+  margin-top: 15px
+
+  > *
     width: 100%
-    margin-top: 15px
+    min-width: 0
+    max-width: 100%
+
+@media (max-width: 1000px)
+  .mainContainer
+    grid-template-columns: minmax(0, 1fr)
+    gap: 15px
+    margin-top: 30px
 
   .filterContainer
-    min-width: 250px
-    height: 350px
-    padding-top: 30px
-    margin-right: 50px
-    display: flex
-    flex-direction: column
-    box-shadow: 0 5px 10px 3px rgba(0, 0, 0, 0.1)
-    align-items: flex-start
-    background-color: white
-    margin-bottom: 15px
-    @media(max-width: 1000px)
-      padding-top: 10px
-      flex-direction: row
-      margin-right: 0
-      justify-content: center
-      height: 80px
+    flex-direction: row
+    gap: 8px
+    padding: 10px
 
-    .filter
-      margin-top: 15px
-      align-self: stretch
-      text-align: center
-      color: #46568a
-      font-size: 18px
-      border-radius: 10px
-      padding: 10px
-      @media(max-width: 1000px)
-        height: 20px
-        margin: 0 5px
+  .filter,
+  .activeFilter
+    flex: 1 1 0
+    width: auto
+    min-height: 54px
+    padding: 8px
+    font-size: 14px
 
-      &:hover
-        background-color: #eefaea
+  .contestsContainer
+    margin-top: 0
 
-    .activeFilter
-      transition: 0.5s background-color
-      margin-top: 15px
-      align-self: stretch
-      text-align: center
-      font-size: 18px
-      border-radius: 10px
-      padding: 10px
-      background-color: #4e618d
-      color: white
-      @media(max-width: 1000px)
-        height: 20px
-        margin: 0 5px
+@media (max-width: 500px)
+  .mainContainer
+    margin-top: 20px
+    padding: 0 12px 32px
+
+  .filterContainer
+    gap: 6px
+    padding: 8px
+
+  .filter,
+  .activeFilter
+    min-height: 58px
+    padding: 8px 4px
+    font-size: 12px
+
+@media (prefers-reduced-motion: reduce)
+  .filter,
+  .activeFilter
+    transition: none

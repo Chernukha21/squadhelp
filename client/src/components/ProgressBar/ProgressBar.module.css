@@ -1,0 +1,101 @@
+.progressBarContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.progressBarContainer .progressContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.progressBarContainer .progressContainer .stepDescContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-right: 4px;
+}
+.progressBarContainer .progressContainer .stepDescContainer .arrow {
+  width: 0;
+  height: 0;
+  border: 5px solid transparent;
+  border-top-color: #28d2d0;
+  border-bottom: 0;
+}
+.progressBarContainer .progressContainer .stepDescContainer .stepDesc {
+  width: 120px;
+  margin-top: -40px;
+  padding: 4px 8px 6px;
+  border-radius: 4px;
+  background: #28d2d0;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 500;
+  text-align: center;
+}
+.progressBarContainer .lineBar {
+  width: 76px;
+  height: 5px;
+  margin: 0 -1px;
+  box-sizing: border-box;
+  border: 1px solid #d5d5da;
+  border-right: 0;
+  border-left: 0;
+}
+.progressBarContainer .outerComplete {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 2px solid #8aca6b;
+  border-radius: 50%;
+  background: #8aca6b;
+}
+.progressBarContainer .outerComplete .innerComplete {
+  width: 24px;
+  height: 24px;
+  background-image: url(./check.png);
+}
+.progressBarContainer .outerActive {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  box-sizing: border-box;
+  border: 2px solid #28d2d0;
+  border-radius: 50%;
+}
+.progressBarContainer .outerActive .innerActive {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #28d2d0;
+}
+.progressBarContainer .outerNotActive {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  box-sizing: border-box;
+  border: 1px solid #d5d5da;
+  border-radius: 50%;
+}
+.progressBarContainer .outerNotActive:hover {
+  border: 2px solid #28d2d0;
+}
+.progressBarContainer .outerNotActive .innerNotActive {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
+
+@media (max-width: 800px) {
+  .progressBarContainer {
+    display: none;
+  }
+}
+
+/*# sourceMappingURL=ProgressBar.module.css.map */

@@ -1,0 +1,181 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+.signUpPage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: #3ea9f5;
+  overflow-x: hidden;
+}
+.signUpPage .signUpContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 900px;
+  min-width: 0;
+  min-height: 650px;
+  margin: 0 auto;
+  padding: 40px 24px 60px;
+}
+.signUpPage .signUpContainer > *:not(.headerSignUpPage) {
+  width: 100%;
+  max-width: 480px;
+  min-width: 0;
+  margin-left: auto;
+  margin-right: auto;
+}
+.signUpPage .signUpContainer form {
+  width: 100%;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 0;
+  padding-right: 0;
+}
+.signUpPage .signUpContainer fieldset,
+.signUpPage .signUpContainer label,
+.signUpPage .signUpContainer select,
+.signUpPage .signUpContainer textarea,
+.signUpPage .signUpContainer button,
+.signUpPage .signUpContainer input {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin-left: 0;
+  margin-right: 0;
+}
+.signUpPage .signUpContainer input[type=radio],
+.signUpPage .signUpContainer input[type=checkbox] {
+  width: auto;
+}
+.signUpPage .signUpContainer img,
+.signUpPage .signUpContainer svg {
+  max-width: 100%;
+  height: auto;
+}
+.signUpPage .signUpContainer h1,
+.signUpPage .signUpContainer h2 {
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 44px;
+  line-height: 1.15;
+  text-align: center;
+  overflow-wrap: break-word;
+}
+@media (max-width: 1000px) {
+  .signUpPage .signUpContainer h1,
+  .signUpPage .signUpContainer h2 {
+    font-size: 40px;
+  }
+}
+@media (max-width: 768px) {
+  .signUpPage .signUpContainer h1,
+  .signUpPage .signUpContainer h2 {
+    font-size: 36px;
+  }
+}
+@media (max-width: 600px) {
+  .signUpPage .signUpContainer h1,
+  .signUpPage .signUpContainer h2 {
+    font-size: 32px;
+  }
+}
+@media (max-width: 420px) {
+  .signUpPage .signUpContainer h1,
+  .signUpPage .signUpContainer h2 {
+    font-size: 28px;
+  }
+}
+@media (max-width: 340px) {
+  .signUpPage .signUpContainer h1,
+  .signUpPage .signUpContainer h2 {
+    font-size: 24px;
+  }
+}
+.signUpPage .signUpContainer .headerSignUpPage {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  gap: 16px;
+  margin-top: 26px;
+  padding-left: 45px;
+  padding-right: 60px;
+}
+@media (max-width: 900px) {
+  .signUpPage .signUpContainer .headerSignUpPage {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+@media (max-width: 530px) {
+  .signUpPage .signUpContainer .headerSignUpPage {
+    margin-top: 12px;
+    padding: 0;
+  }
+}
+.signUpPage .signUpContainer .linkLoginContainer {
+  display: flex;
+  flex: 0 0 auto;
+  justify-content: center;
+  align-items: center;
+  width: 80px;
+  height: 40px;
+  border: 1px solid white;
+  border-radius: 4px;
+  font-size: 18px;
+  font-weight: bold;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+.signUpPage .signUpContainer .linkLoginContainer:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+.signUpPage .signUpContainer .linkLoginContainer:focus-visible {
+  outline: 3px solid rgba(255, 255, 255, 0.6);
+  outline-offset: 3px;
+}
+.signUpPage .signUpContainer .linkLoginContainer span {
+  color: white;
+}
+@media (max-width: 360px) {
+  .signUpPage .signUpContainer .linkLoginContainer {
+    width: 70px;
+    height: 36px;
+    font-size: 16px;
+  }
+}
+@media (max-width: 768px) {
+  .signUpPage .signUpContainer {
+    min-height: auto;
+    padding: 32px 20px 44px;
+  }
+}
+@media (max-width: 600px) {
+  .signUpPage .signUpContainer > *:not(.headerSignUpPage),
+  .signUpPage .signUpContainer form {
+    max-width: 100%;
+  }
+}
+@media (max-width: 420px) {
+  .signUpPage .signUpContainer {
+    padding: 24px 16px 36px;
+  }
+}
+@media (max-width: 340px) {
+  .signUpPage .signUpContainer {
+    padding: 20px 12px 28px;
+  }
+}
+
+/*# sourceMappingURL=RegistrationPage.module.css.map */

@@ -27,12 +27,15 @@ const PayForm = ({ back, sendRequest, isPayForOrder }) => {
         initialValues={{
           focusOnElement: '',
           name: '',
+          sum: '',
           number: '',
           cvc: '',
           expiry: '',
         }}
         onSubmit={pay}
-        validationSchema={Schema.PaymentSchema}
+        validationSchema={
+          isPayForOrder ? Schema.PaymentSchema : Schema.CashoutSchema
+        }
       >
         {({ values }) => {
           const { name, number, expiry, cvc } = values;

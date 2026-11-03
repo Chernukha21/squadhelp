@@ -9,6 +9,7 @@ const userQueries = require('./queries/userQueries');
 const bankQueries = require('./queries/bankQueries');
 const ratingQueries = require('./queries/ratingQueries');
 const BadRequestError = require('../errors/BadRequestError');
+const BankDeclineError = require('../errors/BankDeclineError');
 
 module.exports.login = async (req, res, next) => {
   try {
@@ -257,35 +258,51 @@ module.exports.updateUser = async (req, res, next) => {
 
 module.exports.cashout = async (req, res, next) => {
   let transaction;
+
   try {
+    const amount = Number(req.body.sum);
+
+    if (!Number.isFinite(amount) || amount <= 0) {
+      throw new BadRequestError('Invalid cashout amount');
+    }
+
     transaction = await bd.sequelize.transaction();
-    const updatedUser = await userQueries.updateUser(
-      { balance: bd.sequelize.literal('balance - ' + req.body.sum) },
-      req.tokenData.userId, transaction);
-    await bankQueries.updateBankBalance({
-      balance: bd.sequelize.literal(`CASE 
-                WHEN "cardNumber"='${ req.body.number.replace(/ /g,
-    '') }' AND "expiry"='${ req.body.expiry }' AND "cvc"='${ req.body.cvc }'
-                    THEN "balance"+${ req.body.sum }
-                WHEN "cardNumber"='${ CONSTANTS.SQUADHELP_BANK_NUMBER }' AND "expiry"='${ CONSTANTS.SQUADHELP_BANK_EXPIRY }' AND "cvc"='${ CONSTANTS.SQUADHELP_BANK_CVC }'
-                    THEN "balance"-${ req.body.sum }
-                 END
-                `),
-    },
-    {
-      cardNumber: {
-        [ bd.Sequelize.Op.in ]: [
-          CONSTANTS.SQUADHELP_BANK_NUMBER,
-          req.body.number.replace(/ /g, ''),
-        ],
+
+    const user = await bd.Users.findByPk(req.tokenData.userId, {
+      transaction,
+      lock: transaction.LOCK.UPDATE,
+    });
+
+    if (!user) {
+      throw new BadRequestError('User not found');
+    }
+
+    if (Number(user.balance) < amount) {
+      throw new BankDeclineError('Not enough money');
+    }
+
+    await bankQueries.cashoutBankBalance(
+      {
+        cardNumber: String(req.body.number ?? '').replace(/\s/g, ''),
+        cvc: req.body.cvc,
+        expiry: req.body.expiry,
+        amount,
       },
-    },
-    transaction);
-    transaction.commit();
-    res.send({ balance: updatedUser.balance });
-  } catch (err) {
-    transaction.rollback();
-    next(err);
+      transaction,
+    );
+
+    await user.decrement('balance', { by: amount, transaction });
+    await user.reload({ transaction });
+
+    await transaction.commit();
+
+    return res.send({ balance: user.balance });
+  } catch (error) {
+    if (transaction && !transaction.finished) {
+      await transaction.rollback();
+    }
+
+    return next(error);
   }
 };
 

@@ -5,25 +5,27 @@ import CONSTANTS from '../../../constants';
 
 const AuthHeader = () => {
   const { pathname } = useLocation();
-
   const isLoginPage = pathname === '/login';
 
   return (
-    <div className={styles.container}>
+    <header className={styles.container}>
       <div className={styles.loginContainer}>
         <div className={styles.headerAuthPage}>
-          <Logo src={`${CONSTANTS.STATIC_IMAGES_PATH}logo.png`} alt='logo' />
-          <div className={styles.linkAuthContainer}>
-            <Link
-              to={isLoginPage ? '/registration' : '/login'}
-              style={{ textDecoration: 'none' }}
-            >
-              <span>{isLoginPage ? 'Signup' : 'Login'}</span>
-            </Link>
-          </div>
+          <Logo
+            className={styles.logo}
+            src={`${CONSTANTS.STATIC_IMAGES_PATH}logo.png`}
+            alt='Squadhelp'
+          />
+
+          <Link
+            to={isLoginPage ? '/registration' : '/login'}
+            className={styles.linkAuthContainer}
+          >
+            {isLoginPage ? 'Signup' : 'Login'}
+          </Link>
         </div>
       </div>
-    </div>
+    </header>
   );
 };
 

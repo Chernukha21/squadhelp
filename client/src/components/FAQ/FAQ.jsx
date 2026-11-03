@@ -18,8 +18,14 @@ const FAQItem = ({ question, answer }) => (
 const FAQ = () => {
   const [activeCategory, setActiveCategory] = useState(faqGroups[0].id);
 
-  const goToCategory = categoryId => {
+  const goToCategory = (categoryId, event) => {
     setActiveCategory(categoryId);
+
+    event?.currentTarget.scrollIntoView({
+      behavior: 'smooth',
+      inline: 'center',
+      block: 'nearest',
+    });
 
     document.getElementById(`faq-${categoryId}`)?.scrollIntoView({
       behavior: 'smooth',
@@ -40,7 +46,7 @@ const FAQ = () => {
               className={`${styles.navigationButton} ${
                 activeCategory === group.id ? styles.active : ''
               }`}
-              onClick={() => goToCategory(group.id)}
+              onClick={event => goToCategory(group.id, event)}
             >
               {group.title}
             </button>

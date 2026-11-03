@@ -1,0 +1,120 @@
+.startContestHeader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px 24px;
+  box-sizing: border-box;
+}
+.startContestHeader .startContestInfo {
+  display: flex;
+  flex-direction: column;
+  flex: 0 1 480px;
+  min-width: 0;
+}
+.startContestHeader .startContestInfo h2 {
+  margin: 0 0 12px;
+  color: #333;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+.startContestHeader .startContestInfo span {
+  color: #333;
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 1.5;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  min-width: 0;
+  padding: 35px 24px 20px;
+  box-sizing: border-box;
+  border-bottom: 1px solid #eee;
+  background: #f8f8f8;
+}
+.container .formContainer {
+  width: 100%;
+  max-width: 1200px;
+  min-width: 0;
+}
+
+.footerButtonsContainer {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  box-sizing: border-box;
+}
+.footerButtonsContainer .lastContainer {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  min-width: 0;
+  margin: 24px 0;
+}
+.footerButtonsContainer .lastContainer .buttonsContainer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+@media (max-width: 900px) {
+  .startContestHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+  .startContestHeader .startContestInfo {
+    flex: 0 1 auto;
+  }
+}
+@media (max-width: 800px) {
+  .startContestHeader {
+    gap: 12px;
+    padding: 20px 14px;
+  }
+  .startContestHeader .startContestInfo h2 {
+    margin-bottom: 8px;
+    font-size: 22px;
+  }
+  .startContestHeader .startContestInfo span {
+    font-size: 13px;
+  }
+  .container {
+    padding: 18px 14px;
+  }
+  .footerButtonsContainer {
+    padding: 0 14px;
+  }
+  .footerButtonsContainer .lastContainer {
+    margin: 16px 0 24px;
+  }
+}
+@media (max-width: 480px) {
+  .startContestHeader {
+    padding: 16px 12px;
+  }
+  .startContestHeader .startContestInfo h2 {
+    font-size: 20px;
+  }
+  .container {
+    padding: 14px 12px;
+  }
+  .footerButtonsContainer {
+    padding: 0 12px;
+  }
+  .footerButtonsContainer .lastContainer .buttonsContainer {
+    justify-content: space-between;
+    width: 100%;
+  }
+}
+
+/*# sourceMappingURL=ContestCreationPage.module.css.map */

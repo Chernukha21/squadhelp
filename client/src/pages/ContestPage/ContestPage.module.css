@@ -1,0 +1,147 @@
+.notFound {
+  width: 100%;
+  margin-top: 32px;
+  color: #455a89;
+  font-size: 20px;
+  text-align: center;
+}
+
+.errorContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: 40px;
+  color: red;
+  font-size: 18px;
+  text-align: center;
+}
+.errorContainer .messageError {
+  color: red;
+  font-size: 20px;
+}
+.errorContainer .try {
+  color: #455a89;
+  font-size: 20px;
+}
+
+.containerSpinner {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  min-height: 70vh;
+}
+
+.tryContainer {
+  width: 100%;
+  max-width: 280px;
+  margin: 60px auto 0;
+}
+
+.mainInfoContainer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 260px;
+  align-items: start;
+  gap: 28px;
+  width: 100%;
+  max-width: 1200px;
+  min-width: 0;
+  margin: 0 auto 50px;
+  padding: 20px 20px 0;
+  box-sizing: border-box;
+}
+.mainInfoContainer .infoContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  min-width: 0;
+  box-shadow: 0 5px 10px 3px rgba(0, 0, 0, 0.1);
+}
+.mainInfoContainer .infoContainer .buttonsContainer {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  background: #f3f3f3;
+}
+.mainInfoContainer .infoContainer .buttonsContainer .btn {
+  margin-right: 7px;
+  padding: 11px 15px;
+  border: 1px solid transparent;
+  border-radius: 4px 4px 0 0;
+  background: #6b8ab1;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.mainInfoContainer .infoContainer .buttonsContainer .btn:hover {
+  background: rgba(176, 196, 222, 0.8);
+}
+.mainInfoContainer .infoContainer .buttonsContainer .activeBtn {
+  background: #fff;
+  color: #333;
+}
+.mainInfoContainer .infoContainer .buttonsContainer .activeBtn:hover {
+  background: #fff;
+}
+.mainInfoContainer .infoContainer .offersContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  min-width: 0;
+  padding: 15px;
+  box-sizing: border-box;
+  border-top: 1px solid #f3f3f3;
+}
+.mainInfoContainer .infoContainer .offersContainer .offers {
+  width: 100%;
+  min-width: 0;
+  margin-top: 20px;
+  padding-top: 10px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 1000px) {
+  .mainInfoContainer {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+    padding: 18px 18px 0;
+  }
+}
+@media (max-width: 800px) {
+  .mainInfoContainer {
+    gap: 16px;
+    margin-bottom: 30px;
+    padding: 12px 12px 0;
+  }
+  .mainInfoContainer .infoContainer .offersContainer {
+    padding: 12px;
+  }
+  .mainInfoContainer .infoContainer .offersContainer .offers {
+    margin-top: 12px;
+    padding-top: 6px;
+  }
+  .mainInfoContainer .infoContainer .buttonsContainer .btn {
+    padding: 9px 14px;
+    font-size: 15px;
+  }
+  .notFound {
+    margin-top: 20px;
+    font-size: 16px;
+  }
+}
+@media (max-width: 480px) {
+  .mainInfoContainer {
+    gap: 12px;
+    padding: 10px 8px 0;
+  }
+  .mainInfoContainer .infoContainer .offersContainer {
+    padding: 10px;
+  }
+}
+
+/*# sourceMappingURL=ContestPage.module.css.map */

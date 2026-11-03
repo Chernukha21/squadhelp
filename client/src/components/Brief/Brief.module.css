@@ -1,19 +1,20 @@
 .errorContainer {
   display: flex;
-  justify-content: center;
-  margin-top: 40px;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: 40px;
   color: red;
   font-size: 18px;
-  width: 100%;
   text-align: center;
 }
 
 .contestForm {
-  padding: 20px 0;
-  margin: 20px 30px;
   align-self: stretch;
+  min-width: 0;
+  margin: 20px 30px;
+  padding: 20px 0;
   border-top: 1px solid #f3f3f3;
 }
 
@@ -21,8 +22,9 @@
   display: flex;
   align-items: center;
   gap: 12px;
+  max-width: 100%;
   padding: 0;
-  border: none;
+  border: 0;
   background: transparent;
   color: #1683e7;
   cursor: pointer;
@@ -40,85 +42,123 @@
   border: 1px solid rgba(255, 255, 255, 0.7);
   border-radius: 4px;
   background: transparent;
-  color: white;
+  color: #fff;
   cursor: pointer;
 }
 
 .mainContestInfoContainer {
-  display: flex;
-  flex-direction: column;
   align-self: stretch;
-  padding-top: 20px;
-  margin: 0 25px;
-  margin-top: 20px;
-  padding-bottom: 25px;
+  min-width: 0;
+  margin: 20px 25px 0;
+  padding: 20px 0 25px;
   border-top: 1px solid #f3f3f3;
 }
 .mainContestInfoContainer .infoContainer {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  align-self: stretch;
+  align-items: stretch;
+  min-width: 0;
 }
 .mainContestInfoContainer .infoContainer .contestTypeContainer {
-  align-self: stretch;
   display: flex;
-  flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
+  min-width: 0;
 }
 .mainContestInfoContainer .infoContainer .contestTypeContainer i {
-  font-size: 36px;
   color: #4e618d;
-  transition: font-size 0.2s;
+  font-size: 36px;
+  transition: font-size 0.2s ease;
 }
 .mainContestInfoContainer .infoContainer .contestTypeContainer i:hover {
   font-size: 44px;
-  transition: font-size 0.2s;
 }
 .mainContestInfoContainer .infoContainer .contestTypeContainer .editBtn {
+  flex: 0 0 auto;
   margin-right: 15px;
-  color: white;
-  font-size: 20px;
   padding: 12px 28px;
+  border: 0;
   border-radius: 8px;
-  background-color: #8aca6b;
+  background: #8aca6b;
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
 }
 .mainContestInfoContainer .infoContainer .contestTypeContainer .editBtn:hover {
-  background-color: #6b8ab1;
+  background: #6b8ab1;
 }
 .mainContestInfoContainer .infoContainer .dataContainer {
-  align-self: stretch;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
+  align-items: stretch;
+  min-width: 0;
 }
 .mainContestInfoContainer .infoContainer .dataContainer .data {
+  align-self: stretch;
+  min-width: 0;
+  margin-bottom: 10px;
+  padding: 8px 0 0;
+  border: 0;
+  background: #fff;
   color: #515b5f;
   font-size: 15px;
-  padding: 0;
-  padding-top: 8px;
-  margin-bottom: 10px;
-  border: none;
-  background-color: white;
+  overflow-wrap: anywhere;
   resize: none;
-  align-self: stretch;
-  overflow: visible;
-  overflow-wrap: break-word;
 }
 .mainContestInfoContainer .infoContainer .dataContainer .label {
+  margin: 10px 0;
   font-size: 16px;
   font-weight: 700;
-  margin: 10px 0;
 }
 .mainContestInfoContainer .infoContainer .dataContainer .file {
   align-self: stretch;
+  overflow-wrap: anywhere;
   text-decoration: underline;
 }
 .mainContestInfoContainer .infoContainer .dataContainer .file:hover {
   color: #6b89b0;
+}
+
+@media (max-width: 800px) {
+  .contestForm {
+    margin: 12px 16px;
+    padding: 16px 0;
+  }
+  .mainContestInfoContainer {
+    margin: 12px 16px 0;
+    padding: 16px 0 20px;
+  }
+  .mainContestInfoContainer .infoContainer .contestTypeContainer i {
+    font-size: 28px;
+  }
+  .mainContestInfoContainer .infoContainer .contestTypeContainer i:hover {
+    font-size: 32px;
+  }
+  .mainContestInfoContainer .infoContainer .contestTypeContainer .editBtn {
+    margin-right: 0;
+    padding: 9px 16px;
+    font-size: 16px;
+  }
+  .mainContestInfoContainer .infoContainer .dataContainer .label {
+    margin: 8px 0;
+    font-size: 15px;
+  }
+  .mainContestInfoContainer .infoContainer .dataContainer .data {
+    font-size: 14px;
+  }
+  .filePreview {
+    width: 64px;
+    height: 64px;
+  }
+}
+@media (max-width: 480px) {
+  .contestForm {
+    margin: 10px 12px;
+  }
+  .mainContestInfoContainer {
+    margin: 10px 12px 0;
+  }
 }
 
 /*# sourceMappingURL=Brief.module.css.map */

@@ -1,35 +1,49 @@
 @charset "UTF-8";
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 .page {
+  padding: 0;
+  overflow-x: hidden;
   color: #19184a;
   background-color: #fff;
   font-family: "Nunito Sans", sans-serif;
 }
 
+.heroSection {
+  width: 100%;
+  background: radial-gradient(circle at center, #fafdff, #f3f9ff, #f1f6fd, #f8f9fc);
+}
+
 .hero {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(450px, 520px);
-  align-items: center;
-  gap: 70px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 520px);
+  align-items: start;
+  gap: clamp(32px, 5vw, 70px);
   width: 100%;
   max-width: 1110px;
   min-height: 550px;
   margin: 0 auto;
   padding: 70px 30px;
-  box-sizing: border-box;
 }
 
 .content {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  min-width: 0;
 }
 .content h1 {
   margin: 0;
   color: #19184a;
-  font-size: 42px;
+  font-size: clamp(32px, 4vw, 42px);
   font-weight: 700;
   line-height: 1.15;
   letter-spacing: -1px;
+  overflow-wrap: break-word;
 }
 
 .eyebrow {
@@ -54,7 +68,9 @@
 }
 
 .consentContainer {
-  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  margin-top: 112px;
   padding: 38px 5px;
   border-bottom: 3px solid #5f7cff;
   border-radius: 0 0 16px 16px;
@@ -80,6 +96,7 @@
   color: #111;
   font-size: 13px;
   line-height: 1.6;
+  overflow-wrap: anywhere;
 }
 
 .consentButtons {
@@ -111,7 +128,7 @@
 }
 
 .services {
-  padding: 38px 32px 52px;
+  padding: 38px clamp(20px, 4vw, 32px) 52px;
   background: linear-gradient(110deg, #f3fbfc 0%, #f4f8fe 100%);
 }
 
@@ -123,7 +140,7 @@
 .sectionHeader h2 {
   margin: 0;
   color: #101044;
-  font-size: 32px;
+  font-size: clamp(26px, 3vw, 32px);
   font-weight: 800;
   line-height: 1.25;
 }
@@ -163,7 +180,6 @@
   min-width: 0;
   min-height: 365px;
   padding: 28px 25px 20px;
-  box-sizing: border-box;
   border-radius: 22px;
   background-color: #fff;
   box-shadow: 0 18px 35px rgba(36, 62, 99, 0.08);
@@ -202,7 +218,6 @@
   min-height: 56px;
   margin-top: auto;
   padding: 0 20px;
-  box-sizing: border-box;
   border: none;
   border-radius: 7px;
   background-color: #4f61ec;
@@ -236,8 +251,13 @@
 }
 
 .contestProcess {
-  padding: 80px 24px 90px;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 80px clamp(18px, 4vw, 24px) 90px;
   background-color: #f7f7ff;
+  box-shadow: 0 0 0 100vmax #f7f7ff;
+  clip-path: inset(0 -100vmax);
 }
 
 .processHeading {
@@ -250,7 +270,7 @@
 .processHeading h2 {
   margin: 22px 0 0;
   color: #191b45;
-  font-size: 30px;
+  font-size: clamp(24px, 3vw, 30px);
   font-weight: 800;
   line-height: 1.25;
 }
@@ -273,9 +293,9 @@
 
 .stepCard {
   position: relative;
+  min-width: 0;
   min-height: 245px;
   padding: 24px 25px;
-  box-sizing: border-box;
   background-color: #fff;
   border-radius: 20px;
   box-shadow: 0 12px 35px rgba(31, 48, 91, 0.07);
@@ -306,7 +326,6 @@
   min-width: 68px;
   height: 33px;
   padding: 0 15px;
-  box-sizing: border-box;
   border-radius: 18px;
   color: #fff;
   background: linear-gradient(135deg, #6657f2, #4248e8);
@@ -314,6 +333,27 @@
   font-weight: 700;
 }
 
+@media (max-width: 1200px) {
+  .hero {
+    padding: 60px 30px;
+  }
+  .servicesGrid {
+    gap: 20px;
+  }
+  .serviceCard {
+    padding: 24px 20px 20px;
+  }
+  .stepsList {
+    gap: 20px;
+  }
+  .stepCard {
+    padding: 22px 18px;
+  }
+  .stepCard:not(:last-child)::after {
+    right: -22px;
+    font-size: 22px;
+  }
+}
 @media (max-width: 1000px) {
   .hero {
     grid-template-columns: 1fr;
@@ -325,16 +365,32 @@
   .content {
     align-items: center;
   }
+  .heroDescription {
+    margin-left: auto;
+    margin-right: auto;
+  }
   .consentContainer {
-    width: 100%;
     max-width: 520px;
+    margin-top: 0;
     justify-self: center;
+  }
+  .services {
+    padding-top: 50px;
   }
   .servicesGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+  .serviceCard {
+    min-height: 320px;
+  }
   .serviceCard:last-child {
     grid-column: 1/-1;
+  }
+  .contestProcess {
+    padding: 70px 24px 80px;
+  }
+  .processHeading {
+    margin-bottom: 48px;
   }
   .stepsList {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -346,12 +402,28 @@
     display: none;
   }
 }
-@media (max-width: 700px) {
+@media (max-width: 768px) {
+  .hero {
+    gap: 40px;
+    padding: 50px 24px;
+  }
+  .sectionHeader {
+    margin-bottom: 32px;
+  }
+  .serviceCard {
+    min-height: 300px;
+  }
+  .serviceCard:last-child {
+    min-height: auto;
+  }
+}
+@media (max-width: 600px) {
   .services {
-    padding: 60px 20px;
+    padding: 50px 20px;
   }
   .servicesGrid {
     grid-template-columns: 1fr;
+    gap: 16px;
   }
   .serviceCard,
   .serviceCard:last-child {
@@ -361,31 +433,41 @@
   .serviceButton {
     align-self: flex-start;
   }
-}
-@media (max-width: 600px) {
   .contestProcess {
-    padding: 60px 18px;
+    padding: 55px 18px;
   }
   .processHeading {
-    margin-bottom: 42px;
+    margin-bottom: 36px;
   }
   .processHeading h2 {
-    font-size: 26px;
+    font-size: 24px;
+  }
+  .processIcon {
+    width: 60px;
+    height: 60px;
   }
   .stepsList {
     grid-template-columns: 1fr;
+    gap: 28px;
   }
   .stepCard {
     min-height: auto;
   }
+  .stepCard:not(:last-child)::after {
+    display: block;
+    content: "⟶";
+    top: auto;
+    right: auto;
+    bottom: -26px;
+    left: 50%;
+    font-size: 22px;
+    transform: translateX(-50%) rotate(90deg);
+  }
 }
 @media (max-width: 500px) {
   .hero {
-    gap: 35px;
-    padding: 45px 20px;
-  }
-  .content h1 {
-    font-size: 36px;
+    gap: 32px;
+    padding: 40px 20px;
   }
   .consentContainer {
     padding: 24px 5px;
@@ -396,16 +478,28 @@
   .consentButtons {
     grid-template-columns: 1fr;
   }
+  .heroDescription {
+    font-size: 15px;
+  }
 }
 @media (max-width: 420px) {
   .content h1 {
-    font-size: 34px;
+    font-size: 32px;
+    letter-spacing: -0.5px;
   }
-  .sectionHeader h2 {
-    font-size: 28px;
+  .eyebrow {
+    min-height: 32px;
+    padding: 0 14px;
+    font-size: 12px;
   }
   .serviceCard {
-    padding: 25px 20px 20px;
+    padding: 22px 18px 18px;
+  }
+  .serviceCard h3 {
+    font-size: 19px;
+  }
+  .serviceCard p {
+    font-size: 15px;
   }
   .serviceButton {
     gap: 14px;
@@ -415,6 +509,36 @@
   }
   .buttonArrow {
     font-size: 22px;
+  }
+  .stepCard {
+    padding: 20px 18px;
+  }
+  .stepCard p {
+    font-size: 15px;
+  }
+}
+@media (max-width: 360px) {
+  .hero {
+    padding: 32px 16px;
+  }
+  .services,
+  .contestProcess {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+  .serviceButton {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .serviceButton,
+  .buttonArrow {
+    transition: none;
+  }
+  .serviceButton:hover,
+  .buttonArrow:hover {
+    transform: none;
   }
 }
 

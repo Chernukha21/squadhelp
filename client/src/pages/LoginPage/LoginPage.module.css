@@ -1,0 +1,86 @@
+.mainContainer {
+  display: flex;
+  flex: 1;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  min-width: 0;
+  padding: clamp(32px, 5vw, 70px) 24px 80px;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  background-color: #3ea9f5;
+}
+.mainContainer .loginContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1200px;
+  min-width: 0;
+  background-color: transparent;
+}
+.mainContainer .loginFormContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-width: 0;
+  margin-top: clamp(24px, 5vw, 80px);
+}
+.mainContainer .loginFormContainer > * {
+  width: 100%;
+  max-width: 520px;
+  min-width: 0;
+}
+.mainContainer .headerSignUpPage {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  margin-top: 26px;
+  padding: 0 clamp(20px, 5vw, 100px);
+  box-sizing: border-box;
+}
+.mainContainer .linkLoginContainer {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 40px;
+  border: 1px solid #fff;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+  text-decoration: none;
+}
+.mainContainer .linkLoginContainer span {
+  color: inherit;
+}
+
+@media (max-width: 600px) {
+  .mainContainer {
+    padding: 24px 16px 48px;
+  }
+  .mainContainer .loginFormContainer {
+    margin-top: 24px;
+  }
+  .mainContainer .headerSignUpPage {
+    margin-top: 16px;
+    padding: 0;
+  }
+}
+@media (max-width: 380px) {
+  .mainContainer {
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+  .mainContainer .headerSignUpPage {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+/*# sourceMappingURL=LoginPage.module.css.map */

@@ -28,39 +28,41 @@ const ServiceCard = ({ icon, title, description, buttonText }) => (
 
 const HowItWorks = () => (
   <main className={styles.page}>
-    <section className={styles.hero}>
-      <div className={styles.content}>
-        <span className={styles.eyebrow}>World’s #1 Naming Platform</span>
+    <section className={styles.heroSection}>
+      <section className={styles.hero}>
+        <div className={styles.content}>
+          <span className={styles.eyebrow}>World’s #1 Naming Platform</span>
 
-        <h1>How Does Atom Work?</h1>
+          <h1>How Does Atom Work?</h1>
 
-        <p className={styles.heroDescription}>
-          Atom helps you come up with a great name for your business by
-          combining the power of crowdsourcing with sophisticated technology and
-          Agency-level validation services.
-        </p>
-      </div>
-
-      <div className={styles.consentContainer}>
-        <div className={styles.consentCard}>
-          <h2>Enable this content?</h2>
-
-          <p>
-            This content is served by a third party. If enabled, the service may
-            collect information about your activity.
+          <p className={styles.heroDescription}>
+            Atom helps you come up with a great name for your business by
+            combining the power of crowdsourcing with sophisticated technology
+            and Agency-level validation services.
           </p>
+        </div>
 
-          <div className={styles.consentButtons}>
-            <button type='button' className={styles.preferencesButton}>
-              Preferences
-            </button>
+        <div className={styles.consentContainer}>
+          <div className={styles.consentCard}>
+            <h2>Enable this content?</h2>
 
-            <button type='button' className={styles.enableButton}>
-              Enable
-            </button>
+            <p>
+              This content is served by a third party. If enabled, the service
+              may collect information about your activity.
+            </p>
+
+            <div className={styles.consentButtons}>
+              <button type='button' className={styles.preferencesButton}>
+                Preferences
+              </button>
+
+              <button type='button' className={styles.enableButton}>
+                Enable
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
     </section>
 
     <section className={styles.services}>
