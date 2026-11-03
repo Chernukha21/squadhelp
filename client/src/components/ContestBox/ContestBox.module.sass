@@ -2,25 +2,30 @@
   display: flex
   align-items: center
   justify-content: space-between
+  gap: 16px
+  width: 100%
+  min-width: 0
+  box-sizing: border-box
   background-color: #f9fafb
-  padding: 30px 20px 10px 20px
+  padding: 30px 20px 20px
   margin-bottom: 15px
-  @media(max-width: 400px)
-    flex-direction: column
+  cursor: pointer
 
   .mainContestInfo
-    flex: 1 1
+    flex: 1 1 0
+    min-width: 0
     display: flex
     flex-direction: column
     align-items: flex-start
     justify-content: flex-start
-    margin-right: 20px
 
     .prizeContainer
       margin-top: 5px
       display: flex
       justify-content: flex-start
       align-items: center
+      flex-wrap: wrap
+      gap: 8px 16px
 
       .prize
         display: flex
@@ -35,7 +40,6 @@
         display: flex
         justify-content: flex-start
         align-items: center
-        margin-right: 20px
 
         div
           display: flex
@@ -53,6 +57,8 @@
 
     .contestType
       margin-top: 5px
+      min-width: 0
+      overflow-wrap: anywhere
 
       span
         font-size: 14px
@@ -63,31 +69,36 @@
       display: flex
       justify-content: flex-start
       align-items: center
+      flex-wrap: wrap
+      gap: 4px 12px
 
       .id
         color: #6e7072
         font-size: 14px
+        white-space: nowrap
 
       .title
         color: #556da5
         font-size: 18px
         font-weight: 500
-        margin-right: 20px
+        min-width: 0
+        overflow-wrap: anywhere
 
   .entryAndTimeContainer
     display: flex
+    flex: 0 1 auto
+    min-width: 0
     padding: 10px
+    box-sizing: border-box
     background-color: white
     border-left: 1px solid #eee
     border-right: 1px solid #eee
     border-bottom: 1px solid #eee
     box-shadow: 2px 2px rgba(0, 0, 0, 0.2)
-    @media(max-width: 400px)
-      margin-top: 10px
-      align-self: flex-start
 
     .timeContainer
       display: flex
+      min-width: 0
       flex-direction: column
       justify-content: center
       align-items: center
@@ -97,6 +108,8 @@
       .timeContest
         font-size: 18px
         color: #46568a
+        text-align: center
+        overflow-wrap: anywhere
 
       span
         font-size: 15px
@@ -105,6 +118,7 @@
 
     .entriesContainer
       display: flex
+      min-width: 0
       flex-direction: column
       justify-content: center
       align-items: center
@@ -127,3 +141,40 @@
         span
           font-size: 18px
           color: #46568a
+
+@media (max-width: 640px)
+  .contestBoxContainer
+    flex-direction: column
+    align-items: stretch
+    padding: 20px 16px
+
+    .entryAndTimeContainer
+      width: 100%
+      justify-content: space-around
+
+      .entriesContainer,
+      .timeContainer
+        flex: 1 1 0
+        padding: 0 12px
+
+      .entriesContainer
+        border-right: 1px solid #46568a
+
+      .timeContainer
+        border-left: 0
+
+@media (max-width: 400px)
+  .contestBoxContainer
+    gap: 12px
+    padding: 16px 12px
+
+    .entryAndTimeContainer
+      padding: 8px
+
+      .entriesContainer,
+      .timeContainer
+        padding: 0 6px
+
+      .timeContainer
+        .timeContest
+          font-size: 16px

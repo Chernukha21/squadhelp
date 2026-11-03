@@ -1,0 +1,185 @@
+.contestBoxContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  background-color: #f9fafb;
+  padding: 30px 20px 20px;
+  margin-bottom: 15px;
+  cursor: pointer;
+}
+.contestBoxContainer .mainContestInfo {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.contestBoxContainer .mainContestInfo .prizeContainer {
+  margin-top: 5px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+}
+.contestBoxContainer .mainContestInfo .prizeContainer .prize {
+  display: flex;
+  justify-content: flex-start;
+}
+.contestBoxContainer .mainContestInfo .prizeContainer .prize span {
+  color: #465a89;
+  font-size: 15px;
+  margin-left: 8px;
+}
+.contestBoxContainer .mainContestInfo .prizeContainer .guaranteedContainer {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.contestBoxContainer .mainContestInfo .prizeContainer .guaranteedContainer div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 14px;
+  width: 14px;
+  border-radius: 7px;
+  background-color: #8aca6b;
+  margin-right: 5px;
+}
+.contestBoxContainer .mainContestInfo .prizeContainer .guaranteedContainer span {
+  color: #6e7072;
+  font-size: 13px;
+}
+.contestBoxContainer .mainContestInfo .contestType {
+  margin-top: 5px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.contestBoxContainer .mainContestInfo .contestType span {
+  font-size: 14px;
+  color: #4e618d;
+}
+.contestBoxContainer .mainContestInfo .titleAndIdContainer {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+}
+.contestBoxContainer .mainContestInfo .titleAndIdContainer .id {
+  color: #6e7072;
+  font-size: 14px;
+  white-space: nowrap;
+}
+.contestBoxContainer .mainContestInfo .titleAndIdContainer .title {
+  color: #556da5;
+  font-size: 18px;
+  font-weight: 500;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.contestBoxContainer .entryAndTimeContainer {
+  display: flex;
+  flex: 0 1 auto;
+  min-width: 0;
+  padding: 10px;
+  box-sizing: border-box;
+  background-color: white;
+  border-left: 1px solid #eee;
+  border-right: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  box-shadow: 2px 2px rgba(0, 0, 0, 0.2);
+}
+.contestBoxContainer .entryAndTimeContainer .timeContainer {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0 20px;
+  border-left: 1px solid #46568a;
+}
+.contestBoxContainer .entryAndTimeContainer .timeContainer .timeContest {
+  font-size: 18px;
+  color: #46568a;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+.contestBoxContainer .entryAndTimeContainer .timeContainer span {
+  font-size: 15px;
+  color: #8c8e92;
+  margin-top: 3px;
+}
+.contestBoxContainer .entryAndTimeContainer .entriesContainer {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0 20px;
+  border-right: 1px solid #46568a;
+}
+.contestBoxContainer .entryAndTimeContainer .entriesContainer span {
+  font-size: 15px;
+  color: #8c8e92;
+  margin-top: 3px;
+}
+.contestBoxContainer .entryAndTimeContainer .entriesContainer .entriesCounter {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+.contestBoxContainer .entryAndTimeContainer .entriesContainer .entriesCounter img {
+  margin-right: 5px;
+}
+.contestBoxContainer .entryAndTimeContainer .entriesContainer .entriesCounter span {
+  font-size: 18px;
+  color: #46568a;
+}
+
+@media (max-width: 640px) {
+  .contestBoxContainer {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 20px 16px;
+  }
+  .contestBoxContainer .entryAndTimeContainer {
+    width: 100%;
+    justify-content: space-around;
+  }
+  .contestBoxContainer .entryAndTimeContainer .entriesContainer,
+  .contestBoxContainer .entryAndTimeContainer .timeContainer {
+    flex: 1 1 0;
+    padding: 0 12px;
+  }
+  .contestBoxContainer .entryAndTimeContainer .entriesContainer {
+    border-right: 1px solid #46568a;
+  }
+  .contestBoxContainer .entryAndTimeContainer .timeContainer {
+    border-left: 0;
+  }
+}
+@media (max-width: 400px) {
+  .contestBoxContainer {
+    gap: 12px;
+    padding: 16px 12px;
+  }
+  .contestBoxContainer .entryAndTimeContainer {
+    padding: 8px;
+  }
+  .contestBoxContainer .entryAndTimeContainer .entriesContainer,
+  .contestBoxContainer .entryAndTimeContainer .timeContainer {
+    padding: 0 6px;
+  }
+  .contestBoxContainer .entryAndTimeContainer .timeContainer .timeContest {
+    font-size: 16px;
+  }
+}
+
+/*# sourceMappingURL=ContestBox.module.css.map */
