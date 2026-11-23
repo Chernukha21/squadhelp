@@ -11,7 +11,8 @@ const capitalize = value => {
 
 const ModeratorOfferRow = ({ offer, isUpdating, isActive, onDecision }) => {
   const isPending =
-    offer.moderationStatus === CONSTANTS.OFFER_MODERATION_STATUS_PENDING;
+    offer.moderationStatus === CONSTANTS.OFFER_MODERATION_STATUS_PENDING &&
+    offer.status === CONSTANTS.OFFER_STATUS_PENDING;
 
   const imagePath = offer.fileName
     ? `${CONSTANTS.publicURL}${offer.fileName}`

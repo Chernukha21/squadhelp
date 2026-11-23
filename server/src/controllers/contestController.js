@@ -319,8 +319,6 @@ const resolveOffer = async (
     {
       contestId,
       status: CONSTANTS.OFFER_STATUS_PENDING,
-      moderationStatus:
-      CONSTANTS.OFFER_MODERATION_STATUS_APPROVED,
     },
     transaction,
   );

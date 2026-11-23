@@ -14,6 +14,21 @@ import styles from './OfferBox.module.sass';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import './confirmStyle.css';
 
+const MODERATION_STATUS_CONFIG = {
+  [CONSTANTS.OFFER_MODERATION_STATUS_PENDING]: {
+    label: 'Pending moderation',
+    className: styles.moderationPending,
+  },
+  [CONSTANTS.OFFER_MODERATION_STATUS_APPROVED]: {
+    label: 'Approved by moderator',
+    className: styles.moderationApproved,
+  },
+  [CONSTANTS.OFFER_MODERATION_STATUS_REJECTED]: {
+    label: 'Rejected by moderator',
+    className: styles.moderationRejected,
+  },
+};
+
 const OfferBox = ({ data, contestType, needButtons, setOfferStatus }) => {
   const dispatch = useDispatch();
 
@@ -117,6 +132,26 @@ const OfferBox = ({ data, contestType, needButtons, setOfferStatus }) => {
     return null;
   };
 
+  const moderationStatus = () => {
+    if (role !== CONSTANTS.CREATOR) {
+      return null;
+    }
+
+    const statusConfig = MODERATION_STATUS_CONFIG[data.moderationStatus];
+
+    if (!statusConfig) {
+      return null;
+    }
+
+    return (
+      <span
+        className={classNames(styles.moderationBadge, statusConfig.className)}
+      >
+        {statusConfig.label}
+      </span>
+    );
+  };
+
   const goChat = () => {
     dispatch(
       goToExpandedDialog({
@@ -129,6 +164,7 @@ const OfferBox = ({ data, contestType, needButtons, setOfferStatus }) => {
   return (
     <div className={styles.offerContainer}>
       {offerStatus()}
+      {moderationStatus()}
       <div className={styles.mainInfoContainer}>
         <div className={styles.userInfo}>
           <div className={styles.creativeInfoContainer}>
@@ -215,12 +251,20 @@ const OfferBox = ({ data, contestType, needButtons, setOfferStatus }) => {
       </div>
       {needButtons(data.status) && (
         <div className={styles.btnsContainer}>
-          <div onClick={resolveOffer} className={styles.resolveBtn}>
+          <button
+            type='button'
+            onClick={resolveOffer}
+            className={styles.resolveBtn}
+          >
             Resolve
-          </div>
-          <div onClick={rejectOffer} className={styles.rejectBtn}>
+          </button>
+          <button
+            type='button'
+            onClick={rejectOffer}
+            className={styles.rejectBtn}
+          >
             Reject
-          </div>
+          </button>
         </div>
       )}
     </div>

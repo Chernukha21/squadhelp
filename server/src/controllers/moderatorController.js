@@ -23,6 +23,43 @@ const getSafeOffer = offer => ({
   moderationStatus: offer.moderationStatus,
 });
 
+const sendModerationEmailInBackground = ({
+                                           creatorId,
+                                           offerId,
+                                           contestId,
+                                           decision,
+                                         }) => {
+  db.Users.findByPk(creatorId, {
+    attributes: [
+      'email',
+      'displayName',
+      'firstName',
+    ],
+  })
+    .then(creator => {
+      if (!creator) {
+        throw new Error(
+          `Creative for offer #${offerId} was not found`,
+        );
+      }
+
+      return sendOfferModerationEmail({
+        email: creator.email,
+        creatorName:
+          creator.displayName || creator.firstName,
+        offerId,
+        contestId,
+        decision,
+      });
+    })
+    .catch(emailError => {
+      console.error(
+        `Cannot send moderation email for offer #${offerId}:`,
+        emailError,
+      );
+    });
+};
+
 module.exports.getOffers = async (req, res, next) => {
   try {
     const requestedPage = Number.parseInt(
@@ -64,6 +101,14 @@ module.exports.getOffers = async (req, res, next) => {
 
       where.moderationStatus =
         req.query.moderationStatus;
+
+      if (
+        req.query.moderationStatus ===
+        CONSTANTS.OFFER_MODERATION_STATUS_PENDING
+      ) {
+        where.status =
+          CONSTANTS.OFFER_STATUS_PENDING;
+      }
     }
 
     const { count, rows } =
@@ -133,6 +178,7 @@ module.exports.moderateOffer = async (
     const pendingOffer = await db.Offers.findOne({
       where: {
         id: offerId,
+        status: CONSTANTS.OFFER_STATUS_PENDING,
         moderationStatus:
         CONSTANTS.OFFER_MODERATION_STATUS_PENDING,
       },
@@ -179,6 +225,7 @@ module.exports.moderateOffer = async (
         {
           where: {
             id: offerId,
+            status: CONSTANTS.OFFER_STATUS_PENDING,
             moderationStatus:
             CONSTANTS.OFFER_MODERATION_STATUS_PENDING,
           },
@@ -189,7 +236,7 @@ module.exports.moderateOffer = async (
     if (updatedCount === 0) {
       return next(
         new BadRequestError(
-          'Offer has already been moderated',
+          'Offer has already been moderated or processed',
         ),
       );
     }
@@ -222,42 +269,18 @@ module.exports.moderateOffer = async (
         pendingOffer.contestId,
       );
 
-    try {
-      const creator = await db.Users.findByPk(
-        pendingOffer.userId,
-        {
-          attributes: [
-            'email',
-            'displayName',
-            'firstName',
-          ],
-        },
-      );
-
-      if (!creator) {
-        throw new Error(
-          `Creative for offer #${offerId} was not found`,
-        );
-      }
-
-      await sendOfferModerationEmail({
-        email: creator.email,
-        creatorName:
-          creator.displayName || creator.firstName,
-        offerId: updatedOffer.id,
-        contestId: updatedOffer.contestId,
-        decision,
-      });
-    } catch (emailError) {
-      console.error(
-        `Cannot send moderation email for offer #${offerId}:`,
-        emailError,
-      );
-    }
-
-    return res.send(
+    const response = res.send(
       getSafeOffer(updatedOffer),
     );
+
+    sendModerationEmailInBackground({
+      creatorId: pendingOffer.userId,
+      offerId: updatedOffer.id,
+      contestId: updatedOffer.contestId,
+      decision,
+    });
+
+    return response;
   } catch (error) {
     return next(
       new ServerError('Cannot moderate offer'),

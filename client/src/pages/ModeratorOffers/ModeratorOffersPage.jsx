@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { confirmAlert } from 'react-confirm-alert';
 import ModeratorOfferRow from '../../components/ModeratorOfferRow/ModeratorOfferRow';
 import Spinner from '../../components/Spinner/Spinner';
 import Error from '../../components/Error/Error';
@@ -12,6 +13,7 @@ import {
 import { clearUserStore } from '../../store/slices/userSlice';
 import CONSTANTS from '../../constants';
 import styles from './ModeratorOffersPage.module.sass';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 const PAGE_LIMIT = 10;
 
@@ -48,7 +50,7 @@ const ModeratorOffersPage = () => {
     setPage(1);
   };
 
-  const handleDecision = async (offerId, decision) => {
+  const submitDecision = async (offerId, decision) => {
     const result = await dispatch(
       moderateOffer({
         offerId,
@@ -63,6 +65,26 @@ const ModeratorOffersPage = () => {
         loadOffers();
       }
     }
+  };
+
+  const handleDecision = (offerId, decision) => {
+    const isApproval = decision === CONSTANTS.OFFER_MODERATION_STATUS_APPROVED;
+    const action = isApproval ? 'Approve' : 'Reject';
+
+    confirmAlert({
+      title: `${action} offer #${offerId}?`,
+      message:
+        'This decision is final. The Creative will be notified immediately.',
+      buttons: [
+        {
+          label: action,
+          onClick: () => submitDecision(offerId, decision),
+        },
+        {
+          label: 'Cancel',
+        },
+      ],
+    });
   };
 
   const handleLogout = () => {
