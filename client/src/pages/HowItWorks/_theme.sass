@@ -1,0 +1,59 @@
+@use 'sass:string'
+
+// Palette retained from the agreed screenshots.
+$primary: #6500ff
+$primary-dark: #5100cc
+$text: #281049
+$secondary-text: #737373
+$white: #fff
+$hero-gradient-start: #fafdff
+$hero-gradient-second: #f3f9ff
+$hero-gradient-third: #f1f6fd
+$hero-gradient-end: #f8f9fc
+$eyebrow-background: #eee8ff
+$consent-border: #5f7cff
+$consent-background: #e5e5e5
+$consent-shadow: rgba(0, 0, 0, .12)
+$consent-text: #111
+$services-gradient-start: #f3fbfc
+$services-gradient-end: #f7f5ff
+$badge-background: #eee8ff
+$service-shadow: rgba(0, 0, 0, .04)
+$service-heading-text: #050505
+$process-background: #faf6ff
+$step-shadow: rgba(0, 0, 0, .04)
+$navigation-background: #f5f5f5
+$navigation-text: #29293d
+$navigation-hover: #ff6454
+$navigation-gradient-start: #ff735b
+$navigation-gradient-end: #ff5f4f
+$faq-border: #efecf7
+$faq-open-background: #5b2bfa
+
+
+$content-width: 1116px
+$content-laptop: 936px
+$content-tablet: 696px
+$content-small: 516px
+$section-gutter: 12px
+$grid-gap: 24px
+$faq-width: 850px
+$faq-content-width: 830px
+
+$bp-laptop: 1199px
+$bp-tablet: 991px
+$bp-tablet-sm: 767px
+$bp-mobile: 575px
+
+
+@function arrow-image($color)
+  $hex: string.slice("#{$color}", 2)
+  @return url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2226%22%20height%3D%2214%22%20viewBox%3D%220%200%2026%2014%22%20fill%3D%22none%22%3E%3Cpath%20d%3D%22M19%201L25%207M25%207L19%2013M25%207H1%22%20stroke%3D%22%23#{$hex}%22%20stroke-width%3D%221.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E")
+
+@mixin up-to($width)
+  @media (max-width: $width)
+    @content
+
+@mixin arrow-background($color)
+  background-image: arrow-image($color)
+  background-repeat: no-repeat

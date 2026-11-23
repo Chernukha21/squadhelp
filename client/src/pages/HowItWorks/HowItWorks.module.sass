@@ -1,40 +1,37 @@
-$primary: #377dff
-$primary-dark: #245fda
-$text: #19184a
-$secondary-text: #6f718f
-$background: #f7f8ff
-$border: #e4e7f3
+@use './theme' as *
 
+// Размер шрифта по брейкпоинтам: десктоп / до 992px / до 767px
+@mixin fs($desktop, $tablet, $mobile)
+  font-size: $desktop
 
-$bp-laptop: 1200px
-$bp-tablet: 1000px
-$bp-tablet-sm: 768px
-$bp-mobile: 600px
-$bp-mobile-sm: 420px
-$bp-mobile-xs: 360px
+  @media (max-width: 992px)
+    font-size: $tablet
 
-@mixin up-to($width)
-  @media (max-width: $width)
-    @content
-
-*,
-*::before,
-*::after
-  box-sizing: border-box
+  @media (max-width: 767px)
+    font-size: $mobile
 
 .page
-  padding: 0
-  overflow-x: hidden
+  box-sizing: border-box
+  width: 100%
+  min-width: 0
   color: $text
-  background-color: #fff
-  font-family: 'Nunito Sans', sans-serif
+  background: $white
+  font-family: 'Plus Jakarta Sans', Arial, sans-serif
+  font-weight: 400
 
+  :where(*:not(h1, h2, h3))
+    font-weight: 400
 
-
+  &::before,
+  &::after,
+  *,
+  *::before,
+  *::after
+    box-sizing: border-box
 
 .heroSection
   width: 100%
-  background: radial-gradient(circle at center, #fafdff, #f3f9ff, #f1f6fd, #f8f9fc)
+  background: radial-gradient(circle at center, $hero-gradient-start, $hero-gradient-second, $hero-gradient-third, $hero-gradient-end)
 
 .hero
   display: grid
@@ -42,10 +39,10 @@ $bp-mobile-xs: 360px
   align-items: start
   gap: clamp(32px, 5vw, 70px)
   width: 100%
-  max-width: 1110px
+  max-width: $content-width + 2 * $section-gutter
   min-height: 550px
   margin: 0 auto
-  padding: 70px 30px
+  padding: 70px $section-gutter
 
 .content
   display: flex
@@ -56,10 +53,10 @@ $bp-mobile-xs: 360px
   h1
     margin: 0
     color: $text
-    font-size: clamp(32px, 4vw, 42px)
+    @include fs(40px, 32px, 24px)
     font-weight: 700
     line-height: 1.15
-    letter-spacing: -1px
+    letter-spacing: -.025em
     overflow-wrap: break-word
 
 .eyebrow
@@ -67,49 +64,50 @@ $bp-mobile-xs: 360px
   align-items: center
   min-height: 36px
   margin-bottom: 14px
-  padding: 0 16px
+  padding: 6px 16px
   border-radius: 20px
-  background-color: #e8edff
+  background: $eyebrow-background
   color: $primary
-  font-size: 13px
-  font-weight: 500
+  @include fs(13px, 12px, 11px)
+  font-weight: 400
+  line-height: 1.4
 
 .heroDescription
   max-width: 490px
   margin: 14px 0 0
-  color: #72738f
-  font-size: 16px
-  line-height: 1.55
-
-
+  color: $secondary-text
+  @include fs(20px, 16px, 14px)
+  line-height: 1.6
+  overflow-wrap: break-word
 
 .consentContainer
   width: 100%
   min-width: 0
   margin-top: 112px
   padding: 38px 5px
-  border-bottom: 3px solid #5f7cff
+  border-bottom: 3px solid $consent-border
   border-radius: 0 0 16px 16px
-  background-color: #e5e5e5
+  background: $consent-background
 
 .consentCard
   padding: 28px 32px 32px
   border-radius: 4px
-  background-color: #fff
-  box-shadow: 0 8px 20px rgba(0, 0, 0, .12)
+  background: $white
+  box-shadow: 0 8px 20px $consent-shadow
   text-align: center
 
   h2
     margin: 0 0 16px
-    color: #111
-    font-size: 20px
+    color: $consent-text
+    @include fs(20px, 18px, 16px)
     font-weight: 500
+    line-height: 1.3
 
   p
     max-width: 430px
     margin: 0 auto 20px
-    color: #111
-    font-size: 13px
+    color: $consent-text
+    @include fs(14px, 13px, 12px)
     line-height: 1.6
     overflow-wrap: anywhere
 
@@ -121,92 +119,97 @@ $bp-mobile-xs: 360px
 .preferencesButton,
 .enableButton
   min-height: 36px
+  padding: 8px 12px
+  border: 1px solid $consent-text
   border-radius: 3px
   font-family: inherit
-  font-size: 13px
-  font-weight: 600
+  @include fs(14px, 13px, 12px)
+  font-weight: 400
+  line-height: 1.4
+  overflow-wrap: anywhere
   cursor: pointer
 
 .preferencesButton
-  border: 1px solid #111
-  background-color: #fff
-  color: #111
+  background: $white
+  color: $consent-text
 
 .enableButton
-  border: 1px solid #111
-  background-color: #111
-  color: #fff
-
-
-
+  background: $consent-text
+  color: $white
 
 .services
-  padding: 38px clamp(20px, 4vw, 32px) 52px
-  background: linear-gradient(110deg, #f3fbfc 0%, #f4f8fe 100%)
+  width: 100%
+  padding: 80px $section-gutter
+  background: linear-gradient(110deg, $services-gradient-start, $services-gradient-end)
 
 .sectionHeader
-  max-width: 720px
+  max-width: 640px
   margin: 0 auto 40px
   text-align: center
 
   h2
     margin: 0
-    color: #101044
-    font-size: clamp(26px, 3vw, 32px)
+    color: $text
+    @include fs(32px, 28px, 24px)
     font-weight: 800
-    line-height: 1.25
+    line-height: 1.3
 
   p
-    margin: 12px 0 0
-    color: #101044
-    font-size: 16px
-    font-weight: 400
-    line-height: 1.5
+    margin: 10px 0 0
+    color: $text
+    @include fs(16px, 16px, 14px)
+    line-height: 1.6
 
 .sectionBadge
   display: inline-flex
   align-items: center
   min-height: 30px
   margin-bottom: 16px
-  padding: 0 15px
+  padding: 6px 15px
   border-radius: 18px
-  background-color: #e7eeff
+  background: $badge-background
   color: $primary
-  font-size: 12px
-  font-weight: 400
+  @include fs(12px, 12px, 11px)
+  line-height: 1.4
+
+.servicesGrid,
+.stepsList
+  display: grid
+  gap: $grid-gap
+  width: 100%
+  max-width: $content-width
+  margin: 0 auto
 
 .servicesGrid
-  display: grid
   grid-template-columns: repeat(3, minmax(0, 1fr))
-  gap: 24px
-  width: 100%
-  max-width: 1456px
-  margin: 0 auto
+  row-gap: 0
 
 .serviceCard
   display: flex
   flex-direction: column
   min-width: 0
   min-height: 365px
-  padding: 28px 25px 20px
-  border-radius: 22px
-  background-color: #fff
-  box-shadow: 0 18px 35px rgba(36, 62, 99, .08)
+  margin: 0 0 30px
+  padding: 25px
+  border-radius: 24px
+  background: $white
+  box-shadow: 0 16px 32px $service-shadow
 
   h3
-    margin: 8px 0
-    color: #050505
-    font-size: 20px
+    margin: 10px 0
+    color: $service-heading-text
+    @include fs(20px, 18px, 16px)
     font-weight: 800
     line-height: 1.3
+    overflow-wrap: break-word
 
   p
     flex: 1
     margin: 0 0 24px
-    color: #656775
-    font-size: 16px
-    font-weight: 400
-    line-height: 1.5
+    color: $secondary-text
+    @include fs(16px, 16px, 14px)
+    line-height: 1.6
+    overflow-wrap: break-word
 
 .serviceIcon
   width: 48px
@@ -219,67 +222,65 @@ $bp-mobile-xs: 360px
   align-items: center
   justify-content: center
   align-self: flex-start
-  gap: 18px
-  width: fit-content
+  gap: 20px
   max-width: 100%
-  min-height: 56px
+  min-height: 52px
   margin-top: auto
-  padding: 0 20px
+  padding: 14px 20px
   border: none
-  border-radius: 7px
-  background-color: #4f61ec
-  color: #fff
+  border-radius: 8px
+  background: $primary
+  color: $white
   font-family: inherit
-  font-size: 15px
-  font-weight: 700
-  line-height: 1.2
-  white-space: nowrap
+  @include fs(16px, 16px, 14px)
+  font-weight: 400
+  line-height: 1.4
+  overflow-wrap: anywhere
   cursor: pointer
-  transition: background-color .25s ease, transform .25s ease
+  transition: background-color .2s ease
+
+  > span:first-child
+    min-width: 0
 
   &:hover
-    background-color: #3c50d5
-    transform: translateY(-2px)
-
-    .buttonArrow
-      transform: translateX(15px)
+    background: $primary-dark
 
   &:focus-visible
-    outline: 3px solid rgba(55, 125, 255, .35)
+    outline: 3px solid rgba($primary, .4)
     outline-offset: 3px
 
 .buttonArrow
-  flex-shrink: 0
-  font-size: 25px
-  font-weight: 400
-  line-height: 1
-  transition: transform .25s ease
+  @include arrow-background($white)
+  display: block
+  flex: 0 0 26px
+  width: 26px
+  height: 14px
+  font-size: 0
+  transition: transform .2s ease
 
-
-
+.serviceButton:hover .buttonArrow
+  transform: translateX(4px)
 
 .contestProcess
   width: 100%
-  max-width: none
-  margin: 0
-  padding: 80px clamp(18px, 4vw, 24px) 90px
-  background-color: #f7f7ff
-  box-shadow: 0 0 0 100vmax #f7f7ff
-  clip-path: inset(0 -100vmax)
+  padding: 80px $section-gutter
+  overflow: hidden
+  background: $process-background
 
 .processHeading
   display: flex
   flex-direction: column
   align-items: center
+  margin-bottom: 75px
   text-align: center
-  margin-bottom: 72px
 
   h2
     margin: 22px 0 0
-    color: #191b45
-    font-size: clamp(24px, 3vw, 30px)
+    color: $text
+    @include fs(28px, 24px, 22px)
     font-weight: 800
-    line-height: 1.25
+    line-height: 1.3
+    overflow-wrap: break-word
 
 .processIcon
   width: 72px
@@ -287,200 +288,130 @@ $bp-mobile-xs: 360px
   object-fit: contain
 
 .stepsList
-  display: grid
   grid-template-columns: repeat(4, minmax(0, 1fr))
-  gap: 24px
-  max-width: 1120px
-  margin: 0 auto
+  row-gap: 0
   padding: 0
   list-style: none
 
 .stepCard
   position: relative
   min-width: 0
-  min-height: 245px
-  padding: 24px 25px
-  background-color: #fff
-  border-radius: 20px
-  box-shadow: 0 12px 35px rgba(31, 48, 91, .07)
+  margin: 0 0 30px
+  padding: 25px
+  border-radius: 24px
+  background: $white
+  box-shadow: 0 16px 32px $step-shadow
 
-  &:not(:last-child)::after
-    content: '⟶'
+  &:not(:last-child)::before
+    @include arrow-background($primary)
+    content: ''
+    display: block
     position: absolute
-    z-index: 2
+    z-index: 99
     top: 50%
-    right: -26px
-    color: #5557ef
-    font-size: 27px
-    font-weight: 400
-    line-height: 1
-    transform: translateY(-50%)
+    left: 100%
+    width: 28px
+    height: 14px
+    margin: -2px 0 0 -14px
+    pointer-events: none
 
   p
-    margin: 18px 0 0
-    color: #6f7180
-    font-size: 16px
+    margin: 15px 0 0
+    color: $secondary-text
+    @include fs(16px, 16px, 14px)
     line-height: 1.5
+    overflow-wrap: break-word
 
 .stepBadge
   display: inline-flex
   align-items: center
   justify-content: center
-  min-width: 68px
-  height: 33px
-  padding: 0 15px
-  border-radius: 18px
-  color: #fff
-  background: linear-gradient(135deg, #6657f2, #4248e8)
-  font-size: 13px
-  font-weight: 700
-
-
+  min-height: 32px
+  padding: 6px 15px
+  border-radius: 20px
+  background: $primary
+  color: $white
+  @include fs(14px, 13px, 12px)
+  font-weight: 400
+  line-height: 1.4
 
 @include up-to($bp-laptop)
   .hero
-    padding: 60px 30px
+    max-width: $content-laptop + 2 * $section-gutter
+    padding-top: 60px
+    padding-bottom: 60px
 
-  .servicesGrid
-    gap: 20px
-
-  .serviceCard
-    padding: 24px 20px 20px
-
+  .servicesGrid,
   .stepsList
-    gap: 20px
-
-  .stepCard
-    padding: 22px 18px
-
-    &:not(:last-child)::after
-      right: -22px
-      font-size: 22px
-
-
-
+    max-width: $content-laptop
 
 @include up-to($bp-tablet)
   .hero
     grid-template-columns: 1fr
     gap: 50px
+    max-width: $content-tablet + 2 * $section-gutter
     min-height: auto
-    padding-top: 60px
     text-align: center
 
   .content
     align-items: center
 
   .heroDescription
-    margin-left: auto
     margin-right: auto
+    margin-left: auto
 
   .consentContainer
     max-width: 520px
     margin-top: 0
     justify-self: center
 
-  .services
-    padding-top: 50px
-
-  .servicesGrid
-    grid-template-columns: repeat(2, minmax(0, 1fr))
-
-  .serviceCard
-    min-height: 320px
-
-  .serviceCard:last-child
-    grid-column: 1 / -1
-
+  .services,
   .contestProcess
-    padding: 70px 24px 80px
+    padding-top: 60px
+    padding-bottom: 60px
 
-  .processHeading
-    margin-bottom: 48px
-
+  .servicesGrid,
   .stepsList
     grid-template-columns: repeat(2, minmax(0, 1fr))
-
-  .stepCard
-    min-height: 210px
-
-    &::after
-      display: none
-
-
-
+    max-width: $content-tablet
 
 @include up-to($bp-tablet-sm)
   .hero
     gap: 40px
-    padding: 50px 24px
+    max-width: $content-small + 2 * $section-gutter
+    padding-top: 50px
+    padding-bottom: 50px
 
-  .sectionHeader
-    margin-bottom: 32px
+  .servicesGrid,
+  .stepsList
+    max-width: $content-small
 
   .serviceCard
-    min-height: 300px
+    align-items: center
+    margin-bottom: 10px
+    padding: 10px
+    text-align: center
 
-  .serviceCard:last-child
-    min-height: auto
-
-
-
-
-@include up-to($bp-mobile)
-  .services
-    padding: 50px 20px
+  .serviceIcon
+    object-position: center
 
   .servicesGrid
-    grid-template-columns: 1fr
-    gap: 16px
-
-  .serviceCard,
-  .serviceCard:last-child
-    grid-column: auto
-    min-height: auto
+    column-gap: 8px
 
   .serviceButton
-    align-self: flex-start
-
-  .contestProcess
-    padding: 55px 18px
-
-  .processHeading
-    margin-bottom: 36px
-
-    h2
-      font-size: 24px
-
-  .processIcon
-    width: 60px
-    height: 60px
-
-  .stepsList
-    grid-template-columns: 1fr
-    gap: 28px
+    align-self: center
+    gap: 16px
 
   .stepCard
-    min-height: auto
+    margin-bottom: 20px
+    padding: 10px
 
-
-    &:not(:last-child)::after
-      display: block
-      content: '⟶'
-      top: auto
-      right: auto
-      bottom: -26px
-      left: 50%
-      font-size: 22px
-      transform: translateX(-50%) rotate(90deg)
-
-
-
-
-@include up-to(500px)
+@include up-to($bp-mobile)
   .hero
     gap: 32px
-    padding: 40px 20px
+    max-width: none
+    padding-top: 40px
+    padding-bottom: 40px
 
   .consentContainer
     padding: 24px 5px
@@ -491,68 +422,29 @@ $bp-mobile-xs: 360px
   .consentButtons
     grid-template-columns: 1fr
 
-  .heroDescription
-    font-size: 15px
-
-
-@include up-to($bp-mobile-sm)
-  .content
-    h1
-      font-size: 32px
-      letter-spacing: -.5px
-
-  .eyebrow
-    min-height: 32px
-    padding: 0 14px
-    font-size: 12px
+  .servicesGrid,
+  .stepsList
+    grid-template-columns: 1fr
+    max-width: none
 
   .serviceCard
-    padding: 22px 18px 18px
+    min-height: 230px
 
-    h3
-      font-size: 19px
+  .processIcon
+    width: 60px
+    height: 60px
 
-    p
-      font-size: 15px
+  .processHeading
+    margin-bottom: 40px
 
-  .serviceButton
-    gap: 14px
-    min-height: 52px
-    padding: 0 16px
-    font-size: 14px
-
-  .buttonArrow
-    font-size: 22px
-
+@media (max-width: 575px)
   .stepCard
-    padding: 20px 18px
-
-    p
-      font-size: 15px
-
-
-
-
-@include up-to($bp-mobile-xs)
-  .hero
-    padding: 32px 16px
-
-  .services,
-  .contestProcess
-    padding-left: 14px
-    padding-right: 14px
-
-  .serviceButton
-    width: 100%
-    justify-content: space-between
-
-
-
+    min-height: 230px
 
 @media (prefers-reduced-motion: reduce)
   .serviceButton,
   .buttonArrow
     transition: none
 
-    &:hover
-      transform: none
+  .serviceButton:hover .buttonArrow
+    transform: none

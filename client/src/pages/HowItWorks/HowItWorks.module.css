@@ -1,16 +1,20 @@
-@charset "UTF-8";
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
 .page {
-  padding: 0;
-  overflow-x: hidden;
-  color: #19184a;
-  background-color: #fff;
-  font-family: "Nunito Sans", sans-serif;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  color: #281049;
+  background: #fff;
+  font-family: "Plus Jakarta Sans", Arial, sans-serif;
+  font-weight: 400;
+}
+.page :where(*:not(h1, h2, h3)) {
+  font-weight: 400;
+}
+.page::before, .page::after,
+.page *,
+.page *::before,
+.page *::after {
+  box-sizing: border-box;
 }
 
 .heroSection {
@@ -24,10 +28,10 @@
   align-items: start;
   gap: clamp(32px, 5vw, 70px);
   width: 100%;
-  max-width: 1110px;
+  max-width: 1140px;
   min-height: 550px;
   margin: 0 auto;
-  padding: 70px 30px;
+  padding: 70px 12px;
 }
 
 .content {
@@ -38,11 +42,23 @@
 }
 .content h1 {
   margin: 0;
-  color: #19184a;
-  font-size: clamp(32px, 4vw, 42px);
+  color: #281049;
+  font-size: 40px;
+}
+@media (max-width: 992px) {
+  .content h1 {
+    font-size: 32px;
+  }
+}
+@media (max-width: 767px) {
+  .content h1 {
+    font-size: 24px;
+  }
+}
+.content h1 {
   font-weight: 700;
   line-height: 1.15;
-  letter-spacing: -1px;
+  letter-spacing: -0.025em;
   overflow-wrap: break-word;
 }
 
@@ -51,20 +67,46 @@
   align-items: center;
   min-height: 36px;
   margin-bottom: 14px;
-  padding: 0 16px;
+  padding: 6px 16px;
   border-radius: 20px;
-  background-color: #e8edff;
-  color: #377dff;
+  background: #eee8ff;
+  color: #6500ff;
   font-size: 13px;
-  font-weight: 500;
+}
+@media (max-width: 992px) {
+  .eyebrow {
+    font-size: 12px;
+  }
+}
+@media (max-width: 767px) {
+  .eyebrow {
+    font-size: 11px;
+  }
+}
+.eyebrow {
+  font-weight: 400;
+  line-height: 1.4;
 }
 
 .heroDescription {
   max-width: 490px;
   margin: 14px 0 0;
-  color: #72738f;
-  font-size: 16px;
-  line-height: 1.55;
+  color: #737373;
+  font-size: 20px;
+}
+@media (max-width: 992px) {
+  .heroDescription {
+    font-size: 16px;
+  }
+}
+@media (max-width: 767px) {
+  .heroDescription {
+    font-size: 14px;
+  }
+}
+.heroDescription {
+  line-height: 1.6;
+  overflow-wrap: break-word;
 }
 
 .consentContainer {
@@ -74,13 +116,13 @@
   padding: 38px 5px;
   border-bottom: 3px solid #5f7cff;
   border-radius: 0 0 16px 16px;
-  background-color: #e5e5e5;
+  background: #e5e5e5;
 }
 
 .consentCard {
   padding: 28px 32px 32px;
   border-radius: 4px;
-  background-color: #fff;
+  background: #fff;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
   text-align: center;
 }
@@ -88,13 +130,38 @@
   margin: 0 0 16px;
   color: #111;
   font-size: 20px;
+}
+@media (max-width: 992px) {
+  .consentCard h2 {
+    font-size: 18px;
+  }
+}
+@media (max-width: 767px) {
+  .consentCard h2 {
+    font-size: 16px;
+  }
+}
+.consentCard h2 {
   font-weight: 500;
+  line-height: 1.3;
 }
 .consentCard p {
   max-width: 430px;
   margin: 0 auto 20px;
   color: #111;
-  font-size: 13px;
+  font-size: 14px;
+}
+@media (max-width: 992px) {
+  .consentCard p {
+    font-size: 13px;
+  }
+}
+@media (max-width: 767px) {
+  .consentCard p {
+    font-size: 12px;
+  }
+}
+.consentCard p {
   line-height: 1.6;
   overflow-wrap: anywhere;
 }
@@ -108,48 +175,89 @@
 .preferencesButton,
 .enableButton {
   min-height: 36px;
+  padding: 8px 12px;
+  border: 1px solid #111;
   border-radius: 3px;
   font-family: inherit;
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 14px;
+}
+@media (max-width: 992px) {
+  .preferencesButton,
+  .enableButton {
+    font-size: 13px;
+  }
+}
+@media (max-width: 767px) {
+  .preferencesButton,
+  .enableButton {
+    font-size: 12px;
+  }
+}
+.preferencesButton,
+.enableButton {
+  font-weight: 400;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
   cursor: pointer;
 }
 
 .preferencesButton {
-  border: 1px solid #111;
-  background-color: #fff;
+  background: #fff;
   color: #111;
 }
 
 .enableButton {
-  border: 1px solid #111;
-  background-color: #111;
+  background: #111;
   color: #fff;
 }
 
 .services {
-  padding: 38px clamp(20px, 4vw, 32px) 52px;
-  background: linear-gradient(110deg, #f3fbfc 0%, #f4f8fe 100%);
+  width: 100%;
+  padding: 80px 12px;
+  background: linear-gradient(110deg, #f3fbfc, #f7f5ff);
 }
 
 .sectionHeader {
-  max-width: 720px;
+  max-width: 640px;
   margin: 0 auto 40px;
   text-align: center;
 }
 .sectionHeader h2 {
   margin: 0;
-  color: #101044;
-  font-size: clamp(26px, 3vw, 32px);
+  color: #281049;
+  font-size: 32px;
+}
+@media (max-width: 992px) {
+  .sectionHeader h2 {
+    font-size: 28px;
+  }
+}
+@media (max-width: 767px) {
+  .sectionHeader h2 {
+    font-size: 24px;
+  }
+}
+.sectionHeader h2 {
   font-weight: 800;
-  line-height: 1.25;
+  line-height: 1.3;
 }
 .sectionHeader p {
-  margin: 12px 0 0;
-  color: #101044;
+  margin: 10px 0 0;
+  color: #281049;
   font-size: 16px;
-  font-weight: 400;
-  line-height: 1.5;
+}
+@media (max-width: 992px) {
+  .sectionHeader p {
+    font-size: 16px;
+  }
+}
+@media (max-width: 767px) {
+  .sectionHeader p {
+    font-size: 14px;
+  }
+}
+.sectionHeader p {
+  line-height: 1.6;
 }
 
 .sectionBadge {
@@ -157,21 +265,38 @@
   align-items: center;
   min-height: 30px;
   margin-bottom: 16px;
-  padding: 0 15px;
+  padding: 6px 15px;
   border-radius: 18px;
-  background-color: #e7eeff;
-  color: #377dff;
+  background: #eee8ff;
+  color: #6500ff;
   font-size: 12px;
-  font-weight: 400;
+}
+@media (max-width: 992px) {
+  .sectionBadge {
+    font-size: 12px;
+  }
+}
+@media (max-width: 767px) {
+  .sectionBadge {
+    font-size: 11px;
+  }
+}
+.sectionBadge {
+  line-height: 1.4;
+}
+
+.servicesGrid,
+.stepsList {
+  display: grid;
+  gap: 24px;
+  width: 100%;
+  max-width: 1116px;
+  margin: 0 auto;
 }
 
 .servicesGrid {
-  display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 24px;
-  width: 100%;
-  max-width: 1456px;
-  margin: 0 auto;
+  row-gap: 0;
 }
 
 .serviceCard {
@@ -179,25 +304,51 @@
   flex-direction: column;
   min-width: 0;
   min-height: 365px;
-  padding: 28px 25px 20px;
-  border-radius: 22px;
-  background-color: #fff;
-  box-shadow: 0 18px 35px rgba(36, 62, 99, 0.08);
+  margin: 0 0 30px;
+  padding: 25px;
+  border-radius: 24px;
+  background: #fff;
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.04);
 }
 .serviceCard h3 {
-  margin: 8px 0;
+  margin: 10px 0;
   color: #050505;
   font-size: 20px;
+}
+@media (max-width: 992px) {
+  .serviceCard h3 {
+    font-size: 18px;
+  }
+}
+@media (max-width: 767px) {
+  .serviceCard h3 {
+    font-size: 16px;
+  }
+}
+.serviceCard h3 {
   font-weight: 800;
   line-height: 1.3;
+  overflow-wrap: break-word;
 }
 .serviceCard p {
   flex: 1;
   margin: 0 0 24px;
-  color: #656775;
+  color: #737373;
   font-size: 16px;
-  font-weight: 400;
-  line-height: 1.5;
+}
+@media (max-width: 992px) {
+  .serviceCard p {
+    font-size: 16px;
+  }
+}
+@media (max-width: 767px) {
+  .serviceCard p {
+    font-size: 14px;
+  }
+}
+.serviceCard p {
+  line-height: 1.6;
+  overflow-wrap: break-word;
 }
 
 .serviceIcon {
@@ -212,67 +363,94 @@
   align-items: center;
   justify-content: center;
   align-self: flex-start;
-  gap: 18px;
-  width: fit-content;
+  gap: 20px;
   max-width: 100%;
-  min-height: 56px;
+  min-height: 52px;
   margin-top: auto;
-  padding: 0 20px;
+  padding: 14px 20px;
   border: none;
-  border-radius: 7px;
-  background-color: #4f61ec;
+  border-radius: 8px;
+  background: #6500ff;
   color: #fff;
   font-family: inherit;
-  font-size: 15px;
-  font-weight: 700;
-  line-height: 1.2;
-  white-space: nowrap;
+  font-size: 16px;
+}
+@media (max-width: 992px) {
+  .serviceButton {
+    font-size: 16px;
+  }
+}
+@media (max-width: 767px) {
+  .serviceButton {
+    font-size: 14px;
+  }
+}
+.serviceButton {
+  font-weight: 400;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
   cursor: pointer;
-  transition: background-color 0.25s ease, transform 0.25s ease;
+  transition: background-color 0.2s ease;
+}
+.serviceButton > span:first-child {
+  min-width: 0;
 }
 .serviceButton:hover {
-  background-color: #3c50d5;
-  transform: translateY(-2px);
-}
-.serviceButton:hover .buttonArrow {
-  transform: translateX(15px);
+  background: #5100cc;
 }
 .serviceButton:focus-visible {
-  outline: 3px solid rgba(55, 125, 255, 0.35);
+  outline: 3px solid rgba(101, 0, 255, 0.4);
   outline-offset: 3px;
 }
 
 .buttonArrow {
-  flex-shrink: 0;
-  font-size: 25px;
-  font-weight: 400;
-  line-height: 1;
-  transition: transform 0.25s ease;
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2226%22%20height%3D%2214%22%20viewBox%3D%220%200%2026%2014%22%20fill%3D%22none%22%3E%3Cpath%20d%3D%22M19%201L25%207M25%207L19%2013M25%207H1%22%20stroke%3D%22%23fff%22%20stroke-width%3D%221.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E");
+  background-repeat: no-repeat;
+  display: block;
+  flex: 0 0 26px;
+  width: 26px;
+  height: 14px;
+  font-size: 0;
+  transition: transform 0.2s ease;
+}
+
+.serviceButton:hover .buttonArrow {
+  transform: translateX(4px);
 }
 
 .contestProcess {
   width: 100%;
-  max-width: none;
-  margin: 0;
-  padding: 80px clamp(18px, 4vw, 24px) 90px;
-  background-color: #f7f7ff;
-  box-shadow: 0 0 0 100vmax #f7f7ff;
-  clip-path: inset(0 -100vmax);
+  padding: 80px 12px;
+  overflow: hidden;
+  background: #faf6ff;
 }
 
 .processHeading {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-bottom: 75px;
   text-align: center;
-  margin-bottom: 72px;
 }
 .processHeading h2 {
   margin: 22px 0 0;
-  color: #191b45;
-  font-size: clamp(24px, 3vw, 30px);
+  color: #281049;
+  font-size: 28px;
+}
+@media (max-width: 992px) {
+  .processHeading h2 {
+    font-size: 24px;
+  }
+}
+@media (max-width: 767px) {
+  .processHeading h2 {
+    font-size: 22px;
+  }
+}
+.processHeading h2 {
   font-weight: 800;
-  line-height: 1.25;
+  line-height: 1.3;
+  overflow-wrap: break-word;
 }
 
 .processIcon {
@@ -282,11 +460,8 @@
 }
 
 .stepsList {
-  display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 24px;
-  max-width: 1120px;
-  margin: 0 auto;
+  row-gap: 0;
   padding: 0;
   list-style: none;
 }
@@ -294,180 +469,152 @@
 .stepCard {
   position: relative;
   min-width: 0;
-  min-height: 245px;
-  padding: 24px 25px;
-  background-color: #fff;
-  border-radius: 20px;
-  box-shadow: 0 12px 35px rgba(31, 48, 91, 0.07);
+  margin: 0 0 30px;
+  padding: 25px;
+  border-radius: 24px;
+  background: #fff;
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.04);
 }
-.stepCard:not(:last-child)::after {
-  content: "⟶";
+.stepCard:not(:last-child)::before {
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2226%22%20height%3D%2214%22%20viewBox%3D%220%200%2026%2014%22%20fill%3D%22none%22%3E%3Cpath%20d%3D%22M19%201L25%207M25%207L19%2013M25%207H1%22%20stroke%3D%22%236500ff%22%20stroke-width%3D%221.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E");
+  background-repeat: no-repeat;
+  content: "";
+  display: block;
   position: absolute;
-  z-index: 2;
+  z-index: 99;
   top: 50%;
-  right: -26px;
-  color: #5557ef;
-  font-size: 27px;
-  font-weight: 400;
-  line-height: 1;
-  transform: translateY(-50%);
+  left: 100%;
+  width: 28px;
+  height: 14px;
+  margin: -2px 0 0 -14px;
+  pointer-events: none;
 }
 .stepCard p {
-  margin: 18px 0 0;
-  color: #6f7180;
+  margin: 15px 0 0;
+  color: #737373;
   font-size: 16px;
+}
+@media (max-width: 992px) {
+  .stepCard p {
+    font-size: 16px;
+  }
+}
+@media (max-width: 767px) {
+  .stepCard p {
+    font-size: 14px;
+  }
+}
+.stepCard p {
   line-height: 1.5;
+  overflow-wrap: break-word;
 }
 
 .stepBadge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 68px;
-  height: 33px;
-  padding: 0 15px;
-  border-radius: 18px;
+  min-height: 32px;
+  padding: 6px 15px;
+  border-radius: 20px;
+  background: #6500ff;
   color: #fff;
-  background: linear-gradient(135deg, #6657f2, #4248e8);
-  font-size: 13px;
-  font-weight: 700;
+  font-size: 14px;
+}
+@media (max-width: 992px) {
+  .stepBadge {
+    font-size: 13px;
+  }
+}
+@media (max-width: 767px) {
+  .stepBadge {
+    font-size: 12px;
+  }
+}
+.stepBadge {
+  font-weight: 400;
+  line-height: 1.4;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1199px) {
   .hero {
-    padding: 60px 30px;
+    max-width: 960px;
+    padding-top: 60px;
+    padding-bottom: 60px;
   }
-  .servicesGrid {
-    gap: 20px;
-  }
-  .serviceCard {
-    padding: 24px 20px 20px;
-  }
+  .servicesGrid,
   .stepsList {
-    gap: 20px;
-  }
-  .stepCard {
-    padding: 22px 18px;
-  }
-  .stepCard:not(:last-child)::after {
-    right: -22px;
-    font-size: 22px;
+    max-width: 936px;
   }
 }
-@media (max-width: 1000px) {
+@media (max-width: 991px) {
   .hero {
     grid-template-columns: 1fr;
     gap: 50px;
+    max-width: 720px;
     min-height: auto;
-    padding-top: 60px;
     text-align: center;
   }
   .content {
     align-items: center;
   }
   .heroDescription {
-    margin-left: auto;
     margin-right: auto;
+    margin-left: auto;
   }
   .consentContainer {
     max-width: 520px;
     margin-top: 0;
     justify-self: center;
   }
-  .services {
-    padding-top: 50px;
-  }
-  .servicesGrid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .serviceCard {
-    min-height: 320px;
-  }
-  .serviceCard:last-child {
-    grid-column: 1/-1;
-  }
+  .services,
   .contestProcess {
-    padding: 70px 24px 80px;
+    padding-top: 60px;
+    padding-bottom: 60px;
   }
-  .processHeading {
-    margin-bottom: 48px;
-  }
+  .servicesGrid,
   .stepsList {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .stepCard {
-    min-height: 210px;
-  }
-  .stepCard::after {
-    display: none;
+    max-width: 696px;
   }
 }
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .hero {
     gap: 40px;
-    padding: 50px 24px;
+    max-width: 540px;
+    padding-top: 50px;
+    padding-bottom: 50px;
   }
-  .sectionHeader {
-    margin-bottom: 32px;
+  .servicesGrid,
+  .stepsList {
+    max-width: 516px;
   }
   .serviceCard {
-    min-height: 300px;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 10px;
+    text-align: center;
   }
-  .serviceCard:last-child {
-    min-height: auto;
-  }
-}
-@media (max-width: 600px) {
-  .services {
-    padding: 50px 20px;
+  .serviceIcon {
+    object-position: center;
   }
   .servicesGrid {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-  .serviceCard,
-  .serviceCard:last-child {
-    grid-column: auto;
-    min-height: auto;
+    column-gap: 8px;
   }
   .serviceButton {
-    align-self: flex-start;
-  }
-  .contestProcess {
-    padding: 55px 18px;
-  }
-  .processHeading {
-    margin-bottom: 36px;
-  }
-  .processHeading h2 {
-    font-size: 24px;
-  }
-  .processIcon {
-    width: 60px;
-    height: 60px;
-  }
-  .stepsList {
-    grid-template-columns: 1fr;
-    gap: 28px;
+    align-self: center;
+    gap: 16px;
   }
   .stepCard {
-    min-height: auto;
-  }
-  .stepCard:not(:last-child)::after {
-    display: block;
-    content: "⟶";
-    top: auto;
-    right: auto;
-    bottom: -26px;
-    left: 50%;
-    font-size: 22px;
-    transform: translateX(-50%) rotate(90deg);
+    margin-bottom: 20px;
+    padding: 10px;
   }
 }
-@media (max-width: 500px) {
+@media (max-width: 575px) {
   .hero {
     gap: 32px;
-    padding: 40px 20px;
+    max-width: none;
+    padding-top: 40px;
+    padding-bottom: 40px;
   }
   .consentContainer {
     padding: 24px 5px;
@@ -478,57 +625,25 @@
   .consentButtons {
     grid-template-columns: 1fr;
   }
-  .heroDescription {
-    font-size: 15px;
-  }
-}
-@media (max-width: 420px) {
-  .content h1 {
-    font-size: 32px;
-    letter-spacing: -0.5px;
-  }
-  .eyebrow {
-    min-height: 32px;
-    padding: 0 14px;
-    font-size: 12px;
+  .servicesGrid,
+  .stepsList {
+    grid-template-columns: 1fr;
+    max-width: none;
   }
   .serviceCard {
-    padding: 22px 18px 18px;
+    min-height: 230px;
   }
-  .serviceCard h3 {
-    font-size: 19px;
+  .processIcon {
+    width: 60px;
+    height: 60px;
   }
-  .serviceCard p {
-    font-size: 15px;
-  }
-  .serviceButton {
-    gap: 14px;
-    min-height: 52px;
-    padding: 0 16px;
-    font-size: 14px;
-  }
-  .buttonArrow {
-    font-size: 22px;
-  }
-  .stepCard {
-    padding: 20px 18px;
-  }
-  .stepCard p {
-    font-size: 15px;
+  .processHeading {
+    margin-bottom: 40px;
   }
 }
-@media (max-width: 360px) {
-  .hero {
-    padding: 32px 16px;
-  }
-  .services,
-  .contestProcess {
-    padding-left: 14px;
-    padding-right: 14px;
-  }
-  .serviceButton {
-    width: 100%;
-    justify-content: space-between;
+@media (max-width: 575px) {
+  .stepCard {
+    min-height: 230px;
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -536,8 +651,7 @@
   .buttonArrow {
     transition: none;
   }
-  .serviceButton:hover,
-  .buttonArrow:hover {
+  .serviceButton:hover .buttonArrow {
     transform: none;
   }
 }

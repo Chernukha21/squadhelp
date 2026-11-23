@@ -1,3 +1,4 @@
+import '@fontsource/plus-jakarta-sans/400.css';
 import FAQ from '../../components/FAQ/FAQ';
 import styles from './HowItWorks.module.sass';
 import { services, contestSteps } from './HowItWorks.data';
@@ -29,7 +30,7 @@ const ServiceCard = ({ icon, title, description, buttonText }) => (
 const HowItWorks = () => (
   <main className={styles.page}>
     <section className={styles.heroSection}>
-      <section className={styles.hero}>
+      <div className={styles.hero}>
         <div className={styles.content}>
           <span className={styles.eyebrow}>World’s #1 Naming Platform</span>
 
@@ -62,7 +63,7 @@ const HowItWorks = () => (
             </div>
           </div>
         </div>
-      </section>
+      </div>
     </section>
 
     <section className={styles.services}>

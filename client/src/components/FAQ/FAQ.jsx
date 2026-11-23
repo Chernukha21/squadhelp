@@ -1,22 +1,61 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { faqGroups } from '../../pages/HowItWorks/HowItWorks.data';
 import styles from './FAQ.module.sass';
+import '@fontsource/plus-jakarta-sans/400.css';
+import '@fontsource/plus-jakarta-sans/700.css';
 
-const FAQItem = ({ question, answer }) => (
-  <details className={styles.faqItem}>
-    <summary className={styles.question}>
-      <span>{question}</span>
-      <span className={styles.icon} aria-hidden='true' />
-    </summary>
+const CATEGORY_SCROLL_DELAY = 500;
 
-    <div className={styles.answer}>
-      <p>{answer}</p>
+const FAQItem = ({ id, question, answer, isOpen, onToggle }) => {
+  const answerId = `faq-answer-${id}`;
+
+  return (
+    <div className={`${styles.faqItem} ${isOpen ? styles.open : ''}`}>
+      <button
+        type='button'
+        className={styles.question}
+        aria-expanded={isOpen}
+        aria-controls={answerId}
+        onClick={onToggle}
+      >
+        <span>{question}</span>
+        <span className={styles.icon} aria-hidden='true' />
+      </button>
+
+      <div id={answerId} className={styles.answerWrapper} aria-hidden={!isOpen}>
+        <div className={styles.answerInner}>
+          <div className={styles.answer}>
+            <p>{answer}</p>
+          </div>
+        </div>
+      </div>
     </div>
-  </details>
-);
+  );
+};
 
 const FAQ = () => {
   const [activeCategory, setActiveCategory] = useState(faqGroups[0].id);
+  const [openItemIds, setOpenItemIds] = useState(() => new Set());
+  const categoryScrollTimeoutRef = useRef(null);
+
+  useEffect(
+    () => () => window.clearTimeout(categoryScrollTimeoutRef.current),
+    []
+  );
+
+  const toggleItem = itemId => {
+    setOpenItemIds(currentItemIds => {
+      const nextItemIds = new Set(currentItemIds);
+
+      if (nextItemIds.has(itemId)) {
+        nextItemIds.delete(itemId);
+      } else {
+        nextItemIds.add(itemId);
+      }
+
+      return nextItemIds;
+    });
+  };
 
   const goToCategory = (categoryId, event) => {
     setActiveCategory(categoryId);
@@ -27,10 +66,14 @@ const FAQ = () => {
       block: 'nearest',
     });
 
-    document.getElementById(`faq-${categoryId}`)?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start',
-    });
+    window.clearTimeout(categoryScrollTimeoutRef.current);
+
+    categoryScrollTimeoutRef.current = window.setTimeout(() => {
+      document.getElementById(`faq-${categoryId}`)?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }, CATEGORY_SCROLL_DELAY);
   };
 
   return (
@@ -63,13 +106,20 @@ const FAQ = () => {
               <h3>{group.title}</h3>
 
               <div className={styles.questions}>
-                {group.items.map(item => (
-                  <FAQItem
-                    key={item.question}
-                    question={item.question}
-                    answer={item.answer}
-                  />
-                ))}
+                {group.items.map((item, itemIndex) => {
+                  const itemId = `${group.id}-${itemIndex}`;
+
+                  return (
+                    <FAQItem
+                      key={item.question}
+                      id={itemId}
+                      question={item.question}
+                      answer={item.answer}
+                      isOpen={openItemIds.has(itemId)}
+                      onToggle={() => toggleItem(itemId)}
+                    />
+                  );
+                })}
               </div>
             </section>
           ))}
