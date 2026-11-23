@@ -165,8 +165,8 @@ const changeChatBlockExtraReducers = createExtraReducers({
 // ---------- getCatalogList
 export const getCatalogList = decorateAsyncThunk({
   key: `${CHAT_SLICE_NAME}/getCatalogList`,
-  thunk: async payload => {
-    const { data } = await restController.getCatalogList(payload);
+  thunk: async () => {
+    const { data } = await restController.getCatalogList();
     return data;
   },
 });

@@ -49,7 +49,7 @@ router.use(
   basicMiddlewares.onlyForRegularUsers,
 );
 
-router.post(
+router.get(
   '/dataForContest',
   contestController.dataForContest,
 );
@@ -63,7 +63,7 @@ router.post(
   userController.payment,
 );
 
-router.post(
+router.get(
   '/getCustomersContests',
   contestController.getCustomersContests,
 );
@@ -74,7 +74,7 @@ router.get(
   contestController.getContestById,
 );
 
-router.post(
+router.get(
   '/getAllContests',
   basicMiddlewares.onlyForCreative,
   contestController.getContests,
@@ -86,7 +86,7 @@ router.get(
   contestController.downloadFile,
 );
 
-router.post(
+router.patch(
   '/updateContest',
   basicMiddlewares.onlyForCustomer,
   upload.updateContestFile,
@@ -102,19 +102,19 @@ router.post(
   contestController.setNewOffer,
 );
 
-router.post(
+router.patch(
   '/setOfferStatus',
   basicMiddlewares.onlyForCustomerWhoCreateContest,
   contestController.setOfferStatus,
 );
 
-router.post(
+router.patch(
   '/changeMark',
   basicMiddlewares.onlyForCustomer,
   userController.changeMark,
 );
 
-router.post(
+router.patch(
   '/updateUser',
   upload.uploadAvatar,
   userController.updateUser,
@@ -131,22 +131,22 @@ router.post(
   chatController.addMessage,
 );
 
-router.post(
+router.get(
   '/getChat',
   chatController.getChat,
 );
 
-router.post(
+router.get(
   '/getPreview',
   chatController.getPreview,
 );
 
-router.post(
+router.patch(
   '/blackList',
   chatController.blackList,
 );
 
-router.post(
+router.patch(
   '/favorite',
   chatController.favoriteChat,
 );
@@ -156,7 +156,7 @@ router.post(
   chatController.createCatalog,
 );
 
-router.post(
+router.patch(
   '/updateNameCatalog',
   chatController.updateNameCatalog,
 );
@@ -166,7 +166,7 @@ router.post(
   chatController.addNewChatToCatalog,
 );
 
-router.post(
+router.delete(
   '/removeChatFromCatalog',
   chatController.removeChatFromCatalog,
 );
@@ -176,7 +176,7 @@ router.delete(
   chatController.deleteCatalog,
 );
 
-router.post(
+router.get(
   '/getCatalogs',
   chatController.getCatalogs,
 );

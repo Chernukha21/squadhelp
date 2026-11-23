@@ -7,6 +7,8 @@
 *.env
 # testing
 /coverage
+/client/src/**/*.module.css
+/client/src/**/*.module.css.map
 
 # production
 /build

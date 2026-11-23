@@ -47,7 +47,7 @@ module.exports.getChat = async (req, res, next) => {
   try {
     const chat = await chatService.getChat({
       currentUserId: Number(req.tokenData.userId),
-      interlocutorId: Number(req.body.interlocutorId),
+      interlocutorId: Number(req.query.interlocutorId),
     });
 
     return res.send(chat);

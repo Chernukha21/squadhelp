@@ -11,7 +11,7 @@ const BadRequestError = require('../errors/BadRequestError');
 module.exports.dataForContest = async (req, res, next) => {
   const response = {};
   try {
-    const { body: { characteristic1, characteristic2 } } = req;
+    const { characteristic1, characteristic2 } = req.query;
     const types = [characteristic1, characteristic2, 'industry'].filter(Boolean);
 
     const characteristics = await db.Selects.findAll({
@@ -320,7 +320,7 @@ const resolveOffer = async (
       contestId,
       status: CONSTANTS.OFFER_STATUS_PENDING,
       moderationStatus:
-    CONSTANTS.OFFER_MODERATION_STATUS_APPROVED,
+      CONSTANTS.OFFER_MODERATION_STATUS_APPROVED,
     },
     transaction,
   );
@@ -425,13 +425,16 @@ module.exports.setOfferStatus = async (
 };
 
 module.exports.getCustomersContests = (req, res, next) => {
+  const limit = Number(req.query.limit);
+  const offset = Number(req.query.offset) || 0;
+
   db.Contests.findAll({
     where: {
-      status: req.headers.status,
+      status: req.query.status,
       userId: req.tokenData.userId,
     },
-    limit: req.body.limit,
-    offset: req.body.offset || 0,
+    limit,
+    offset,
     order: [['id', 'DESC']],
     include: [
       {
@@ -469,15 +472,13 @@ module.exports.getContests = async (
   try {
     const predicates =
       UtilFunctions.createWhereForAllContests(
-        req.body.typeIndex,
-        req.body.contestId,
-        req.body.industry,
-        req.body.awardSort,
+        req.query.typeIndex,
+        req.query.contestId,
+        req.query.industry,
+        req.query.awardSort,
       );
 
-    const ownEntries = Boolean(
-      req.body.ownEntries,
-    );
+    const ownEntries = req.query.ownEntries === 'true';
 
     const offersWhere = ownEntries
       ? {
@@ -498,8 +499,8 @@ module.exports.getContests = async (
     const contests = await db.Contests.findAll({
       where: predicates.where,
       order: predicates.order,
-      limit: req.body.limit,
-      offset: req.body.offset || 0,
+      limit: Number(req.query.limit),
+      offset: Number(req.query.offset) || 0,
       include: [
         {
           model: db.Offers,
