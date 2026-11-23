@@ -1,12 +1,30 @@
-const { archiveErrors } = require('./errorLogger');
+const cron = require('node-cron');
+const {
+  archiveErrors,
+  hasArchiveForDate,
+} = require('./errorLogger');
 
-const CHECK_INTERVAL_MS = 10 * 1000;
+const getDateInTimeZone = (date, timeZone) => {
+  const formatter = new Intl.DateTimeFormat('en-GB', {
+    timeZone,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  });
+  const parts = Object.fromEntries(
+    formatter
+      .formatToParts(date)
+      .map(({ type, value }) => [type, value]),
+  );
+
+  return [parts.year, parts.month, parts.day].join('-');
+};
 
 const startLogArchiving = ({
-  hour = 0,
-  minute = 0,
-  timeZone = 'Europe/Kyiv',
-} = {}) => {
+                             hour = 0,
+                             minute = 0,
+                             timeZone = 'Europe/Kyiv',
+                           } = {}) => {
   if (
     !Number.isInteger(hour) ||
     hour < 0 ||
@@ -18,58 +36,55 @@ const startLogArchiving = ({
     throw new RangeError('Invalid archive time');
   }
 
-  const formatter = new Intl.DateTimeFormat('en-GB', {
-    timeZone,
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    hourCycle: 'h23',
-  });
+  getDateInTimeZone(new Date(), timeZone);
 
-  let lastArchiveDate = null;
+  const cronExpression = `${minute} ${hour} * * *`;
 
-  const checkTime = async () => {
-    const parts = Object.fromEntries(
-      formatter
-        .formatToParts(new Date())
-        .map(({ type, value }) => [type, value]),
-    );
+  if (!cron.validate(cronExpression)) {
+    throw new RangeError('Invalid archive schedule');
+  }
 
-    const currentDate = [
-      parts.year,
-      parts.month,
-      parts.day,
-    ].join('-');
+  let activeJob = null;
 
-    if (
-      Number(parts.hour) !== hour ||
-      Number(parts.minute) !== minute ||
-      lastArchiveDate === currentDate
-    ) {
-      return;
+  const runArchiveJob = () => {
+    if (activeJob) {
+      return activeJob;
     }
 
-    lastArchiveDate = currentDate;
+    activeJob = (async () => {
+      const archiveDate = getDateInTimeZone(new Date(), timeZone);
 
-    try {
-      const archivePath = await archiveErrors();
+      if (await hasArchiveForDate(archiveDate)) {
+        return null;
+      }
+
+      const archivePath = await archiveErrors({ archiveDate });
 
       if (archivePath) {
         console.log('Error log archived:', archivePath);
       }
-    } catch (error) {
-      console.error('Log archive job failed:', error);
-    }
+
+      return archivePath;
+    })()
+      .catch(error => {
+        console.error('Log archive job failed:', error);
+
+        return null;
+      })
+      .finally(() => {
+        activeJob = null;
+      });
+
+    return activeJob;
   };
 
-  const timer = setInterval(checkTime, CHECK_INTERVAL_MS);
+  const task = cron.schedule(cronExpression, runArchiveJob, {
+    timezone: timeZone,
+  });
 
-  timer.unref();
-  checkTime();
+  runArchiveJob();
 
-  return () => clearInterval(timer);
+  return () => task.stop();
 };
 
 module.exports = { startLogArchiving };

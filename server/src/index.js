@@ -9,6 +9,7 @@ const cors = require('cors');
 const router = require('./router');
 const controller = require('./socketInit');
 const handlerError = require('./handlerError/handler');
+const { initializeLogger } = require('./utils/errorLogger');
 const { startLogArchiving } = require('./utils/logArchiveScheduler');
 
 const PORT = process.env.PORT || 3000;
@@ -21,8 +22,21 @@ app.use(router);
 app.use(handlerError);
 
 const server = http.createServer(app);
-server.listen(PORT, () =>  console.log(`Server listening on port ${PORT}!`));
-controller.createConnection(server);
 
-const stopLogArchiving = startLogArchiving();
-server.on('close', stopLogArchiving);
+const startServer = async () => {
+  await initializeLogger();
+
+  server.listen(PORT, () =>
+    console.log(`Server listening on port ${PORT}!`),
+  );
+  controller.createConnection(server);
+
+  const stopLogArchiving = startLogArchiving();
+
+  server.on('close', stopLogArchiving);
+};
+
+startServer().catch(error => {
+  console.error('Cannot start server:', error);
+  process.exitCode = 1;
+});
