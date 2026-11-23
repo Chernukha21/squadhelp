@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Form, Formik } from 'formik';
+import { Form, Formik, useField } from 'formik';
 
 import CONSTANTS from '../../constants';
 import { getDataForContest } from '../../store/slices/dataForContestSlice';
@@ -50,6 +50,18 @@ const variableOptions = {
     nameVenture: '',
     typeOfTagline: '',
   },
+};
+
+const FormikButtonGroup = ({ name, ...props }) => {
+  const [field, meta] = useField(name);
+
+  return (
+    <ButtonGroup
+      {...props}
+      {...field}
+      error={meta.touched ? meta.error : undefined}
+    />
+  );
 };
 
 const ContestForm = ({ contestType, defaultData, handleSubmit, formRef }) => {
@@ -191,7 +203,7 @@ const ContestForm = ({ contestType, defaultData, handleSubmit, formRef }) => {
             dataForContest={dataForContest}
           />
           {contestType === CONSTANTS.NAME_CONTEST && !isEditContest && (
-            <ButtonGroup
+            <FormikButtonGroup
               name='domainPreference'
               title='Do you want a matching domain (.com URL) with your name?'
               options={domainOptions}

@@ -1,34 +1,46 @@
 import classNames from 'classnames';
-import { useField } from 'formik';
 import styles from './ButtonGroup.module.sass';
 
-const ButtonGroup = ({ name, title, options }) => {
-  const [field, meta] = useField(name);
-
-  const showError = meta.touched && meta.error;
+const ButtonGroup = ({
+  name,
+  title,
+  options,
+  value,
+  onChange,
+  onBlur,
+  error,
+}) => {
+  const errorId = `${name}-error`;
 
   return (
-    <fieldset className={styles.container}>
+    <fieldset
+      className={styles.container}
+      aria-invalid={Boolean(error)}
+      aria-describedby={error ? errorId : undefined}
+    >
       <legend className={styles.title}>{title}</legend>
 
       <div className={styles.options} role='radiogroup'>
         {options.map(option => {
-          const isSelected = field.value === option.value;
+          const isSelected = value === option.value;
+          const optionId = `${name}-${option.value}`;
 
           return (
             <label
               key={option.value}
+              htmlFor={optionId}
               className={classNames(styles.option, {
                 [styles.selected]: isSelected,
               })}
             >
               <input
+                id={optionId}
                 type='radio'
-                name={field.name}
+                name={name}
                 value={option.value}
                 checked={isSelected}
-                onChange={field.onChange}
-                onBlur={field.onBlur}
+                onChange={onChange}
+                onBlur={onBlur}
                 className={styles.radio}
               />
 
@@ -50,7 +62,11 @@ const ButtonGroup = ({ name, title, options }) => {
         })}
       </div>
 
-      {showError && <span className={styles.error}>{meta.error}</span>}
+      {error && (
+        <span id={errorId} className={styles.error}>
+          {error}
+        </span>
+      )}
     </fieldset>
   );
 };

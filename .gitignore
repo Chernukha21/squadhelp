@@ -3,6 +3,8 @@
 *.env
 /client/node_modules/
 /client/dist/
+/client/src/**/*.module.css
+/client/src/**/*.module.css.map
 /server/node_modules/
 ./server/node_modules/
 ./server/uploadFiles
@@ -14,3 +16,5 @@
 **server/public/*
 *server/public/*
 .codex/
+
+
