@@ -1,5 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 import EventForm from '../../components/EventForm/EventForm';
 import {
   addEvent,
@@ -17,7 +19,7 @@ const Events = () => {
   const now = useNow();
 
   const handleSubmit = (values, { resetForm, setSubmitting }) => {
-    if (userId == null) {
+    if (userId === undefined) {
       setSubmitting(false);
       return;
     }
@@ -35,33 +37,48 @@ const Events = () => {
     setSubmitting(false);
   };
 
-  const handleRemoveEvent = eventId => {
-    if (userId == null) {
+  const handleRemoveEvent = event => {
+    if (userId === undefined) {
       return;
     }
 
-    dispatch(
-      removeEvent({
-        eventId,
-        userId,
-      })
-    );
+    confirmAlert({
+      title: 'Delete event?',
+      message: `Are you sure you want to delete “${event.name}”?`,
+      buttons: [
+        {
+          label: 'Delete',
+          onClick: () => {
+            dispatch(
+              removeEvent({
+                eventId: event.id,
+                userId,
+              })
+            );
+          },
+        },
+        {
+          label: 'Cancel',
+        },
+      ],
+    });
   };
 
   return (
-    <main>
-      <h1>Events</h1>
+    <main className={styles.page}>
+      <h1 className={styles.title}>Events</h1>
 
-      <p>Plan your next branding update.</p>
+      <p className={styles.description}>Plan your next branding update.</p>
 
       <EventForm onSubmit={handleSubmit} />
       <section className={styles.eventsSection}>
         <header className={styles.listHeader}>
-          <h2>Upcoming events</h2>
+          <h2 className={styles.listTitle}>Upcoming events</h2>
 
           <span className={styles.remainingLabel}>
             <span>Remaining time</span>
             <svg
+              className={styles.clockIcon}
               width='40'
               height='40'
               viewBox='0 0 24 24'
@@ -80,7 +97,7 @@ const Events = () => {
         </header>
 
         {events.length === 0 ? (
-          <p>No events yet.</p>
+          <p className={styles.emptyState}>No events yet.</p>
         ) : (
           <ul className={styles.eventsList}>
             {events.map(event => (

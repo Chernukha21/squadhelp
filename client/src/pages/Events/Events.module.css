@@ -1,15 +1,24 @@
-main {
+.page {
   padding: 20px 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
-main h1, main p {
+
+.title,
+.description {
   color: #19184a;
   font-size: 23px;
   font-weight: 500;
   line-height: 1.3;
+}
+
+.emptyState {
+  margin: 0;
+  color: #6f718f;
+  font-size: 16px;
+  line-height: 1.5;
 }
 
 .eventsSection {
@@ -28,7 +37,8 @@ main h1, main p {
   gap: 12px 20px;
   margin-bottom: 20px;
 }
-.listHeader h2 {
+
+.listTitle {
   margin: 0;
   color: #19184a;
   font-size: 25px;
@@ -46,7 +56,8 @@ main h1, main p {
   font-weight: 500;
   white-space: nowrap;
 }
-.remainingLabel svg {
+
+.clockIcon {
   flex-shrink: 0;
 }
 
@@ -62,7 +73,7 @@ main h1, main p {
   .eventsSection {
     padding: 0 16px;
   }
-  .listHeader h2 {
+  .listTitle {
     font-size: 22px;
   }
   .remainingLabel {

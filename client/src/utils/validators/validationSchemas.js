@@ -272,6 +272,25 @@ export default {
       .typeError('Enter the number of minutes')
       .required('Notification time is required')
       .integer('Enter a whole number')
-      .min(0, 'Cannot be negative'),
+      .min(0, 'Cannot be negative')
+      .test(
+        'notification-in-future',
+        'Notification time must be in the future',
+        function validateNotificationTime(value) {
+          const { eventAt } = this.parent;
+
+          if (!eventAt || !Number.isFinite(value)) {
+            return true;
+          }
+
+          const eventDate = moment(eventAt, 'YYYY-MM-DDTHH:mm', true);
+
+          if (!eventDate.isValid()) {
+            return true;
+          }
+
+          return eventDate.subtract(value, 'minutes').isAfter(moment());
+        }
+      ),
   }),
 };

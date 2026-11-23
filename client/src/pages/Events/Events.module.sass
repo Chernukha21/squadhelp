@@ -1,14 +1,23 @@
-main
+.page
   padding: 20px 0
   display: flex
   flex-direction: column
   justify-content: center
   align-items: center
-  h1, p
-    color: #19184a
-    font-size: 23px
-    font-weight: 500
-    line-height: 1.3
+
+.title,
+.description
+  color: #19184a
+  font-size: 23px
+  font-weight: 500
+  line-height: 1.3
+
+.emptyState
+  margin: 0
+  color: #6f718f
+  font-size: 16px
+  line-height: 1.5
+
 .eventsSection
   width: 100%
   max-width: 900px
@@ -24,12 +33,12 @@ main
   gap: 12px 20px
   margin-bottom: 20px
 
-  h2
-    margin: 0
-    color: #19184a
-    font-size: 25px
-    font-weight: 700
-    line-height: 1.3
+.listTitle
+  margin: 0
+  color: #19184a
+  font-size: 25px
+  font-weight: 700
+  line-height: 1.3
 
 .remainingLabel
   display: inline-flex
@@ -41,8 +50,8 @@ main
   font-weight: 500
   white-space: nowrap
 
-  svg
-    flex-shrink: 0
+.clockIcon
+  flex-shrink: 0
 
 .eventsList
   display: grid
@@ -56,9 +65,8 @@ main
   .eventsSection
     padding: 0 16px
 
-  .listHeader
-    h2
-      font-size: 22px
+  .listTitle
+    font-size: 22px
 
   .remainingLabel
     font-size: 12px

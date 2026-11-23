@@ -25,6 +25,7 @@ import Events from './pages/Events/Events';
 import ModeratorRoute from './components/Routes/ModeratorRoute/ModeratorRoute';
 import ModeratorOffersPage from './pages/ModeratorOffers/ModeratorOffersPage';
 import RegularUserRoute from './components/Routes/RegularUserRoute/RegularUserRoute';
+import CustomerRoute from './components/Routes/CustomerRoute/CustomerRoute';
 
 const App = () => {
   const role = useSelector(state => state.userStore.data?.role);
@@ -68,7 +69,9 @@ const App = () => {
 
           <Route element={<PrivateRoute />}>
             <Route element={<RegularUserRoute />}>
-              <Route path='events' element={<Events />} />
+              <Route element={<CustomerRoute />}>
+                <Route path='events' element={<Events />} />
+              </Route>
               <Route path='/payment' element={<Payment />} />
               <Route path='/startContest' element={<StartContestPage />} />
               <Route

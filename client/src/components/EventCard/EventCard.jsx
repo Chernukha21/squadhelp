@@ -1,5 +1,6 @@
 import moment from 'moment';
 import classNames from 'classnames';
+import { isNotificationDue } from '../../utils/events';
 import styles from './EventCard.module.sass';
 
 const formatRemainingTime = seconds => {
@@ -19,10 +20,8 @@ const EventCard = ({ event, now, onRemove }) => {
 
   const remainingSeconds = Math.max(0, Math.ceil((eventTime - now) / 1000));
 
-  const notificationTime = eventTime - event.notifyBeforeMinutes * 60 * 1000;
-
   const isFinished = remainingSeconds === 0;
-  const isNotificationDue = now >= notificationTime;
+  const notificationDue = isNotificationDue(event, now);
 
   const totalDuration = Math.max(1, eventTime - createdTime);
 
@@ -34,7 +33,7 @@ const EventCard = ({ event, now, onRemove }) => {
   return (
     <li
       className={classNames(styles.card, {
-        [styles.notificationDue]: isNotificationDue,
+        [styles.notificationDue]: notificationDue,
         [styles.finished]: isFinished,
       })}
     >
@@ -46,9 +45,9 @@ const EventCard = ({ event, now, onRemove }) => {
 
       <div className={styles.content}>
         <div className={styles.info}>
-          <h3>{event.name}</h3>
+          <h3 className={styles.eventName}>{event.name}</h3>
 
-          <time dateTime={event.eventAt}>
+          <time className={styles.eventTime} dateTime={event.eventAt}>
             {moment(event.eventAt).format('DD.MM.YYYY HH:mm')}
           </time>
         </div>
@@ -60,7 +59,7 @@ const EventCard = ({ event, now, onRemove }) => {
         <button
           type='button'
           className={styles.deleteButton}
-          onClick={() => onRemove(event.id)}
+          onClick={() => onRemove(event)}
           aria-label={`Delete event: ${event.name}`}
         >
           ×

@@ -169,9 +169,10 @@ const Header = () => {
     );
   };
 
-  const navigationItems = data
-    ? [...MENU_ITEMS.slice(0, 2), EVENTS_MENU_ITEM, ...MENU_ITEMS.slice(2)]
-    : MENU_ITEMS;
+  const navigationItems =
+    data?.role === CONSTANTS.CUSTOMER
+      ? [...MENU_ITEMS.slice(0, 2), EVENTS_MENU_ITEM, ...MENU_ITEMS.slice(2)]
+      : MENU_ITEMS;
 
   const openSubmenuLabel = navigationItems.find(
     item => item.key === openSubmenu

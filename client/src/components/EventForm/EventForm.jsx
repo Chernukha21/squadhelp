@@ -18,8 +18,11 @@ const EventForm = ({ onSubmit }) => (
       {({ isSubmitting, errors, touched }) => (
         <Form className={styles.form} noValidate>
           <div className={styles.formHeader}>
-            <h2>Create an event</h2>
-            <p>Plan your next branding update.</p>
+            <h2 className={styles.formTitle}>Create an event</h2>
+
+            <p className={styles.formDescription}>
+              Plan your next branding update.
+            </p>
           </div>
 
           <div className={`${styles.field} ${styles.fullWidth}`}>

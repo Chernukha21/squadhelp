@@ -39,7 +39,7 @@ const eventsSlice = createSlice({
     },
 
     removeEvent: (state, { payload: { eventId, userId } }) => {
-      if (userId == null) {
+      if (userId === undefined) {
         return;
       }
 
@@ -59,13 +59,11 @@ const selectCurrentUserId = state => state.userStore.data?.id;
 export const selectEvents = createSelector(
   [selectAllEvents, selectCurrentUserId],
   (events, userId) => {
-    if (userId == null) {
+    if (userId === undefined) {
       return [];
     }
 
-    return events.filter(
-      event => event.userId != null && String(event.userId) === String(userId)
-    );
+    return events.filter(event => String(event.userId) === String(userId));
   }
 );
 
